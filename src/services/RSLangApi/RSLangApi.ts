@@ -1,6 +1,6 @@
 import { AxiosRequestHeaders } from 'axios';
 
-export class RaceApi {
+export abstract class RSLangApi {
   protected API_HOST = process.env.REACT_APP_API_URL;
 
   protected API_PATH = '';
