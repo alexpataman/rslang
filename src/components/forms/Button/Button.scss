@@ -1,0 +1,13 @@
+Button {
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:hover {
+    opacity: 0.9;
+
+    &:disabled {
+      opacity: 1;
+    }
+  }
+}
