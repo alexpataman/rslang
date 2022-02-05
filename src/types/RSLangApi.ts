@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios';
+
 export type Word = {
   id: string;
   group: number;
@@ -29,3 +31,26 @@ export type Authorization = {
   userId: string;
   name: string;
 };
+
+type Error = {
+  message: string;
+  path: string[];
+};
+
+export type ErrorData = {
+  error: {
+    errors: Error[];
+    status: string;
+  };
+};
+
+// export interface IErrorResponse extends AxiosError {
+//   response: {
+//     data: {
+//       error: {
+//         errors: Error[];
+//         status: string;
+//       };
+//     };
+//   };
+// }

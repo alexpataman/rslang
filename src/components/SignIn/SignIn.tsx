@@ -1,6 +1,7 @@
-import * as React from 'react';
+import { useMemo, useState } from 'react';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Alert } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,19 +13,39 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { SigninApi } from '../../services/RSLangApi/SigninApi';
+import { useAppDispatch } from '../../store/hooks';
+import * as userSlice from '../../store/user/user.slice';
 import { IAuthForm } from '../../types/common';
+import { OtherApiError } from '../../utils/errors/OtherApiError';
 
 const theme = createTheme();
 
 export const SignIn = ({ toggleView }: IAuthForm) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const signinApi = useMemo(() => new SigninApi(), []);
+  const [alert, setAlert] = useState<string>();
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const email = (data.get('email') as string) || '';
+    const password = (data.get('password') as string) || '';
+
+    try {
+      const result = await signinApi.signin({ email, password });
+      dispatch(userSlice.login(result));
+    } catch (error) {
+      if (error instanceof OtherApiError && error.message) {
+        setAlert(error.message);
+      }
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLFormElement>) => {
+    if (alert) {
+      setAlert(undefined);
+    }
   };
 
   return (
@@ -48,9 +69,14 @@ export const SignIn = ({ toggleView }: IAuthForm) => {
           <Box
             component="form"
             onSubmit={handleSubmit}
-            noValidate
+            onChange={handleChange}
             sx={{ mt: 1 }}
           >
+            {alert && (
+              <Grid item xs={12} sm={12}>
+                <Alert severity="error">{alert}</Alert>
+              </Grid>
+            )}
             <TextField
               margin="normal"
               required

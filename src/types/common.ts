@@ -6,3 +6,7 @@ export enum SORT_ORDER {
 export interface IAuthForm {
   toggleView: () => void;
 }
+
+export type ValidationErrors = {
+  [key: string]: string;
+};

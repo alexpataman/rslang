@@ -1,4 +1,4 @@
-import { AxiosRequestHeaders } from 'axios';
+import { AxiosRequestHeaders, AxiosResponse } from 'axios';
 
 export abstract class RSLangApi {
   protected API_HOST = process.env.REACT_APP_API_URL;
@@ -15,5 +15,14 @@ export abstract class RSLangApi {
 
   getApiUrl() {
     return `${this.API_HOST}/${this.API_PATH}`;
+  }
+
+  static prepareResponse(response?: AxiosResponse) {
+    return response
+      ? {
+          status: response.status,
+          data: response.data,
+        }
+      : {};
   }
 }
