@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
-import { User } from '../../types/RSLangApi';
+import { Tokens, User } from '../../types/RSLangApi';
 import { OtherApiError } from '../../utils/errors/OtherApiError';
 import { UserValidationError } from '../../utils/errors/UserValidationError';
 import { RSLangApi } from './RSLangApi';
@@ -36,11 +36,90 @@ export class UsersApi extends RSLangApi {
   }
 
   async getUser(id: User['id']): Promise<User | null> {
+    const instance = this.getAuthInstance(id);
+    const token = this.getTokens();
+
+    const headers = {
+      ...this.defaultHeaders,
+      Authorization: `Bearer ${token}`,
+    };
+
     try {
-      const result = await axios.get(`${this.getApiUrl()}/${id}`);
+      const result = await instance.get(`${this.getApiUrl()}/${id}`, {
+        headers,
+      });
+      // console.log(result.data);
       return result.data;
     } catch {
-      return null;
+      throw new Error('err');
+    }
+  }
+
+  getAuthInstance(id: User['id']) {
+    const instance = axios.create({
+      baseURL: this.getApiUrl(),
+      headers: this.defaultHeaders,
+    });
+
+    // Add a request interceptor
+    instance.interceptors.request.use(
+      (config) => {
+        const tokens = this.getTokens();
+        config.headers = {
+          ...this.defaultHeaders,
+          Authorization: `Bearer ${tokens.token}`,
+        };
+        return config;
+      },
+      (error) => {
+        Promise.reject(error);
+      }
+    );
+
+    // Add a response interceptor
+    instance.interceptors.response.use(
+      (response) => response,
+      async (error: AxiosError) => {
+        const tokens = this.getTokens();
+        const originalConfig = { retried: false, ...error.config };
+        if (originalConfig.url !== '/signin' && error.response) {
+          if (error.response?.status === 401 && !originalConfig.retried) {
+            originalConfig.retried = true;
+
+            try {
+              const newTokens = await this.refreshToken(
+                id,
+                tokens.refreshToken
+              );
+              this.setTokens(newTokens);
+              return instance(originalConfig);
+            } catch (_error) {
+              return Promise.reject(_error);
+            }
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return instance;
+  }
+
+  async refreshToken(
+    id: User['id'],
+    refreshToken: Tokens['refreshToken']
+  ): Promise<Tokens> {
+    const headers = {
+      ...this.defaultHeaders,
+      Authorization: `Bearer ${refreshToken}`,
+    };
+    try {
+      const result = await axios.get(`${this.getApiUrl()}/${id}/tokens`, {
+        headers,
+      });
+      return result.data;
+    } catch {
+      throw new Error('unauthorized');
     }
   }
 }

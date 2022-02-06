@@ -1,3 +1,5 @@
+import { Tokens } from '../types/RSLangApi';
+import { UsersApi } from './RSLangApi/UsersApi';
 import { storage } from './Storage';
 
 const key = 'user';
@@ -10,25 +12,49 @@ type UserData = {
   userId: string;
 };
 
-export class User {
-  static isGuest() {
+export const User = {
+  isGuest() {
     return !storage.exists(key);
-  }
+  },
 
-  static getName() {
-    const data = User.getData() as UserData;
-    return data.name;
-  }
+  getName() {
+    const storedData = User.getStoredData() as UserData;
+    return storedData.name;
+  },
 
-  static getData() {
+  async getData() {
+    const usersApi = new UsersApi(this.getTokens, this.setTokens);
+    const storedData = User.getStoredData() as UserData;
+    try {
+      const result = await usersApi.getUser(storedData.userId);
+      return result;
+    } catch {
+      throw new Error('Something went wrong');
+    }
+  },
+
+  getTokens(): Tokens {
+    const storedData = User.getStoredData() as UserData;
+    return {
+      token: storedData.token,
+      refreshToken: storedData.refreshToken,
+    };
+  },
+
+  setTokens(tokens: Tokens) {
+    const storedData = User.getStoredData() as UserData;
+    storage.set(key, { ...storedData, ...tokens });
+  },
+
+  getStoredData() {
     return storage.get(key);
-  }
+  },
 
-  static login(data: {}) {
+  login(data: {}) {
     storage.set(key, data);
-  }
+  },
 
-  static logout() {
+  logout() {
     storage.remove(key);
-  }
-}
+  },
+};

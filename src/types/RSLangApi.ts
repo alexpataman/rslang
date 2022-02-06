@@ -1,5 +1,3 @@
-import { AxiosError } from 'axios';
-
 export type Word = {
   id: string;
   group: number;
@@ -24,6 +22,8 @@ export type User = {
   password?: string;
 };
 
+export type UserInfo = Omit<User, 'password'>;
+
 export type Authorization = {
   message: string;
   token: string;
@@ -44,13 +44,10 @@ export type ErrorData = {
   };
 };
 
-// export interface IErrorResponse extends AxiosError {
-//   response: {
-//     data: {
-//       error: {
-//         errors: Error[];
-//         status: string;
-//       };
-//     };
-//   };
-// }
+export type Tokens = {
+  token: string;
+  refreshToken: string;
+};
+
+export type GetTokens = () => Tokens;
+export type SetTokens = (tokens: Tokens) => void;

@@ -12,7 +12,7 @@ const initialState: IUserState = {
 };
 
 const slice = createSlice({
-  name: 'modal',
+  name: 'user',
   initialState,
   reducers: {
     logout: (state) => {
