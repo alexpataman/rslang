@@ -26,7 +26,7 @@
 
     .game__progress {
       margin: 0 auto;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       max-width: 50%;
       display: flex;
       justify-content: space-between;
@@ -50,6 +50,32 @@
           background-color: gold;
         }
       }
+    }
+
+    .game__audio-btn {
+      margin-bottom: 20px;
+      padding: 10px;
+      height: 90px;
+      width: 90px;
+      background-color: transparent;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .word-card {
+      margin-bottom: 20px;
+    }
+
+    .game__choices {
+      margin-bottom: 10px;
+
+      button {
+        margin: 0 6px;
+      }
+    }
+
+    .game__choice-btn {
+
     }
   }
 }
