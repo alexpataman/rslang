@@ -26,16 +26,23 @@ export const AudioGame = () => {
     const btn = e.target as HTMLButtonElement;
     if (btn.id === "wordAudio") {
       roundState?.audio.play();
+      return;
     }
     const { src } = btn.dataset;
     const audio = new Audio(`https://rslang-project.herokuapp.com/${src}`);
     audio?.play();
-    console.log(audio);
   }
 
   const getChoicesArray = (correctId: number): Array<number> => {
-    let array = new Array(5).fill(1);
-    array = array.map((index) => getRandomNum(MIN_WORD_IND, MAX_WORD_IND));
+    let array = new Array(5).fill(99);
+    array = array.map((index) => {
+      let num;
+      do {
+        num = getRandomNum(MIN_WORD_IND, MAX_WORD_IND);
+      } while (num === correctId);
+      return num;
+    });
+    console.log(array);
     const randomInd = getRandomNum(0, 4);
     array[randomInd] = correctId;
     return array;
@@ -84,12 +91,12 @@ export const AudioGame = () => {
     const updResult = result.slice();
     if (choice === correctWord) {
       updResult[roundState?.roundNum as number] = 'correct';
-      // btn.className = 'correct';
+      btn.classList.add('correct');
     } else if (!choice) {
       updResult[roundState?.roundNum as number] = 'unknown';
     } else {
       updResult[roundState?.roundNum as number] = 'wrong';
-      // btn.className = 'wrong';
+      btn.classList.add('wrong');
     }
     setResult(updResult);
     
@@ -100,6 +107,16 @@ export const AudioGame = () => {
 
   const handleNextRoundBtnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+
+    const choiceBtns = document.querySelectorAll('.choice');
+    choiceBtns.forEach((item) => {
+      if (item.classList.contains('correct')) {
+        item.classList.remove('correct');
+      }
+      if (item.classList.contains('wrong')) {
+        item.classList.remove('wrong');
+      }
+    });
 
     const wordsArray = words?.slice() as Word[];
     const round = (roundState?.roundNum as number) + 1;
@@ -156,7 +173,14 @@ export const AudioGame = () => {
             </div>
           }
           <div className="game__choices">
-            {roundState?.choices.map((choice, ind) => <button key={ind} data-choice={choice} onClick={handleChoiceBtnClick}>{choice}</button>)}
+            {roundState?.choices.map((choice, ind) => 
+            <button 
+              className="choice" 
+              key={ind} 
+              data-choice={choice} 
+              onClick={handleChoiceBtnClick} >
+                {choice}
+            </button>)}
           </div>
           <button onClick={roundState?.isAnswered ? handleNextRoundBtnClick : handleChoiceBtnClick}>
             {roundState?.isAnswered ? '->' : 'не знаю'}
