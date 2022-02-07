@@ -50,17 +50,23 @@ export abstract class RSLangApi {
   }
 
   getException(error: AxiosError): Error {
-    switch (error.response?.status) {
+    if (!error.response) {
+      return new Error('Something went wrong');
+    }
+
+    const { status, data } = error.response;
+
+    switch (status) {
       case this.ERROR_CODES.VALIDATION_ERROR:
-        return new ValidationError(error.response?.data);
+        return new ValidationError(data);
       case this.ERROR_CODES.AlREADY_EXISTS:
-        return new AlreadyExistsError(error.response?.data);
+        return new AlreadyExistsError(data);
       case this.ERROR_CODES.UNAUTHORIZED:
-        return new UnauthorizedError(error.response?.data);
+        return new UnauthorizedError(data);
       case this.ERROR_CODES.FORBIDDEN:
-        return new ForbiddenError(error.response?.data);
+        return new ForbiddenError(data);
       default:
-        return new Error(error.response?.data);
+        return new Error(data);
     }
   }
 }
