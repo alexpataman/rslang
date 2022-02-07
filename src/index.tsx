@@ -7,6 +7,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { App } from './App';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { store } from './store';
+import { AudioGamePage } from './views/Games/AudioGame/AudioGamePage';
 import { GamesPage } from './views/Games/GamesPage/GamesPage';
 import { AppSprint } from './views/Games/GamesPage/sprint/app-sprin';
 import { Levels } from './views/Games/GamesPage/sprint/levels';
@@ -39,6 +40,7 @@ render(
             <Route path="/games" element={<GamesPage />} />
             <Route path="/games/sprint/:gameType" element={<AppSprint />} />
             <Route path="/games/sprint/levels" element={<Levels />} />
+            <Route path="/games/audio" element={<AudioGamePage />} />
             <Route path="/textbook" element={<TextbookPage />}>
               <Route path="/textbook" element={<TextbookCategoriesPage />} />
               <Route path="/textbook/category/">
