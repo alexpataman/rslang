@@ -1,6 +1,6 @@
 import "./AudioGame.scss";
 
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
 import { round } from '../../../types/AudioGame';
@@ -14,11 +14,11 @@ import {
 import { getRandomNum } from "../../../utils/helpers/randomNum";
 
 export const AudioGame = () => {
-  const [gameStatus, setGameStatus] = useState<boolean>(false);
+  const [gameStatus, setGameStatus] = useState<string>();
   const [roundState, setRoundState] = useState<round>();
-  const [result, setResult] = useState<Array<string>>(new Array(20).fill(''));
   const [words, setWords] = useState<Word[]>();
   const wordsApi = useMemo(() => new WordsApi(), []);
+  const [result, setResult] = useState<Array<string>>(new Array(20).fill(''));
 
   const handleAudioClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -61,7 +61,7 @@ export const AudioGame = () => {
     (async () => {
       const wordsArray = await wordsApi.getWords(group, page);
       setWords(wordsArray);
-      setGameStatus(true);
+      setGameStatus('game');
       assignRoundState(wordsArray);
     })();
   }
@@ -98,7 +98,7 @@ export const AudioGame = () => {
     const round = (roundState?.roundNum as number) + 1;
 
     if (round > 19) {
-      console.log('end');
+      setGameStatus('result');
       return;
     }
 
@@ -122,7 +122,7 @@ export const AudioGame = () => {
     setRoundState(nextRoundState);
   }
 
-  if (gameStatus) {
+  if (gameStatus === 'game') {
     return (
       <div className="audio-game">
         <div className="game">
@@ -146,6 +146,64 @@ export const AudioGame = () => {
           <button onClick={roundState?.isAnswered ? handleNextRoundBtnClick : handleChoiceBtnClick}>
             {roundState?.isAnswered ? '->' : 'не знаю'}
           </button>
+        </div>
+      </div>
+    );
+  } 
+  
+  if (gameStatus === 'result') {
+    return (
+      <div className="audio-game">
+        <div className="result">
+          <h2 className="result__title">Результаты:</h2>
+          <div className="result__block">
+            <h3 className="result__subtitle">Ошибки <span>{
+              result.filter(item => item === 'wrong' ).length
+            }</span></h3>
+            <ul className="result__list">
+              {
+                result.map((item, ind) => {
+                  if (item === 'wrong') {
+                    const { word, wordTranslate } = (words as Word[])[ind];
+                    return <li key={word} className="result__item" >{word} - {wordTranslate}</li>;
+                  }
+                  return null;
+                })
+              }
+            </ul>
+          </div>
+          <div className="result__block">
+            <h3 className="result__subtitle">Неизвестные <span>{
+              result.filter(item => item === 'unknown').length
+            }</span></h3>
+            <ul className="result__list">
+              {
+                result.map((item, ind) => {
+                  if (item === 'unknown') {
+                    const { word, wordTranslate } = (words as Word[])[ind];
+                    return <li key={word} className="result__item" >{word} - {wordTranslate}</li>;
+                  }
+                  return null;
+                })
+              }
+            </ul>
+          </div>
+          <div className="result__block">
+            <h3 className="result__subtitle">Изученные <span>{
+              result.filter(item => item === 'correct').length
+            }</span></h3>
+            <ul className="result__list">
+              {
+                result.map((item, ind) => {
+                  if (item === 'correct') {
+                    const { word, wordTranslate } = (words as Word[])[ind];
+                    return <li key={word} className="result__item" >{word} - {wordTranslate}</li>;
+                  }
+                  return null;
+                })
+              }
+            </ul>
+          </div>
         </div>
       </div>
     );
