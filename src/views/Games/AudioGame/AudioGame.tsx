@@ -23,7 +23,14 @@ export const AudioGame = () => {
   const handleAudioClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    roundState?.audio.play();
+    const btn = e.target as HTMLButtonElement;
+    if (btn.id === "wordAudio") {
+      roundState?.audio.play();
+    }
+    const { src } = btn.dataset;
+    const audio = new Audio(`https://rslang-project.herokuapp.com/${src}`);
+    audio?.play();
+    console.log(audio);
   }
 
   const getChoicesArray = (correctId: number): Array<number> => {
@@ -120,6 +127,9 @@ export const AudioGame = () => {
       choices: choicesArr
      };
     setRoundState(nextRoundState);
+    if (roundState?.next) {
+      roundState?.next.play();
+    }
   }
 
   if (gameStatus === 'game') {
@@ -136,6 +146,11 @@ export const AudioGame = () => {
             <div className="word-card">
               <img src={`https://rslang-project.herokuapp.com/${words[roundState.roundNum].image}`} alt="photo: correct answer" />
               <p>{words[roundState.roundNum].word} <span>{words[roundState.roundNum].transcription}</span></p>
+              <button 
+                className="audio-btn"
+                data-src={words[roundState.roundNum].audioExample}
+                onClick={handleAudioClick} >
+              </button>
               <p>{words[roundState.roundNum].textExample}</p>
               <p>{words[roundState.roundNum].textExampleTranslate}</p>
             </div>
@@ -165,7 +180,14 @@ export const AudioGame = () => {
                 result.map((item, ind) => {
                   if (item === 'wrong') {
                     const { word, wordTranslate } = (words as Word[])[ind];
-                    return <li key={word} className="result__item" >{word} - {wordTranslate}</li>;
+                    return <li key={word} className="result__item" >
+                      <button 
+                        className="result__audio audio-btn" 
+                        data-src={(words as Word[])[ind].audio}
+                        onClick={handleAudioClick} >
+                      </button>
+                      {word} - {wordTranslate}
+                    </li>;
                   }
                   return null;
                 })
@@ -181,7 +203,14 @@ export const AudioGame = () => {
                 result.map((item, ind) => {
                   if (item === 'unknown') {
                     const { word, wordTranslate } = (words as Word[])[ind];
-                    return <li key={word} className="result__item" >{word} - {wordTranslate}</li>;
+                    return <li key={word} className="result__item" >
+                      <button 
+                      className="result__audio audio-btn" 
+                      data-src={(words as Word[])[ind].audio}
+                      onClick={handleAudioClick} >
+                      </button>
+                      {word} - {wordTranslate}
+                    </li>;
                   }
                   return null;
                 })
@@ -197,7 +226,14 @@ export const AudioGame = () => {
                 result.map((item, ind) => {
                   if (item === 'correct') {
                     const { word, wordTranslate } = (words as Word[])[ind];
-                    return <li key={word} className="result__item" >{word} - {wordTranslate}</li>;
+                    return <li key={word} className="result__item" >
+                      <button 
+                        className="result__audio audio-btn" 
+                        data-src={(words as Word[])[ind].audio} 
+                        onClick={handleAudioClick} >
+                      </button>
+                      {word} - {wordTranslate}
+                      </li>;
                   }
                   return null;
                 })

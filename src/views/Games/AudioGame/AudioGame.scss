@@ -3,6 +3,15 @@
   max-width: 60%;
   text-align: center;
 
+  .audio-btn {
+    height: 16px;
+    width: 16px;
+    background: 0 0/contain url("../../../assets/svg/volume.svg") no-repeat;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
   .start-page {
     padding: 20px 0;
     border: 1px solid #000;
@@ -114,7 +123,12 @@
     }
 
     .result__item {
+      margin-bottom: 4px;
       list-style: none;
+    }
+
+    .result__audio {
+      margin-right: 6px;
     }
   }
 }
