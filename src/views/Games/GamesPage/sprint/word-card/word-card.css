@@ -1,0 +1,21 @@
+.card {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: space-between;
+  border: 1px solid red;
+}
+.card__stat {
+  display: flex;
+  justify-content: space-between;
+}
+.cards__buttons {
+  display: flex;
+  justify-content: center;
+}
+.cards__words {
+  display: flex;
+  justify-content: center;
+}
