@@ -13,7 +13,6 @@ import { WordsApi } from '../../../services/RSLangApi/WordsApi';
 import { User } from '../../../services/User';
 import { Word } from '../../../types/RSLangApi';
 import { MAX_PAGE_NUMBER } from '../../../utils/constants/common.constants';
-import { wordAdapter } from '../../../utils/helpers/wordAdapter';
 import { TextbookWordItem } from '../TextbookWordItem/TextbookWordItem';
 
 export const TextbookCategoryPage = () => {

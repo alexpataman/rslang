@@ -1,15 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import { useUserIsGuest } from '../../../hooks/useUserIsGuest';
+import { AuthorisedOnly } from '../../../components/AuthorisedOnly/AuthorisedOnly';
 
-export const TextbookNav = () => {
-  const isGuest = useUserIsGuest();
-
-  if (isGuest) {
-    return <></>;
-  }
-
-  return (
+export const TextbookNav = () => (
+  <AuthorisedOnly>
     <nav>
       <ul>
         <li>
@@ -23,5 +17,5 @@ export const TextbookNav = () => {
         </li>
       </ul>
     </nav>
-  );
-};
+  </AuthorisedOnly>
+);

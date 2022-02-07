@@ -1,12 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
-import {
-  Tokens,
-  GetTokens,
-  SetTokens,
-  User,
-  Word,
-} from '../../types/RSLangApi';
+import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
 import { wordAdapter } from '../../utils/helpers/wordAdapter';
 import { UsersApi } from './UsersApi';
 
@@ -23,11 +17,14 @@ export class UsersAggregatedWords extends UsersApi {
     this.API_PATH = `users/${userId}/aggregatedWords`;
   }
 
-  getWords = async (group?: number, page?: number) => {
+  getWords = async (group?: number, page?: number, filter?: {}) => {
     const instance = this.getAuthInstance(this.userId);
-    const filter = {
+    const defaultFilter = {
       $and: [{ page }, { group }],
     };
+
+    filter = filter || defaultFilter;
+
     const params = { wordsPerPage: 30, filter };
 
     try {

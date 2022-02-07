@@ -1,12 +1,6 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 
-import {
-  Tokens,
-  GetTokens,
-  SetTokens,
-  User,
-  Word,
-} from '../../types/RSLangApi';
+import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
 import { AlreadyExistsError } from '../../utils/errors/AlreadyExistsError';
 import { UsersApi } from './UsersApi';
 
@@ -59,7 +53,6 @@ export class UsersWords extends UsersApi {
 
     try {
       const result = await instance.post(`${this.getApiUrl()}/${wordId}`, data);
-      // console.log(result.data);
       return result.data;
     } catch (error) {
       const err = error as AxiosError;
@@ -85,7 +78,6 @@ export class UsersWords extends UsersApi {
 
     try {
       const result = await instance.put(`${this.getApiUrl()}/${wordId}`, data);
-      // console.log(result.data);
       return result.data;
     } catch (error) {
       const err = error as AxiosError;

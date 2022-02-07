@@ -41,7 +41,6 @@ interface ITextbookWordItem {
 export const TextbookWordItem = ({ item }: ITextbookWordItem) => {
   const [expanded, setExpanded] = React.useState(false);
   const {
-    id,
     word,
     wordTranslate,
     image,
