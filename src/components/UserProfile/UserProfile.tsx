@@ -6,16 +6,16 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
+import { useUserIsGuest } from '../../hooks/useUserIsGuest';
 import { User } from '../../services/User';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { selectUserData } from '../../store/user/user.slice';
+import { useAppDispatch } from '../../store/hooks';
 import * as userSlice from '../../store/user/user.slice';
 import { Auth } from '../Auth/Auth';
 import { ModalContext } from '../context/ModalContext';
 
 export const UserProfile = () => {
-  const { isGuest } = useAppSelector(selectUserData);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isGuest = useUserIsGuest();
   const dispatch = useAppDispatch();
 
   const modal = useContext(ModalContext);

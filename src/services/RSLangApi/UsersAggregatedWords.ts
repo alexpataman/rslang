@@ -1,5 +1,3 @@
-import axios, { AxiosError } from 'axios';
-
 import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
 import { wordAdapter } from '../../utils/helpers/wordAdapter';
 import { UsersApi } from './UsersApi';

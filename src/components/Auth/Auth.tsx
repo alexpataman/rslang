@@ -1,7 +1,6 @@
 import { useEffect, useState, MouseEvent } from 'react';
 
-import { useAppSelector } from '../../store/hooks';
-import { selectUserData } from '../../store/user/user.slice';
+import { useUserIsGuest } from '../../hooks/useUserIsGuest';
 import { SignIn } from '../SignIn/SignIn';
 import { SignUp } from '../SignUp/SignUp';
 
@@ -17,7 +16,7 @@ interface IAuth {
 export const Auth = (props: IAuth) => {
   const { successfulCallback } = props;
   const [action, setAction] = useState(STATES.SIGN_IN);
-  const { isGuest } = useAppSelector(selectUserData);
+  const isGuest = useUserIsGuest();
 
   let View = <></>;
 

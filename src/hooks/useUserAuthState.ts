@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import { useAppSelector, useAppDispatch } from '../store/hooks';
-import { selectUserData } from '../store/user/user.slice';
+import { useAppDispatch } from '../store/hooks';
 import * as userSlice from '../store/user/user.slice';
+import { useUserIsGuest } from './useUserIsGuest';
 
 export const useUserAuthState = (action: () => any) => {
   const [result, setResult] = useState();
-  const { isGuest } = useAppSelector(selectUserData);
+  const isGuest = useUserIsGuest();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
