@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Pagination,
@@ -16,10 +17,13 @@ import { MAX_PAGE_NUMBER } from '../../../utils/constants/common.constants';
 import { TextbookWordItem } from '../TextbookWordItem/TextbookWordItem';
 
 export const TextbookCategoryPage = () => {
-  const categoryId = useParams()?.categoryId || 0;
+  const categoryId = Number(useParams()?.categoryId) || 0;
+  const page = Number(useParams()?.page) || 0;
   const [words, setWords] = useState<Word[]>();
-  const [page, setPage] = useState<number>(0);
+  // const [page, setPage] = useState<number>(0);
   const isGuest = useUserIsGuest();
+  const navigate = useNavigate();
+
   const wordsApi = useMemo(
     () =>
       isGuest
@@ -34,23 +38,21 @@ export const TextbookCategoryPage = () => {
 
   useEffect(() => {
     (async () => {
-      const words = await wordsApi.getWords(+categoryId, page);
+      const words = await wordsApi.getWords(categoryId, page);
       setWords(words);
     })();
   }, [wordsApi, categoryId, page, isGuest]);
 
   const changePageHandler = (direction: PAGINATION_DIRECTIONS) => {
-    setPage((prev) => {
-      if (direction === PAGINATION_DIRECTIONS.PREV) {
-        return prev - 1;
-      }
-      return prev + 1;
-    });
+    if (direction === PAGINATION_DIRECTIONS.PREV) {
+      return navigate(`/textbook/category/${categoryId}/page/${page - 1}`);
+    }
+    return navigate(`/textbook/category/${categoryId}/page/${page + 1}`);
   };
 
   const disableConditions = {
-    [PAGINATION_DIRECTIONS.NEXT]: page === MAX_PAGE_NUMBER - 1,
-    [PAGINATION_DIRECTIONS.PREV]: page === 0,
+    [PAGINATION_DIRECTIONS.NEXT]: page >= MAX_PAGE_NUMBER - 1,
+    [PAGINATION_DIRECTIONS.PREV]: page <= 0,
   };
 
   return (

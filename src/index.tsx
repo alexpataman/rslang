@@ -27,10 +27,13 @@ render(
             <Route path="/games" element={<GamesPage />} />
             <Route path="/textbook" element={<TextbookPage />}>
               <Route path="/textbook" element={<TextbookCategoriesPage />} />
-              <Route
-                path="/textbook/category/:categoryId"
-                element={<TextbookCategoryPage />}
-              />
+              <Route path="/textbook/category/">
+                <Route path=":categoryId" element={<TextbookCategoryPage />} />
+                <Route
+                  path=":categoryId/page/:page"
+                  element={<TextbookCategoryPage />}
+                />
+              </Route>
               <Route
                 path="/textbook/difficult"
                 element={<TextbookDifficultPage />}
