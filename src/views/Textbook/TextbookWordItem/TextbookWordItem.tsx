@@ -36,9 +36,16 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 interface ITextbookWordItem {
   item: Word;
+  clickHandlers?: {
+    knownClickHandler?: () => void;
+    difficultClickHandler?: () => void;
+  };
 }
 
-export const TextbookWordItem = ({ item }: ITextbookWordItem) => {
+export const TextbookWordItem = ({
+  item,
+  clickHandlers,
+}: ITextbookWordItem) => {
   const [expanded, setExpanded] = React.useState(false);
   const {
     word,
@@ -77,10 +84,16 @@ export const TextbookWordItem = ({ item }: ITextbookWordItem) => {
       </CardContent>
       <CardActions disableSpacing>
         <AuthorisedOnly>
-          <TextbookButtonDifficult word={item} />
+          <TextbookButtonDifficult
+            word={item}
+            onClick={clickHandlers?.difficultClickHandler}
+          />
         </AuthorisedOnly>
         <AuthorisedOnly>
-          <TextbookButtonKnown word={item} />
+          <TextbookButtonKnown
+            word={item}
+            onClick={clickHandlers?.knownClickHandler}
+          />
         </AuthorisedOnly>
         <Tooltip title="Проиграть">
           <IconButton aria-label="Проиграть">

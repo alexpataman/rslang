@@ -4,6 +4,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Button, Typography } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { Link } from 'react-router-dom';
 
 import { User } from '../../services/User';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
@@ -70,8 +71,12 @@ export const UserProfile = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Словарь</MenuItem>
-        <MenuItem onClick={handleClose}>Статистика</MenuItem>
+        <MenuItem component={Link} to="/textbook/difficult">
+          Сложные слова
+        </MenuItem>
+        <MenuItem component={Link} to="/textbook/known">
+          Изученные слова
+        </MenuItem>
         <MenuItem onClick={handleLogout}>Выход</MenuItem>
       </Menu>
     </div>

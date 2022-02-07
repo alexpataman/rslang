@@ -11,10 +11,12 @@ import { AlreadyExistsError } from '../../../utils/errors/AlreadyExistsError';
 
 interface ITextbookButtonKnown {
   word: Word;
+  onClick?: () => void;
 }
 
 export const TextbookButtonKnown = (props: ITextbookButtonKnown) => {
-  const { id, userWord } = props.word;
+  const { onClick, word } = props;
+  const { id, userWord } = word;
   const [isActive, setIsActive] = useState(userWord?.optional?.isKnown);
 
   const usersWordsApi = useMemo(
@@ -32,6 +34,10 @@ export const TextbookButtonKnown = (props: ITextbookButtonKnown) => {
       }
     }
     setIsActive(!isActive);
+
+    if (onClick) {
+      onClick();
+    }
   };
 
   return (
