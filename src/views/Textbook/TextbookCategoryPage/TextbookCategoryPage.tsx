@@ -7,23 +7,38 @@ import {
   Pagination,
   PAGINATION_DIRECTIONS,
 } from '../../../components/Pagination/Pagination';
+import { useUserIsGuest } from '../../../hooks/useUserIsGuest';
+import { UsersAggregatedWords } from '../../../services/RSLangApi/UsersAggregatedWords';
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
+import { User } from '../../../services/User';
 import { Word } from '../../../types/RSLangApi';
 import { MAX_PAGE_NUMBER } from '../../../utils/constants/common.constants';
+import { wordAdapter } from '../../../utils/helpers/wordAdapter';
 import { TextbookWordItem } from '../TextbookWordItem/TextbookWordItem';
 
 export const TextbookCategoryPage = () => {
   const categoryId = useParams()?.categoryId || 0;
   const [words, setWords] = useState<Word[]>();
   const [page, setPage] = useState<number>(0);
-  const wordsApi = useMemo(() => new WordsApi(), []);
+  const isGuest = useUserIsGuest();
+  const wordsApi = useMemo(
+    () =>
+      isGuest
+        ? new WordsApi()
+        : new UsersAggregatedWords(
+            User.getId(),
+            User.getTokens,
+            User.setTokens
+          ),
+    [isGuest]
+  );
 
   useEffect(() => {
     (async () => {
-      const words = await wordsApi.getWords(categoryId, page);
+      const words = await wordsApi.getWords(+categoryId, page);
       setWords(words);
     })();
-  }, [wordsApi, categoryId, page]);
+  }, [wordsApi, categoryId, page, isGuest]);
 
   const changePageHandler = (direction: PAGINATION_DIRECTIONS) => {
     setPage((prev) => {

@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Card from '@mui/material/Card';
@@ -14,9 +12,12 @@ import { styled } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import parse from 'html-react-parser';
-import './TextbookWordItem.scss';
 
+import { AuthorisedOnly } from '../../../components/AuthorisedOnly/AuthorisedOnly';
 import { Word } from '../../../types/RSLangApi';
+import { TextbookButtonDifficult } from '../TextbookButtonDifficult/TextbookButtonDifficult';
+import { TextbookButtonKnown } from '../TextbookButtonKnown/TextbookButtonKnown';
+import './TextbookWordItem.scss';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -40,6 +41,7 @@ interface ITextbookWordItem {
 export const TextbookWordItem = ({ item }: ITextbookWordItem) => {
   const [expanded, setExpanded] = React.useState(false);
   const {
+    id,
     word,
     wordTranslate,
     image,
@@ -75,16 +77,12 @@ export const TextbookWordItem = ({ item }: ITextbookWordItem) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Tooltip title="Добавить в сложные">
-          <IconButton aria-label="Добавить в сложные">
-            <BookmarkAddIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Добавить в изученные">
-          <IconButton aria-label="Изученное">
-            <BookmarkAddedIcon />
-          </IconButton>
-        </Tooltip>
+        <AuthorisedOnly>
+          <TextbookButtonDifficult word={item} />
+        </AuthorisedOnly>
+        <AuthorisedOnly>
+          <TextbookButtonKnown word={item} />
+        </AuthorisedOnly>
         <Tooltip title="Проиграть">
           <IconButton aria-label="Проиграть">
             <VolumeUpIcon />

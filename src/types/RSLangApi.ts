@@ -1,3 +1,10 @@
+export type UserWord = {
+  optional: {
+    isDifficult: boolean;
+    isKnown: boolean;
+  };
+};
+
 export type Word = {
   id: string;
   group: number;
@@ -13,6 +20,7 @@ export type Word = {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+  userWord?: UserWord;
 };
 
 export type User = {

@@ -13,7 +13,7 @@ interface ITextbookCategoryItem {
 export const TextbookCategoryItem = (props: ITextbookCategoryItem) => {
   const { id, img } = props;
   const title = `Категория #${id + 1}`;
-  const link = `/textbook/category/${id}`;
+  const link = `category/${id}`;
   const image = `${process.env.REACT_APP_API_URL}/${img}`;
 
   return (

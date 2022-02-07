@@ -17,6 +17,11 @@ export const User = {
     return !storage.exists(key);
   },
 
+  getId() {
+    const storedData = User.getStoredData() as UserData;
+    return storedData.userId;
+  },
+
   getName() {
     const storedData = User.getStoredData() as UserData;
     return storedData.name;

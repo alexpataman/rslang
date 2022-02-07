@@ -9,7 +9,10 @@ import { store } from './store';
 import { GamesPage } from './views/Games/GamesPage/GamesPage';
 import { HomePage } from './views/Home/HomePage/HomePage';
 import { StatisticsPage } from './views/Statistics/StatisticsPage/StatisticsPage';
+import { TextbookCategoriesPage } from './views/Textbook/TextbookCategoriesPage/TextbookCategoriesPage';
 import { TextbookCategoryPage } from './views/Textbook/TextbookCategoryPage/TextbookCategoryPage';
+import { TextbookDifficultPage } from './views/Textbook/TextbookDifficultPage/TextbookDifficultPage';
+import { TextbookKnownPage } from './views/Textbook/TextbookKnownPage/TextbookKnownPage';
 import { TextbookPage } from './views/Textbook/TextbookPage/TextbookPage';
 // import './utils/helpers/taskCheck';
 
@@ -22,11 +25,18 @@ render(
             <Route index element={<HomePage />} />
             <Route path="/statistics" element={<StatisticsPage />} />
             <Route path="/games" element={<GamesPage />} />
-            <Route path="/textbook" element={<TextbookPage />} />
-            <Route
-              path="/textbook/category/:categoryId"
-              element={<TextbookCategoryPage />}
-            />
+            <Route path="/textbook" element={<TextbookPage />}>
+              <Route path="/textbook" element={<TextbookCategoriesPage />} />
+              <Route
+                path="/textbook/category/:categoryId"
+                element={<TextbookCategoryPage />}
+              />
+              <Route
+                path="/textbook/difficult"
+                element={<TextbookDifficultPage />}
+              />
+              <Route path="/textbook/known" element={<TextbookKnownPage />} />
+            </Route>
             <Route
               path="*"
               element={

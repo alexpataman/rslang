@@ -6,6 +6,7 @@ const emptyTokens = {
   token: '',
   refreshToken: '',
 };
+
 export abstract class RSLangApi {
   protected API_HOST = process.env.REACT_APP_API_URL;
 
@@ -17,7 +18,12 @@ export abstract class RSLangApi {
 
   protected defaultHeaders: AxiosRequestHeaders;
 
-  constructor(getTokens?: () => Tokens, setTokens?: (tokens: Tokens) => void) {
+  public ERROR_CODES = {
+    AlREADY_EXISTS: 417,
+    VALIDATION_ERROR: 422,
+  };
+
+  constructor(getTokens?: GetTokens, setTokens?: SetTokens) {
     this.defaultHeaders = {
       'Content-Type': 'application/json',
     };

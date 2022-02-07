@@ -5,11 +5,6 @@ import { OtherApiError } from '../../utils/errors/OtherApiError';
 import { UserValidationError } from '../../utils/errors/UserValidationError';
 import { RSLangApi } from './RSLangApi';
 
-const ERROR_CODES = {
-  USER_EXISTS: 417,
-  VALIDATION_ERROR: 422,
-};
-
 export class UsersApi extends RSLangApi {
   protected API_PATH = 'users';
 
@@ -26,9 +21,9 @@ export class UsersApi extends RSLangApi {
     } catch (error) {
       const err = error as AxiosError;
       switch (err.response?.status) {
-        case ERROR_CODES.VALIDATION_ERROR:
+        case this.ERROR_CODES.VALIDATION_ERROR:
           throw new UserValidationError(err.response?.data);
-        case ERROR_CODES.USER_EXISTS:
+        case this.ERROR_CODES.AlREADY_EXISTS:
         default:
           throw new OtherApiError(err.response?.data);
       }
@@ -37,18 +32,9 @@ export class UsersApi extends RSLangApi {
 
   async getUser(id: User['id']): Promise<User | null> {
     const instance = this.getAuthInstance(id);
-    const token = this.getTokens();
-
-    const headers = {
-      ...this.defaultHeaders,
-      Authorization: `Bearer ${token}`,
-    };
 
     try {
-      const result = await instance.get(`${this.getApiUrl()}/${id}`, {
-        headers,
-      });
-      // console.log(result.data);
+      const result = await instance.get(`${this.getApiUrl()}/${id}`);
       return result.data;
     } catch {
       throw new Error('err');
