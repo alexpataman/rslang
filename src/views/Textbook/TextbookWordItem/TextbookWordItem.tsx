@@ -18,6 +18,7 @@ import { Word } from '../../../types/RSLangApi';
 import { TextbookButtonDifficult } from '../TextbookButtonDifficult/TextbookButtonDifficult';
 import { TextbookButtonKnown } from '../TextbookButtonKnown/TextbookButtonKnown';
 import './TextbookWordItem.scss';
+import { TextbookButtonProgress } from '../TextbookButtonProgress/TextbookButtonProgress';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -94,6 +95,9 @@ export const TextbookWordItem = ({
             word={item}
             onClick={clickHandlers?.knownClickHandler}
           />
+        </AuthorisedOnly>
+        <AuthorisedOnly>
+          <TextbookButtonProgress word={item} />
         </AuthorisedOnly>
         <Tooltip title="Проиграть">
           <IconButton aria-label="Проиграть">
