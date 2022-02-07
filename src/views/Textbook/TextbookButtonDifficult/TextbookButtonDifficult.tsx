@@ -4,7 +4,6 @@ import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
-import { useAccessControl } from '../../../hooks/useAccessControl';
 import { UsersWords } from '../../../services/RSLangApi/UsersWordsApi';
 import { User } from '../../../services/User';
 import { Word } from '../../../types/RSLangApi';

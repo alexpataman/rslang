@@ -1,32 +1,23 @@
 import axios, { AxiosError } from 'axios';
 
 import { Tokens, User } from '../../types/RSLangApi';
-import { OtherApiError } from '../../utils/errors/OtherApiError';
-import { UserValidationError } from '../../utils/errors/UserValidationError';
 import { RSLangApi } from './RSLangApi';
 
 export class UsersApi extends RSLangApi {
-  protected API_PATH = 'users';
+  public API_PATH_USERS = `${this.API_HOST}/users`;
 
   async createUser(
     data: Pick<User, 'name' | 'email' | 'password'>
   ): Promise<User> {
     try {
       const result = await axios.post(
-        this.getApiUrl(),
+        this.API_PATH_USERS,
         data,
         this.defaultHeaders
       );
       return result.data;
     } catch (error) {
-      const err = error as AxiosError;
-      switch (err.response?.status) {
-        case this.ERROR_CODES.VALIDATION_ERROR:
-          throw new UserValidationError(err.response?.data);
-        case this.ERROR_CODES.AlREADY_EXISTS:
-        default:
-          throw new OtherApiError(err.response?.data);
-      }
+      throw this.getException(error as AxiosError);
     }
   }
 
@@ -34,20 +25,19 @@ export class UsersApi extends RSLangApi {
     const instance = this.getAuthInstance(id);
 
     try {
-      const result = await instance.get(`${this.getApiUrl()}/${id}`);
+      const result = await instance.get(`${this.API_PATH_USERS}/${id}`);
       return result.data;
-    } catch {
-      throw new Error('err');
+    } catch (error) {
+      throw this.getException(error as AxiosError);
     }
   }
 
   getAuthInstance(id: User['id']) {
     const instance = axios.create({
-      baseURL: this.getApiUrl(),
+      baseURL: this.API_PATH_USERS,
       headers: this.defaultHeaders,
     });
 
-    // Add a request interceptor
     instance.interceptors.request.use(
       (config) => {
         const tokens = this.getTokens();
@@ -62,7 +52,6 @@ export class UsersApi extends RSLangApi {
       }
     );
 
-    // Add a response interceptor
     instance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
@@ -100,12 +89,13 @@ export class UsersApi extends RSLangApi {
       Authorization: `Bearer ${refreshToken}`,
     };
     try {
-      const result = await axios.get(`${this.getApiUrl()}/${id}/tokens`, {
+      const result = await axios.get(`${this.API_PATH_USERS}/${id}/tokens`, {
+        // const result = await axios.get(`${this.API_HOST}/users/${id}/tokens`, {
         headers,
       });
       return result.data;
-    } catch {
-      throw new Error('unauthorized');
+    } catch (error) {
+      throw this.getException(error as AxiosError);
     }
   }
 }

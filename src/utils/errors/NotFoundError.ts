@@ -1,11 +1,11 @@
-export class CancelError extends Error {
+export class NotFoundError extends Error {
   constructor(...params: string[]) {
     super(...params);
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, CancelError);
+      Error.captureStackTrace(this, NotFoundError);
     }
 
-    this.name = 'CancelError';
+    this.name = 'NotFoundError';
   }
 }

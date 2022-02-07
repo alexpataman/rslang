@@ -1,8 +1,8 @@
 import { Tokens } from '../types/RSLangApi';
 import { UsersApi } from './RSLangApi/UsersApi';
-import { storage } from './Storage';
+import { Storage } from './Storage';
 
-const key = 'user';
+const LOCAL_STORAGE_KEY = 'user';
 
 type UserData = {
   message: string;
@@ -13,8 +13,12 @@ type UserData = {
 };
 
 export const User = {
+  // getUsersApiInstance(Class: any) {
+  //   return new Class(this.getId(), this.getTokens, this.setTokens);
+  // },
+
   isGuest() {
-    return !storage.exists(key);
+    return !Storage.exists(LOCAL_STORAGE_KEY);
   },
 
   getId() {
@@ -48,18 +52,18 @@ export const User = {
 
   setTokens(tokens: Tokens) {
     const storedData = User.getStoredData() as UserData;
-    storage.set(key, { ...storedData, ...tokens });
+    Storage.set(LOCAL_STORAGE_KEY, { ...storedData, ...tokens });
   },
 
   getStoredData() {
-    return storage.get(key);
+    return Storage.get(LOCAL_STORAGE_KEY);
   },
 
   login(data: {}) {
-    storage.set(key, data);
+    Storage.set(LOCAL_STORAGE_KEY, data);
   },
 
   logout() {
-    storage.remove(key);
+    Storage.remove(LOCAL_STORAGE_KEY);
   },
 };

@@ -16,7 +16,6 @@ import { User } from '../../services/User';
 import { useAppDispatch } from '../../store/hooks';
 import * as userSlice from '../../store/user/user.slice';
 import { IAuthForm } from '../../types/common';
-import { OtherApiError } from '../../utils/errors/OtherApiError';
 
 export const SignIn = ({ toggleView }: IAuthForm) => {
   const signinApi = useMemo(() => new SigninApi(), []);
@@ -34,7 +33,7 @@ export const SignIn = ({ toggleView }: IAuthForm) => {
       User.login(result);
       dispatch(userSlice.login(result));
     } catch (error) {
-      if (error instanceof OtherApiError && error.message) {
+      if (error instanceof Error && error.message) {
         setAlert('Вход не выполнен. Проверьте данные.');
       }
     }

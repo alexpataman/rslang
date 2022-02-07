@@ -1,8 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import {
   Pagination,
@@ -20,9 +19,9 @@ export const TextbookCategoryPage = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
   const [words, setWords] = useState<Word[]>();
-  // const [page, setPage] = useState<number>(0);
   const isGuest = useUserIsGuest();
   const navigate = useNavigate();
+  const pageNavigatePath = `/textbook/category/${categoryId}/page`;
 
   const wordsApi = useMemo(
     () =>
@@ -45,9 +44,9 @@ export const TextbookCategoryPage = () => {
 
   const changePageHandler = (direction: PAGINATION_DIRECTIONS) => {
     if (direction === PAGINATION_DIRECTIONS.PREV) {
-      return navigate(`/textbook/category/${categoryId}/page/${page - 1}`);
+      return navigate(`${pageNavigatePath}/${page - 1}`);
     }
-    return navigate(`/textbook/category/${categoryId}/page/${page + 1}`);
+    return navigate(`${pageNavigatePath}/${page + 1}`);
   };
 
   const disableConditions = {

@@ -1,9 +1,14 @@
+import { AxiosError } from 'axios';
+
 import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
+import { WORDS_PER_PAGE } from '../../utils/constants/common.constants';
 import { wordAdapter } from '../../utils/helpers/wordAdapter';
 import { UsersApi } from './UsersApi';
 
 export class UsersAggregatedWords extends UsersApi {
   protected userId: User['id'];
+
+  public API_PATH_USERS_AGGREGATED_WORDS: string;
 
   constructor(
     userId: User['id'],
@@ -12,7 +17,7 @@ export class UsersAggregatedWords extends UsersApi {
   ) {
     super(getTokens, setTokens);
     this.userId = userId;
-    this.API_PATH = `users/${userId}/aggregatedWords`;
+    this.API_PATH_USERS_AGGREGATED_WORDS = `${this.API_HOST}/users/${userId}/aggregatedWords`;
   }
 
   getWords = async (group?: number, page?: number, filter?: {}) => {
@@ -23,13 +28,16 @@ export class UsersAggregatedWords extends UsersApi {
 
     filter = filter || defaultFilter;
 
-    const params = { wordsPerPage: 30, filter };
+    const params = { wordsPerPage: WORDS_PER_PAGE, filter };
 
     try {
-      const result = await instance.get(`${this.getApiUrl()}`, { params });
+      const result = await instance.get(
+        `${this.API_PATH_USERS_AGGREGATED_WORDS}`,
+        { params }
+      );
       return result.data[0].paginatedResults.map(wordAdapter);
-    } catch {
-      throw new Error('err');
+    } catch (error) {
+      throw this.getException(error as AxiosError);
     }
   };
 
@@ -37,10 +45,12 @@ export class UsersAggregatedWords extends UsersApi {
     const instance = this.getAuthInstance(this.userId);
 
     try {
-      const result = await instance.get(`${this.getApiUrl()}/${wordId}`);
+      const result = await instance.get(
+        `${this.API_PATH_USERS_AGGREGATED_WORDS}/${wordId}`
+      );
       return result.data;
-    } catch {
-      throw new Error('err');
+    } catch (error) {
+      throw this.getException(error as AxiosError);
     }
   };
 }

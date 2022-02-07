@@ -1,11 +1,12 @@
 import { AxiosError } from 'axios';
 
 import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
-import { AlreadyExistsError } from '../../utils/errors/AlreadyExistsError';
 import { UsersApi } from './UsersApi';
 
 export class UsersWords extends UsersApi {
   protected userId: User['id'];
+
+  public API_PATH_USERS_WORDS: string;
 
   constructor(
     userId: User['id'],
@@ -14,18 +15,17 @@ export class UsersWords extends UsersApi {
   ) {
     super(getTokens, setTokens);
     this.userId = userId;
-    this.API_PATH = `users/${userId}/words`;
+    this.API_PATH_USERS_WORDS = `${this.API_HOST}/users/${userId}/words`;
   }
 
   getAllWords = async () => {
     const instance = this.getAuthInstance(this.userId);
 
     try {
-      const result = await instance.get(`${this.getApiUrl()}`);
-      // console.log(result.data);
+      const result = await instance.get(`${this.API_PATH_USERS_WORDS}`);
       return result.data;
-    } catch {
-      throw new Error('err');
+    } catch (error) {
+      throw this.getException(error as AxiosError);
     }
   };
 
@@ -33,10 +33,12 @@ export class UsersWords extends UsersApi {
     const instance = this.getAuthInstance(this.userId);
 
     try {
-      const result = await instance.get(`${this.getApiUrl()}/${wordId}`);
+      const result = await instance.get(
+        `${this.API_PATH_USERS_WORDS}/${wordId}`
+      );
       return result.data;
-    } catch {
-      throw new Error('err');
+    } catch (error) {
+      throw this.getException(error as AxiosError);
     }
   };
 
@@ -52,16 +54,13 @@ export class UsersWords extends UsersApi {
     };
 
     try {
-      const result = await instance.post(`${this.getApiUrl()}/${wordId}`, data);
+      const result = await instance.post(
+        `${this.API_PATH_USERS_WORDS}/${wordId}`,
+        data
+      );
       return result.data;
     } catch (error) {
-      const err = error as AxiosError;
-      switch (err.response?.status) {
-        case this.ERROR_CODES.AlREADY_EXISTS:
-          throw new AlreadyExistsError(err.response?.data);
-        default:
-          throw err;
-      }
+      throw this.getException(error as AxiosError);
     }
   };
 
@@ -77,16 +76,13 @@ export class UsersWords extends UsersApi {
     };
 
     try {
-      const result = await instance.put(`${this.getApiUrl()}/${wordId}`, data);
+      const result = await instance.put(
+        `${this.API_PATH_USERS_WORDS}/${wordId}`,
+        data
+      );
       return result.data;
     } catch (error) {
-      const err = error as AxiosError;
-      switch (err.response?.status) {
-        case this.ERROR_CODES.AlREADY_EXISTS:
-          throw new AlreadyExistsError(err.response?.data);
-        default:
-          throw err;
-      }
+      throw this.getException(error as AxiosError);
     }
   };
 }

@@ -16,8 +16,7 @@ import { UsersApi } from '../../services/RSLangApi/UsersApi';
 import { useAppDispatch } from '../../store/hooks';
 import * as userSlice from '../../store/user/user.slice';
 import { IAuthForm, ValidationErrors } from '../../types/common';
-import { OtherApiError } from '../../utils/errors/OtherApiError';
-import { UserValidationError } from '../../utils/errors/UserValidationError';
+import { ValidationError } from '../../utils/errors/ValidationError';
 import {
   getValidationErrorText,
   isValid,
@@ -46,19 +45,19 @@ export const SignUp = ({ toggleView }: IAuthForm) => {
         const result = await signinApi.signin({ email, password });
         dispatch(userSlice.login(result));
       } catch (error) {
-        if (error instanceof OtherApiError && error.message) {
+        if (error instanceof Error && error.message) {
           setAlert(error.message);
         }
       }
     } catch (error) {
-      if (error instanceof UserValidationError && error.data) {
+      if (error instanceof ValidationError && error.data) {
         setValidationErrors(
           error.data.error.errors.reduce(
             (acc, el) => Object.assign(acc, { [el.path[0]]: el.message }),
             {} as ValidationErrors
           )
         );
-      } else if (error instanceof OtherApiError && error.message) {
+      } else if (error instanceof Error && error.message) {
         setAlert(error.message);
       }
     }
