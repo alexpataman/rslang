@@ -1,22 +1,11 @@
-import axios from 'axios';
-
 import { Word } from '../../types/RSLangApi';
 import { RSLangApi } from './RSLangApi';
 
 export class SoundsApi extends RSLangApi {
-  protected API_PATH = '';
+  private API_PATH = this.API_HOST;
 
   getSoundPath(src: Word['audio']): string {
-    const result = `${this.getApiUrl()}${src}`;
+    const result = `${this.API_PATH}${src}`;
     return result;
   }
-
 }
-
-
-
-
-
-
-
-

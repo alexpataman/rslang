@@ -1,3 +1,5 @@
+import { Button } from '../forms/Button/Button';
+
 import './Pagination.scss';
 
 export enum PAGINATION_DIRECTIONS {
@@ -18,19 +20,19 @@ export const Pagination = ({
   disableConditions,
 }: IPagination) => (
   <div className="Pagination">
-    <button
+    <Button
       className="PaginationButton"
       onClick={() => changePageHandler(PAGINATION_DIRECTIONS.PREV)}
       disabled={disableConditions[PAGINATION_DIRECTIONS.PREV]}
     >
       Prev
-    </button>
-    <button
+    </Button>
+    <Button
       className="PaginationButton"
       onClick={() => changePageHandler(PAGINATION_DIRECTIONS.NEXT)}
       disabled={disableConditions[PAGINATION_DIRECTIONS.NEXT]}
     >
       Next
-    </button>
+    </Button>
   </div>
 );

@@ -1,3 +1,10 @@
+export type UserWord = {
+  optional: {
+    isDifficult: boolean;
+    isKnown: boolean;
+  };
+};
+
 export type Word = {
   id: string;
   group: number;
@@ -13,6 +20,7 @@ export type Word = {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+  userWord?: UserWord;
 };
 
 export type User = {
@@ -22,6 +30,8 @@ export type User = {
   password?: string;
 };
 
+export type UserInfo = Omit<User, 'password'>;
+
 export type Authorization = {
   message: string;
   token: string;
@@ -29,3 +39,23 @@ export type Authorization = {
   userId: string;
   name: string;
 };
+
+type Error = {
+  message: string;
+  path: string[];
+};
+
+export type ErrorData = {
+  error: {
+    errors: Error[];
+    status: string;
+  };
+};
+
+export type Tokens = {
+  token: string;
+  refreshToken: string;
+};
+
+export type GetTokens = () => Tokens;
+export type SetTokens = (tokens: Tokens) => void;

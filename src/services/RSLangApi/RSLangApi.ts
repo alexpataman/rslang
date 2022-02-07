@@ -1,19 +1,66 @@
-import { AxiosRequestHeaders } from 'axios';
+import { AxiosError, AxiosRequestHeaders } from 'axios';
+
+import { Tokens, GetTokens, SetTokens } from '../../types/RSLangApi';
+import { AlreadyExistsError } from '../../utils/errors/AlreadyExistsError';
+import { ForbiddenError } from '../../utils/errors/ForbiddenError';
+import { UnauthorizedError } from '../../utils/errors/UnauthorizedError';
+import { ValidationError } from '../../utils/errors/ValidationError';
+
+const emptyTokens = {
+  token: '',
+  refreshToken: '',
+};
 
 export abstract class RSLangApi {
-  protected API_HOST = process.env.REACT_APP_API_URL;
+  public API_HOST = process.env.REACT_APP_API_URL;
 
-  protected API_PATH = '';
+  protected getLocalTokens: GetTokens | undefined;
+
+  protected setLocalTokens: SetTokens | undefined;
 
   protected defaultHeaders: AxiosRequestHeaders;
 
-  constructor() {
+  public ERROR_CODES = {
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    AlREADY_EXISTS: 417,
+    VALIDATION_ERROR: 422,
+    NOT_FOUND: 404,
+  };
+
+  constructor(getTokens?: GetTokens, setTokens?: SetTokens) {
     this.defaultHeaders = {
       'Content-Type': 'application/json',
     };
+    this.getLocalTokens = getTokens;
+    this.setLocalTokens = setTokens;
   }
 
-  getApiUrl() {
-    return `${this.API_HOST}/${this.API_PATH}`;
+  getTokens() {
+    if (this.getLocalTokens) {
+      return this.getLocalTokens();
+    }
+    return emptyTokens;
+  }
+
+  setTokens(tokens: Tokens) {
+    if (this.setLocalTokens) {
+      this.setLocalTokens(tokens);
+    }
+  }
+
+  getException(error: AxiosError): Error {
+    switch (error.response?.status) {
+      case this.ERROR_CODES.VALIDATION_ERROR:
+        return new ValidationError(error.response?.data);
+      case this.ERROR_CODES.AlREADY_EXISTS:
+        return new AlreadyExistsError(error.response?.data);
+      case this.ERROR_CODES.UNAUTHORIZED:
+        return new UnauthorizedError(error.response?.data);
+      case this.ERROR_CODES.FORBIDDEN:
+        return new ForbiddenError(error.response?.data);
+      default:
+        return new Error(error.response?.data);
+    }
   }
 }

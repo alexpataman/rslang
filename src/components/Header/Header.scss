@@ -1,13 +1,17 @@
 @import '../../App.variables.scss';
 
 .Header {
-  padding: 10px 0;
+  padding: 0;
   background: $base-color;
   height: 50px;
 
   & > .container {
     display: flex;
     align-items: center;
+
+    .username {
+      color: #fff;
+    }
 
     .nav {
       display: flex;

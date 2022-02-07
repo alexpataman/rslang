@@ -3,7 +3,6 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   Button,
 } from '@mui/material';
 import classNames from 'classnames';
@@ -15,7 +14,7 @@ type ModalOptions = {
 
 export interface IModalData {
   title?: string;
-  content?: string;
+  content?: string | JSX.Element;
   options?: ModalOptions;
 }
 interface SimpleDialogProps {
@@ -39,13 +38,7 @@ export const Modal = (props: SimpleDialogProps) => {
       className={classNames(options?.className)}
     >
       {title && <DialogTitle>{title}</DialogTitle>}
-      {content && (
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {content}
-          </DialogContentText>
-        </DialogContent>
-      )}
+      {content && <DialogContent>{content}</DialogContent>}
       {options?.showCloseButton && (
         <DialogActions>
           <Button onClick={handleClose}>Закрыть</Button>

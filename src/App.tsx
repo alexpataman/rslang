@@ -1,32 +1,46 @@
+import { useState } from 'react';
+
 import { Outlet } from 'react-router-dom';
 
+import { ModalContext } from './components/context/ModalContext';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { Modal } from './components/Modal/Modal';
-import { useAppSelector, useAppDispatch } from './store/hooks';
-import * as modalSlice from './store/modal/modal.slice';
+import { IModalData } from './types/modal';
 import './App.scss';
 
 export const App = () => {
-  const { isModalOpen, modalData } = useAppSelector(modalSlice.selectModalData);
-  const dispatch = useAppDispatch();
+  const [modalData, setModalData] = useState<IModalData>({});
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  const contextData = {
+    setModalData: (data: IModalData) => {
+      setModalData(data);
+    },
+    setModalOpen: (data: boolean) => {
+      setModalOpen(data);
+    },
+  };
 
   return (
-    <div className="App">
-      <Header />
-      <main>
-        <div className="container">
-          <Outlet />
-        </div>
-      </main>
-      <Footer />
-      {isModalOpen && (
-        <Modal
-          open={isModalOpen}
-          modalData={modalData}
-          onClose={() => dispatch(modalSlice.close())}
-        />
-      )}
-    </div>
+    <ModalContext.Provider value={contextData}>
+      <div className="App">
+        <Header />
+        <main>
+          <div className="container">
+            <Outlet />
+          </div>
+        </main>
+        <Footer />
+
+        {isModalOpen && (
+          <Modal
+            open={isModalOpen}
+            modalData={modalData}
+            onClose={() => setModalOpen(false)}
+          />
+        )}
+      </div>
+    </ModalContext.Provider>
   );
 };

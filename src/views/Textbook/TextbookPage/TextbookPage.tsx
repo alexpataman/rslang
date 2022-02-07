@@ -1,29 +1,10 @@
-import { useMemo, useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { WordsApi } from '../../../services/RSLangApi/WordsApi';
-import { Word } from '../../../types/RSLangApi';
+import { TextbookNav } from '../TextbookNav/TextbookNav';
 
-export const TextbookPage = () => {
-  const [words, setWords] = useState<Word[]>();
-  const wordsApi = useMemo(() => new WordsApi(), []);
-
-  useEffect(() => {
-    (async () => {
-      const words = await wordsApi.getWords();
-      setWords(words);
-    })();
-  }, [wordsApi]);
-
-  return (
-    <>
-      <div>Textbook Page</div>
-      <ul>
-        {words?.map((el) => (
-          <li key={el.id}>
-            {el.word} - {el.wordTranslate}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-};
+export const TextbookPage = () => (
+  <>
+    <TextbookNav />
+    <Outlet />
+  </>
+);
