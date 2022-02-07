@@ -12,17 +12,6 @@ export class WordsApi extends RSLangApi {
     return result.data;
   }
 
-  async getSound(id: Word['id']): Promise<Word | null> {
-    try {
-      const result = await axios.get(`${this.getApiUrl()}/${id}`);
-      return result.data;
-    } catch {
-      return null;
-    }
-  }
-
-
-
   async getWord(id: Word['id']): Promise<Word | null> {
     try {
       const result = await axios.get(`${this.getApiUrl()}/${id}`);
