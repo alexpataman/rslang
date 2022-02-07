@@ -5,9 +5,11 @@ import { Provider } from 'react-redux';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { App } from './App';
+import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { store } from './store';
 import { GamesPage } from './views/Games/GamesPage/GamesPage';
 import { HomePage } from './views/Home/HomePage/HomePage';
+import { LoginPage } from './views/Login/LoginPage/LoginPage';
 import { StatisticsPage } from './views/Statistics/StatisticsPage/StatisticsPage';
 import { TextbookCategoriesPage } from './views/Textbook/TextbookCategoriesPage/TextbookCategoriesPage';
 import { TextbookCategoryPage } from './views/Textbook/TextbookCategoryPage/TextbookCategoryPage';
@@ -23,7 +25,15 @@ render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<HomePage />} />
-            <Route path="/statistics" element={<StatisticsPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/statistics"
+              element={
+                <PrivateRoute>
+                  <StatisticsPage />
+                </PrivateRoute>
+              }
+            />
             <Route path="/games" element={<GamesPage />} />
             <Route path="/textbook" element={<TextbookPage />}>
               <Route path="/textbook" element={<TextbookCategoriesPage />} />
@@ -36,9 +46,20 @@ render(
               </Route>
               <Route
                 path="/textbook/difficult"
-                element={<TextbookDifficultPage />}
+                element={
+                  <PrivateRoute>
+                    <TextbookDifficultPage />
+                  </PrivateRoute>
+                }
               />
-              <Route path="/textbook/known" element={<TextbookKnownPage />} />
+              <Route
+                path="/textbook/known"
+                element={
+                  <PrivateRoute>
+                    <TextbookKnownPage />
+                  </PrivateRoute>
+                }
+              />
             </Route>
             <Route
               path="*"
