@@ -7,6 +7,8 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import { App } from './App';
 import { store } from './store';
 import { GamesPage } from './views/Games/GamesPage/GamesPage';
+import { AppSprint } from './views/Games/GamesPage/sprint/app-sprin';
+import { Levels } from './views/Games/GamesPage/sprint/levels';
 import { HomePage } from './views/Home/HomePage/HomePage';
 import { StatisticsPage } from './views/Statistics/StatisticsPage/StatisticsPage';
 import { TextbookPage } from './views/Textbook/TextbookPage/TextbookPage';
@@ -22,6 +24,8 @@ render(
             <Route path="/statistics" element={<StatisticsPage />} />
             <Route path="/games" element={<GamesPage />} />
             <Route path="/textbook" element={<TextbookPage />} />
+            <Route path="/games/sprint/:gameType" element={<AppSprint />} />
+            <Route path="/games/sprint/levels" element={<Levels />} />
           </Route>
         </Routes>
       </HashRouter>
