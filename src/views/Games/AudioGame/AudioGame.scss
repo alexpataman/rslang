@@ -1,0 +1,134 @@
+.audio-game {
+  margin: 0 auto;
+  max-width: 60%;
+  text-align: center;
+
+  .audio-btn {
+    height: 16px;
+    width: 16px;
+    background: 0 0/contain url("../../../assets/svg/volume.svg") no-repeat;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .start-page {
+    padding: 20px 0;
+    border: 1px solid #000;
+
+    .start-page__title {
+      margin: 0;
+    }
+
+    .start-page__lvl-btn {
+      margin: 0 6px;
+      height: 40px;
+      width: 40px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+
+  .game {
+    padding: 20px 0;
+    border: 1px solid brown;
+
+    .game__progress {
+      margin: 0 auto;
+      margin-bottom: 20px;
+      max-width: 50%;
+      display: flex;
+      justify-content: space-between;
+
+      & > li {
+        display: block;
+        height: 15px;
+        width: 15px;
+        background-color: #000;
+        border-radius: 50%;
+
+        &.correct {
+          background-color: green;
+        }
+
+        &.wrong {
+          background-color: red;
+        }
+
+        &.unknown {
+          background-color: gold;
+        }
+      }
+    }
+
+    .game__audio-btn {
+      margin-bottom: 20px;
+      padding: 10px;
+      height: 90px;
+      width: 90px;
+      background-color: transparent;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .word-card {
+      margin-bottom: 20px;
+
+      img {
+        max-height: 180px;
+      }
+    }
+
+    .game__choices {
+      margin-bottom: 10px;
+
+      button {
+        margin: 0 6px;
+      }
+
+      .correct {
+        font-weight: bold;
+        color: green;
+      }
+
+      .wrong {
+        font-weight: bold;
+        text-decoration: line-through;
+        color: red;
+      }
+    }
+  }
+
+  .result {
+    border: 1px solid rgb(36, 168, 3);
+
+    .result__block {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .result__subtitle::after {
+      content: "";
+      display: block;
+      position: absolute;
+      height: 1px;
+      width: 30%;
+      background-color: #000;
+      top: 24px;
+      left: 35%;
+    }
+
+    .result__list {
+      text-align: center;
+    }
+
+    .result__item {
+      margin-bottom: 4px;
+      list-style: none;
+    }
+
+    .result__audio {
+      margin-right: 6px;
+    }
+  }
+}
