@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,16 +8,16 @@ import CardMedia from '@mui/material/CardMedia';
 import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import parse from 'html-react-parser';
 
 import { AuthorisedOnly } from '../../../components/AuthorisedOnly/AuthorisedOnly';
 import { Word } from '../../../types/RSLangApi';
+import { TextbookButtonAudio } from '../TextbookButtonAudio/TextbookButtonAudio';
 import { TextbookButtonDifficult } from '../TextbookButtonDifficult/TextbookButtonDifficult';
 import { TextbookButtonKnown } from '../TextbookButtonKnown/TextbookButtonKnown';
-import './TextbookWordItem.scss';
 import { TextbookButtonProgress } from '../TextbookButtonProgress/TextbookButtonProgress';
+import './TextbookWordItem.scss';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -99,11 +98,7 @@ export const TextbookWordItem = ({
         <AuthorisedOnly>
           <TextbookButtonProgress word={item} />
         </AuthorisedOnly>
-        <Tooltip title="Проиграть">
-          <IconButton aria-label="Проиграть">
-            <VolumeUpIcon />
-          </IconButton>
-        </Tooltip>
+        <TextbookButtonAudio word={item} />
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
