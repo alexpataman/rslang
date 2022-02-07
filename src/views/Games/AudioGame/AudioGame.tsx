@@ -41,11 +41,11 @@ export const AudioGame = () => {
     const nextAudio = new Audio(`https://rslang-project.herokuapp.com/${nextWord.audio}`);
 
     const arr = getChoicesArray(0);
-    const choicesArr = arr.map((index) => wordsArray[index].word);
+    const choicesArr = arr.map((index) => wordsArray[index].wordTranslate);
 
     setRoundState({
       isAnswered: false,
-      wordInd: 0,
+      roundNum: 0,
       audio: firstAudio,
       next: nextAudio,
       choices: choicesArr
@@ -69,14 +69,22 @@ export const AudioGame = () => {
   const handleChoiceBtnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
+    if (roundState?.isAnswered) return;
+
     const btn = e.target as HTMLButtonElement;
-    const correctWord = words !== undefined && roundState?.wordInd !== undefined && words[roundState.wordInd].word;
+    const correctWord = words !== undefined && words[roundState?.roundNum as number].wordTranslate;
     const { choice } = btn.dataset;
+    const updResult = result.slice();
     if (choice === correctWord) {
-      console.log('correct', correctWord, choice);
+      updResult[roundState?.roundNum as number] = 'correct';
+      // btn.className = 'correct';
+    } else if (!choice) {
+      updResult[roundState?.roundNum as number] = 'unknown';
     } else {
-      console.log('wrong', correctWord, choice);
+      updResult[roundState?.roundNum as number] = 'wrong';
+      // btn.className = 'wrong';
     }
+    setResult(updResult);
     
     const newRoundState = { ...(roundState as round) };
     newRoundState.isAnswered = true;
@@ -86,7 +94,32 @@ export const AudioGame = () => {
   const handleNextRoundBtnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    console.log('next round click');
+    const wordsArray = words?.slice() as Word[];
+    const round = (roundState?.roundNum as number) + 1;
+
+    if (round > 19) {
+      console.log('end');
+      return;
+    }
+
+    const currAudio = roundState?.next as HTMLAudioElement;
+    let nextAudio = null;
+    if (round < MAX_WORD_IND) {
+      const nextWord = wordsArray[round + 1];
+      nextAudio = new Audio(`https://rslang-project.herokuapp.com/${nextWord.audio}`);
+    }
+
+    const arr = getChoicesArray(round);
+    const choicesArr = arr.map((index) => wordsArray[index].wordTranslate);
+
+    const nextRoundState = { 
+      isAnswered: false,
+      roundNum: round,
+      audio: currAudio,
+      next: nextAudio,
+      choices: choicesArr
+     };
+    setRoundState(nextRoundState);
   }
 
   if (gameStatus) {
@@ -96,22 +129,22 @@ export const AudioGame = () => {
           <ul className="game__progress">
             {result.map((item, ind) => <li key={ind} className={item}></li>)}
           </ul>
-          <button className="game__audio-btn" onClick={handleAudioClick}>
+          <button id="wordAudio" className="game__audio-btn" onClick={handleAudioClick}>
             Повторить
           </button>
           {roundState?.isAnswered && words &&
             <div className="word-card">
-              <img src={`https://rslang-project.herokuapp.com/${words[roundState.wordInd].image}`} alt="photo: correct answer" />
-              <p>{words[roundState.wordInd].word} <span>{words[roundState.wordInd].transcription}</span></p>
-              <p>{words[roundState.wordInd].textExample}</p>
-              <p>{words[roundState.wordInd].textExampleTranslate}</p>
+              <img src={`https://rslang-project.herokuapp.com/${words[roundState.roundNum].image}`} alt="photo: correct answer" />
+              <p>{words[roundState.roundNum].word} <span>{words[roundState.roundNum].transcription}</span></p>
+              <p>{words[roundState.roundNum].textExample}</p>
+              <p>{words[roundState.roundNum].textExampleTranslate}</p>
             </div>
           }
           <div className="game__choices">
             {roundState?.choices.map((choice, ind) => <button key={ind} data-choice={choice} onClick={handleChoiceBtnClick}>{choice}</button>)}
           </div>
-          <button className="game__choice-btn" onClick={roundState?.isAnswered ? handleNextRoundBtnClick : handleChoiceBtnClick}>
-            {roundState?.isAnswered ? '->' : 'Не знаю'}
+          <button onClick={roundState?.isAnswered ? handleNextRoundBtnClick : handleChoiceBtnClick}>
+            {roundState?.isAnswered ? '->' : 'не знаю'}
           </button>
         </div>
       </div>
@@ -122,7 +155,7 @@ export const AudioGame = () => {
     <div className="audio-game">
       <div className="start-page">
         <h2 className="start-page__title">Аудиовызов</h2>
-        <p className="start-page__subtitle">Ваша задача - прослушать аудио и выбрать соответствующее ему слово</p>
+        <p className="start-page__subtitle">Ваша задача - прослушать аудио и выбрать соответствующий ему перевод</p>
         <p className="start-page__subtitle">Выберите уровень сложности</p>
         <div className="start-page__btn-cont">
           <button id="0" className="start-page__lvl-btn" onClick={handleLevelBtnClick}>1</button>

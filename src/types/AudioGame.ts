@@ -1,6 +1,6 @@
 type round = {
   isAnswered: boolean,
-  wordInd: number,
+  roundNum: number,
   audio: HTMLAudioElement,
   next: HTMLAudioElement | null,
   choices: Array<string> | []

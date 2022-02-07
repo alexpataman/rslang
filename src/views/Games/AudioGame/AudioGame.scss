@@ -64,6 +64,10 @@
 
     .word-card {
       margin-bottom: 20px;
+
+      img {
+        max-height: 180px;
+      }
     }
 
     .game__choices {
@@ -72,10 +76,17 @@
       button {
         margin: 0 6px;
       }
-    }
 
-    .game__choice-btn {
+      .correct {
+        font-weight: bold;
+        color: green;
+      }
 
+      .wrong {
+        font-weight: bold;
+        text-decoration: line-through;
+        color: red;
+      }
     }
   }
 }
