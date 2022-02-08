@@ -3,6 +3,7 @@ import { useMemo, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { GameButtons } from '../../../components/GameButtons/GameButtons';
 import {
   Pagination,
   PAGINATION_DIRECTIONS,
@@ -56,11 +57,18 @@ export const TextbookCategoryPage = () => {
 
   return (
     <>
-      <h2>Категория #{+categoryId + 1}</h2>
-      <Pagination
-        changePageHandler={changePageHandler}
-        disableConditions={disableConditions}
-      />
+      <h2>Категория #{categoryId + 1}</h2>
+      <Grid container alignItems="center" sx={{ mb: 2 }} spacing={2}>
+        <Grid item>
+          <Pagination
+            changePageHandler={changePageHandler}
+            disableConditions={disableConditions}
+          />
+        </Grid>
+        <Grid item>
+          <GameButtons categoryId={categoryId} page={page} />
+        </Grid>
+      </Grid>
 
       <Grid
         container

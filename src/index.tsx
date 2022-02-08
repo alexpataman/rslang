@@ -38,9 +38,27 @@ render(
               }
             />
             <Route path="/games" element={<GamesPage />} />
+
             <Route path="/games/sprint/:gameType" element={<AppSprint />} />
+
             <Route path="/games/sprint/levels" element={<Levels />} />
-            <Route path="/games/audio" element={<AudioGamePage />} />
+
+            <Route path="/games/sprint" element={<AppSprint />}>
+              <Route path="category">
+                <Route path=":categoryId" element={<AppSprint />}>
+                  <Route path="page/:page" element={<AppSprint />} />
+                </Route>
+              </Route>
+            </Route>
+
+            <Route path="/games/audio" element={<AudioGamePage />}>
+              <Route path="category">
+                <Route path=":categoryId" element={<AudioGamePage />}>
+                  <Route path="page/:page" element={<AudioGamePage />} />
+                </Route>
+              </Route>
+            </Route>
+
             <Route path="/textbook" element={<TextbookPage />}>
               <Route path="/textbook" element={<TextbookCategoriesPage />} />
               <Route path="/textbook/category/">

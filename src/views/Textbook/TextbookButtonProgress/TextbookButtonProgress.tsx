@@ -4,7 +4,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
-import { ModalContext } from '../../../components/context/ModalContext';
+import { ModalContext } from '../../../context/ModalContext';
 import { Word } from '../../../types/RSLangApi';
 
 interface ITextbookButtonDifficult {
