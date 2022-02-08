@@ -12,3 +12,8 @@ export interface IAuthForm {
 export type ValidationErrors = {
   [key: string]: string;
 };
+
+export enum GAME_ID {
+  AUDIO = 'audio',
+  SPRINT = 'sprint',
+}
