@@ -6,12 +6,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
+import { ModalContext } from '../../context/ModalContext';
 import { useUserIsGuest } from '../../hooks/useUserIsGuest';
 import { User } from '../../services/User';
 import { useAppDispatch } from '../../store/hooks';
 import * as userSlice from '../../store/user/user.slice';
 import { Auth } from '../Auth/Auth';
-import { ModalContext } from '../context/ModalContext';
 
 export const UserProfile = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

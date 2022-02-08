@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { Outlet } from 'react-router-dom';
 
-import { ModalContext } from './components/context/ModalContext';
 import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { Modal } from './components/Modal/Modal';
+import { ModalContext } from './context/ModalContext';
 import { IModalData } from './types/modal';
 import './App.scss';
 

@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { IModalData } from '../../types/modal';
+import { IModalData } from '../types/modal';
 
 interface IModalContext {
   setModalData: (data: IModalData) => void;

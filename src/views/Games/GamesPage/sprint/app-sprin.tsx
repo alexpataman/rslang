@@ -12,32 +12,33 @@ import { WordCard } from './word-card/word-card';
 import './app-sprint.css';
 
 export const AppSprint = () => {
-  const par = useParams<{gameType: GameType}>();
+  const categoryId = Number(useParams()?.categoryId) || 0;
+  const page = Number(useParams()?.page) || 0;
+
+  const par = useParams<{ gameType: GameType }>();
   const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
   const [ans, setAns] = useState<Answer[]>([]);
-  const [cur, setcur] =  useState<number>(0);
+  const [cur, setcur] = useState<number>(0);
   const [gameStatus, setGameStatus] = useState<boolean>(true);
   useEffect(() => {
     if (cur >= words.length) {
-     stopGame();
+      stopGame();
     }
   });
 
-
   function see(a: Word, b: boolean) {
-   if (cur < words.length) {
-    const aa:Answer = {ans:b, word: a}  
-    const newarr: Answer[] =[...ans, aa];
-    setAns(newarr);
-    setcur(cur + 1);
-   
-  }  
+    if (cur < words.length) {
+      const aa: Answer = { ans: b, word: a };
+      const newarr: Answer[] = [...ans, aa];
+      setAns(newarr);
+      setcur(cur + 1);
+    }
   }
   function getRandom(): Word {
-    return words[Math.floor(Math.random()*words.length)]
+    return words[Math.floor(Math.random() * words.length)];
   }
-  function  startGame() {
+  function startGame() {
     setGameStatus(true);
   }
 
@@ -47,12 +48,12 @@ export const AppSprint = () => {
 
   useEffect(() => {
     (async () => {
-      let words=[];
+      let words = [];
       if (par.gameType === GameType.fromMenu) {
         words = await wordsApi.getWords();
         console.log('from menu');
       } else {
-        words = await wordsApi.getWords(Number(par.gameType)-1);
+        words = await wordsApi.getWords(Number(par.gameType) - 1);
         console.log('from cat', par.gameType);
       }
       setWords(words);
@@ -61,17 +62,31 @@ export const AppSprint = () => {
     })();
   }, [par.gameType, wordsApi]);
 
-if (words.length !== 0) {
-  if (gameStatus) {
-  return (
-    <div className='appSprint'>
-      <WordCard cWord={words[cur]} getAnswer={see} random={getRandom()} stop={stopGame}/>
-    </div>
-  )
-  } 
+  if (words.length !== 0) {
+    if (gameStatus) {
+      return (
+        <div className="appSprint">
+          <WordCard
+            cWord={words[cur]}
+            getAnswer={see}
+            random={getRandom()}
+            stop={stopGame}
+          />
+        </div>
+      );
+    }
     return (
-      <><Result ansList={ans} /></>
-  )
-}
-return (<div>loading...</div>);
-}
+      <>
+        <Result ansList={ans} />
+      </>
+    );
+  }
+  return (
+    <div>
+      <h5>
+        ID категории {categoryId}, страница {page}
+      </h5>
+      loading...
+    </div>
+  );
+};
