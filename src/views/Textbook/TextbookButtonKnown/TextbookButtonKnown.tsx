@@ -4,9 +4,9 @@ import SchoolIcon from '@mui/icons-material/School';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
-import { UsersWords } from '../../../services/RSLangApi/UsersWordsApi';
+import { UsersWordsApi } from '../../../services/RSLangApi/UsersWordsApi';
 import { User } from '../../../services/User';
-import { Word } from '../../../types/RSLangApi';
+import { UserWord, Word } from '../../../types/RSLangApi';
 import { AlreadyExistsError } from '../../../utils/errors/AlreadyExistsError';
 
 interface ITextbookButtonKnown {
@@ -20,17 +20,25 @@ export const TextbookButtonKnown = (props: ITextbookButtonKnown) => {
   const [isActive, setIsActive] = useState(userWord?.optional?.isKnown);
 
   const usersWordsApi = useMemo(
-    () => new UsersWords(User.getId(), User.getTokens, User.setTokens),
+    () => new UsersWordsApi(User.getId(), User.getTokens, User.setTokens),
     []
   );
   const handleClick = async () => {
+    const userWord = (await (async () => {
+      try {
+        return await usersWordsApi.get(id);
+      } catch {
+        return null;
+      }
+    })()) as UserWord | null;
+
     const payload = { ...userWord?.optional, isKnown: !isActive };
 
     try {
-      await usersWordsApi.createWord(id, payload);
+      await usersWordsApi.create(id, payload);
     } catch (error) {
       if (error instanceof AlreadyExistsError) {
-        await usersWordsApi.updateWord(id, payload);
+        await usersWordsApi.update(id, payload);
       }
     }
     setIsActive(!isActive);
