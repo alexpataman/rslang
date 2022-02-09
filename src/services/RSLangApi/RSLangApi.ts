@@ -3,6 +3,7 @@ import { AxiosError, AxiosRequestHeaders } from 'axios';
 import { Tokens, GetTokens, SetTokens } from '../../types/RSLangApi';
 import { AlreadyExistsError } from '../../utils/errors/AlreadyExistsError';
 import { ForbiddenError } from '../../utils/errors/ForbiddenError';
+import { NotFoundError } from '../../utils/errors/NotFoundError';
 import { UnauthorizedError } from '../../utils/errors/UnauthorizedError';
 import { ValidationError } from '../../utils/errors/ValidationError';
 
@@ -65,6 +66,8 @@ export abstract class RSLangApi {
         return new UnauthorizedError(data);
       case this.ERROR_CODES.FORBIDDEN:
         return new ForbiddenError(data);
+      case this.ERROR_CODES.NOT_FOUND:
+        return new NotFoundError(data);
       default:
         return new Error(data);
     }

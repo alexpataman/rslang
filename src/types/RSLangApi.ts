@@ -1,8 +1,16 @@
-export type UserWord = {
-  optional: {
-    isDifficult: boolean;
-    isKnown: boolean;
+export type UserWordPayload = {
+  isDifficult?: boolean;
+  isKnown?: boolean;
+  progress?: {
+    counter: number;
+    lastChange: string;
+    totalMistakes: number;
+    totalCorrect: number;
   };
+};
+
+export type UserWord = {
+  optional?: UserWordPayload;
 };
 
 export type Word = {

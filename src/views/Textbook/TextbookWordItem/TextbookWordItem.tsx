@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import parse from 'html-react-parser';
 
 import { AuthorisedOnly } from '../../../components/AuthorisedOnly/AuthorisedOnly';
+import { Temp } from '../../../components/Temp/Temp';
 import { Word } from '../../../types/RSLangApi';
 import { TextbookButtonAudio } from '../TextbookButtonAudio/TextbookButtonAudio';
 import { TextbookButtonDifficult } from '../TextbookButtonDifficult/TextbookButtonDifficult';
@@ -112,6 +113,7 @@ export const TextbookWordItem = ({
         <CardContent>
           <Typography paragraph>{parse(textMeaning)}</Typography>
           <Typography>{parse(textMeaningTranslate)}</Typography>
+          <Temp word={item} />
         </CardContent>
       </Collapse>
     </Card>
