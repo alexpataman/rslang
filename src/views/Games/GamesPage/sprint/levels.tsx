@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { GameType, LEVELS } from './types/gametypes';
+import { LEVELS } from './types/gametypes';
 
 export const Levels = () =>{
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export const Levels = () =>{
   </div>
   <div>
   {LEVELS.map((e, i)=> (
-    <button key={i} onClick={()=> navigate(`/games/sprint/${e}`)}>{e}</button>
+    <button key={i} onClick={()=> navigate(`/games/sprint/category/${e}/page/${e}`)}>{e}</button>
   ))}
   </div>
   </>

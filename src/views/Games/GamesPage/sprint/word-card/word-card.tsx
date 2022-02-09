@@ -1,16 +1,18 @@
-import { KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
+import { WordStatistics } from '../../../../../services/WordStatistics';
+import { GAME_ID } from '../../../../../types/common';
 import { Word } from '../../../../../types/RSLangApi'
-import { Answer } from '../types/Answer';
+import { Control } from '../control/control';
 import './word-card.css';
 
 type WordParam = {
   cWord: Word;
-  getAnswer: (a: Word, b: boolean) => void;
+  getAnswer: (a: Word, b: boolean, score: number) => void;
   random: Word,
   stop: () => void,
 }
-const TIME_TO_PLAY = 10;
+const TIME_TO_PLAY = 100;
 
 export const WordCard = (word: WordParam) => {
   const [ww, setww] = useState<Word>();
@@ -18,10 +20,13 @@ export const WordCard = (word: WordParam) => {
   const score = useRef<HTMLDivElement>(null);
   const multRef = useRef<HTMLDivElement>(null);
   const [mult, setMult] = useState<number>(1);
-  const [seconds, setSeconds ] =  useState(TIME_TO_PLAY);
-  const [ timerActive, setTimerActive ] = useState(false);
-  
-  
+  const [seconds, setSeconds] =  useState(TIME_TO_PLAY);
+  const [timerActive, setTimerActive] = useState(false);
+  const [isSound, setIsSound] = useState(true);
+  // TODO: нужно как-то иначе
+  const [correctAudio, setCorrectAudio] = useState<HTMLAudioElement>();
+  const [errorAudio, setErrorAudio] = useState<HTMLAudioElement>();
+
    useEffect(() => {
     (() => {
       setww(word.cWord);
@@ -32,25 +37,49 @@ export const WordCard = (word: WordParam) => {
   });
 
   useEffect(() => {
-   
+    setCorrectAudio(new Audio(`${process.env.PUBLIC_URL}/sprint/sound/correct.mp3`));
+    setErrorAudio(new Audio(`${process.env.PUBLIC_URL}/sprint/sound/error.mp3`));
+  },[]);
+
+  useEffect(() => {
+   let timer: NodeJS.Timeout; 
     if (seconds > 0 && timerActive) {
-      setTimeout(setSeconds, 1000, seconds - 1);
+      timer = setTimeout(setSeconds, 1000, seconds - 1);
     } else {
       console.log('timer',seconds);
       setTimerActive(false);
       }
+    return () => {clearTimeout(timer)} 
   }, [ seconds, timerActive ]);
 
   useEffect(() => {
     window.addEventListener("keydown", keyDownHandler);
-
+    // correctAudio.load();
+    // errorAudio.load();
     return () => {
       window.removeEventListener("keydown", keyDownHandler);
     };
-  },);
+  });
+
+  async function play(value: boolean) {
+    if (isSound) {
+      if (value) {
+        // const correctAudio = new Audio(`${process.env.PUBLIC_URL}/sprint/sound/correct.mp3`);
+      await correctAudio?.play();
+      } else {
+       await errorAudio?.play();
+      }
+    }
+  }
+  
+  function toggleSound() {
+    setIsSound(!isSound);
+  }
 
   function check(userWord: Word, b: boolean, rndWord: Word) {
     let res: boolean;
+    console.log(b, userWord.word, rndWord.word,(userWord.word === rndWord.word) === b);
+
     if ((userWord.word === rndWord.word) === b) {
       res=true;
       setMult(mult + 1);
@@ -60,15 +89,16 @@ export const WordCard = (word: WordParam) => {
       setMult(1);
       res = false;
     }
-    word.getAnswer(userWord, res);
+    play(res);
+    WordStatistics.process(ww!.id, b, GAME_ID.SPRINT);
+    word.getAnswer(userWord, res, Number(score.current!.textContent));
   }
 
   const keyDownHandler = (event: Event) => {
     if (event.type=== 'keydown') {
       const e = event as unknown as KeyboardEvent;
-      console.log(e.key);
       if (e.key ==='ArrowRight') {
-        check(ww!, true, rn!);
+        check(ww!, false, rn!);
       }
       if (e.key ==='ArrowLeft') {
         check(ww!, true, rn!);
@@ -79,7 +109,8 @@ export const WordCard = (word: WordParam) => {
   if (ww!==undefined) {
   
  return (
-    <div tabIndex={-1}>
+    <div>
+      <Control stop={word.stop} toggleSound={toggleSound} isSound={isSound}/>
       <div className="card">        
         <div className='card__stat'>
           <div className='score' >
