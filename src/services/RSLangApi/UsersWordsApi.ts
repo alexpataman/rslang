@@ -4,6 +4,7 @@ import {
   GetTokens,
   SetTokens,
   User,
+  UserWord,
   UserWordPayload,
   Word,
 } from '../../types/RSLangApi';
@@ -35,7 +36,7 @@ export class UsersWordsApi extends UsersApi {
     }
   };
 
-  get = async (wordId: Word['id']) => {
+  get = async (wordId: Word['id']): Promise<UserWord> => {
     const instance = this.getAuthInstance(this.userId);
 
     try {
@@ -48,7 +49,10 @@ export class UsersWordsApi extends UsersApi {
     }
   };
 
-  create = async (wordId: Word['id'], payload?: UserWordPayload) => {
+  create = async (
+    wordId: Word['id'],
+    payload?: UserWordPayload
+  ): Promise<UserWord> => {
     const instance = this.getAuthInstance(this.userId);
     const data = {
       optional: {
@@ -67,7 +71,10 @@ export class UsersWordsApi extends UsersApi {
     }
   };
 
-  update = async (wordId: Word['id'], payload: UserWordPayload) => {
+  update = async (
+    wordId: Word['id'],
+    payload: UserWordPayload
+  ): Promise<UserWord> => {
     const instance = this.getAuthInstance(this.userId);
     const data = {
       optional: {
