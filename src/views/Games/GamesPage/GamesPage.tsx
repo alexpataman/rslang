@@ -10,7 +10,7 @@ export const GamesPage = () => {
         Sprint Game
       </button>
       <br />
-      <button type="button" onClick={() => navigate('/games/audio')}>
+      <button type="button" onClick={() => navigate('/games/audio/levels')}>
         Audio Game
       </button>
     </>

@@ -4,6 +4,6 @@ import { ILevelBtnProps } from '../../../../types/AudioGame';
 
 export const LevelButton = (props: ILevelBtnProps) => (
   <button id={props.id} className="start-page__lvl-btn" onClick={props.onClick}>
-    {props.id}
+    {parseInt(props.id, 10) + 1}
   </button>
 );

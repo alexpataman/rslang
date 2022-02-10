@@ -1,15 +1,15 @@
 import './AudioGame.scss';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
+import { WordStatistics } from '../../../services/WordStatistics';
 import { round } from '../../../types/AudioGame';
+import { GAME_ID } from '../../../types/common';
 import { Word } from '../../../types/RSLangApi';
 import {
-  MIN_PAGE,
-  MAX_PAGE,
   MIN_WORD_IND,
   MAX_WORD_IND,
   API_PATH,
@@ -17,16 +17,41 @@ import {
 import { getRandomNum } from '../../../utils/helpers/randomNum';
 import { Game } from './Game/Game';
 import { Result } from './Result/Result';
-import { StartPage } from './StartPage/StartPage';
 
 export const AudioGame = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
-  const [gameStatus, setGameStatus] = useState<string>();
+  const [gameStatus, setGameStatus] = useState<boolean>(true);
   const [roundState, setRoundState] = useState<round>();
   const [words, setWords] = useState<Word[]>();
   const wordsApi = useMemo(() => new WordsApi(), []);
   const [result, setResult] = useState<Array<string>>(new Array(20).fill(''));
+
+  const assignRoundState = (wordsArray: Word[]) => {
+    const firstWord = wordsArray[0];
+    const firstAudio = new Audio(`${API_PATH}${firstWord.audio}`);
+    const nextWord = wordsArray[1];
+    const nextAudio = new Audio(`${API_PATH}${nextWord.audio}`);
+
+    const arr = getChoicesArray(0);
+    const choicesArr = arr.map((index) => wordsArray[index].wordTranslate);
+
+    setRoundState({
+      isAnswered: false,
+      roundNum: 0,
+      audio: firstAudio,
+      next: nextAudio,
+      choices: choicesArr,
+    });
+  };
+  
+  useEffect(() => {
+    (async () => {
+      const wordsArray = await wordsApi.getWords(categoryId, page);
+      setWords(wordsArray);
+      assignRoundState(wordsArray);
+    })();
+  }, [wordsApi]);
 
   const handleAudioClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -52,67 +77,34 @@ export const AudioGame = () => {
       } while (num === correctId);
       return num;
     });
-    console.log(array);
     const randomInd = getRandomNum(0, 4);
     array[randomInd] = correctId;
     return array;
   };
 
-  const assignRoundState = (wordsArray: Word[]) => {
-    const firstWord = wordsArray[0];
-    const firstAudio = new Audio(
-      `${API_PATH}${firstWord.audio}`
-    );
-    const nextWord = wordsArray[1];
-    const nextAudio = new Audio(
-      `${API_PATH}${nextWord.audio}`
-    );
-
-    const arr = getChoicesArray(0);
-    const choicesArr = arr.map((index) => wordsArray[index].wordTranslate);
-
-    setRoundState({
-      isAnswered: false,
-      roundNum: 0,
-      audio: firstAudio,
-      next: nextAudio,
-      choices: choicesArr,
-    });
-  };
-
-  const handleLevelBtnClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
-    const group = parseInt(e.currentTarget.id, 10);
-    const page = getRandomNum(MIN_PAGE, MAX_PAGE);
-
-    (async () => {
-      const wordsArray = await wordsApi.getWords(group, page);
-      setWords(wordsArray);
-      setGameStatus('game');
-      assignRoundState(wordsArray);
-    })();
-  };
-
   const getRoundResult = (btn: HTMLButtonElement) => {
+    // TODO: обернуть вызов process в проверку авторизации
     const correctWord =
-      words !== undefined &&
-      words[roundState?.roundNum as number].wordTranslate;
+      words !== undefined && words[roundState?.roundNum as number];
+    const correctTranslation = (correctWord as Word).wordTranslate;
+    const correctWordId = (correctWord as Word).id;
+    console.log(correctWordId);
     const { choice } = btn.dataset;
     const updResult = result.slice();
-    if (choice === correctWord) {
+    if (choice === correctTranslation) {
       updResult[roundState?.roundNum as number] = 'correct';
       btn.classList.add('correct');
+      WordStatistics.process(correctWordId, true, GAME_ID.AUDIO);
     } else if (!choice) {
       updResult[roundState?.roundNum as number] = 'unknown';
+      WordStatistics.process(correctWordId, false, GAME_ID.AUDIO);
     } else {
       updResult[roundState?.roundNum as number] = 'wrong';
+      WordStatistics.process(correctWordId, false, GAME_ID.AUDIO);
       btn.classList.add('wrong');
     }
     return updResult;
-  }
+  };
 
   const handleChoiceBtnClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -123,7 +115,7 @@ export const AudioGame = () => {
 
     const btn = e.target as HTMLButtonElement;
     const updResult = getRoundResult(btn);
-    
+
     setResult(updResult);
 
     const newRoundState = { ...(roundState as round) };
@@ -141,7 +133,7 @@ export const AudioGame = () => {
         item.classList.remove('wrong');
       }
     });
-  }
+  };
 
   const handleNextRoundBtnClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -153,7 +145,7 @@ export const AudioGame = () => {
     const round = (roundState?.roundNum as number) + 1;
 
     if (round > 19) {
-      setGameStatus('result');
+      setGameStatus(false);
       return;
     }
 
@@ -162,9 +154,7 @@ export const AudioGame = () => {
     let nextAudio = null;
     if (round < MAX_WORD_IND) {
       const nextWord = wordsArray[round + 1];
-      nextAudio = new Audio(
-        `${API_PATH}${nextWord.audio}`
-      );
+      nextAudio = new Audio(`${API_PATH}${nextWord.audio}`);
     }
 
     const arr = getChoicesArray(round);
@@ -183,22 +173,7 @@ export const AudioGame = () => {
     }
   };
 
-  if (gameStatus === 'game') {
-    return (
-      <div className="audio-game">
-        <Game
-          roundState={roundState}
-          result={result}
-          words={words}
-          handleAudioClick={handleAudioClick}
-          handleChoiceBtnClick={handleChoiceBtnClick}
-          handleNextRoundBtnClick={handleNextRoundBtnClick}
-        />
-      </div>
-    );
-  }
-
-  if (gameStatus === 'result') {
+  if (!gameStatus) {
     return (
       <div className="audio-game">
         <Result
@@ -212,7 +187,14 @@ export const AudioGame = () => {
 
   return (
     <div className="audio-game">
-      <StartPage handleButtonClick={handleLevelBtnClick} />
+      <Game
+        roundState={roundState}
+        result={result}
+        words={words}
+        handleAudioClick={handleAudioClick}
+        handleChoiceBtnClick={handleChoiceBtnClick}
+        handleNextRoundBtnClick={handleNextRoundBtnClick}
+      />
     </div>
   );
 };

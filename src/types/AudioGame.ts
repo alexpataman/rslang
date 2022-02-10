@@ -21,10 +21,6 @@ interface IAudioBtnProps {
   text: string | undefined
 }
 
-interface IStartPageProps {
-  handleButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-}
-
 interface IAudioGameProps {
   result: string[]
   words: Word[] | undefined,
@@ -54,7 +50,6 @@ export type {
   round,
   ILevelBtnProps,
   IAudioBtnProps,
-  IStartPageProps,
   IGameProps,
   IWordCardProps,
   IResultProps,
