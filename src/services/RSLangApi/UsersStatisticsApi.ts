@@ -1,6 +1,12 @@
 import { AxiosError } from 'axios';
 
-import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
+import {
+  GetTokens,
+  IUserStatistics,
+  SetTokens,
+  User,
+  Word,
+} from '../../types/RSLangApi';
 import { UsersApi } from './UsersApi';
 
 export class UsersStatisticsApi extends UsersApi {
@@ -18,7 +24,7 @@ export class UsersStatisticsApi extends UsersApi {
     this.API_PATH_USERS_STATISTICS = `${this.API_HOST}/users/${userId}/statistics`;
   }
 
-  get = async () => {
+  get = async (): Promise<IUserStatistics> => {
     const instance = this.getAuthInstance(this.userId);
 
     try {
@@ -29,7 +35,7 @@ export class UsersStatisticsApi extends UsersApi {
     }
   };
 
-  set = async (payload: {}) => {
+  set = async (payload: {}): Promise<IUserStatistics> => {
     const instance = this.getAuthInstance(this.userId);
     const data = {
       optional: {

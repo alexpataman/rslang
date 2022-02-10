@@ -39,8 +39,6 @@ render(
             />
             <Route path="/games" element={<GamesPage />} />
 
-            <Route path="/games/sprint/:gameType" element={<AppSprint />} />
-
             <Route path="/games/sprint/levels" element={<Levels />} />
 
             <Route path="/games/sprint" element={<AppSprint />}>

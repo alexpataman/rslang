@@ -1,9 +1,16 @@
 import { AxiosError } from 'axios';
 
-import { GetTokens, SetTokens, User, Word } from '../../types/RSLangApi';
+import {
+  GetTokens,
+  SetTokens,
+  User,
+  UserWord,
+  UserWordPayload,
+  Word,
+} from '../../types/RSLangApi';
 import { UsersApi } from './UsersApi';
 
-export class UsersWords extends UsersApi {
+export class UsersWordsApi extends UsersApi {
   protected userId: User['id'];
 
   public API_PATH_USERS_WORDS: string;
@@ -18,7 +25,7 @@ export class UsersWords extends UsersApi {
     this.API_PATH_USERS_WORDS = `${this.API_HOST}/users/${userId}/words`;
   }
 
-  getAllWords = async () => {
+  getAll = async () => {
     const instance = this.getAuthInstance(this.userId);
 
     try {
@@ -29,7 +36,7 @@ export class UsersWords extends UsersApi {
     }
   };
 
-  getWord = async (wordId: Word['id']) => {
+  get = async (wordId: Word['id']): Promise<UserWord> => {
     const instance = this.getAuthInstance(this.userId);
 
     try {
@@ -42,10 +49,10 @@ export class UsersWords extends UsersApi {
     }
   };
 
-  createWord = async (
+  create = async (
     wordId: Word['id'],
-    payload: { isDifficult?: boolean; isKnown?: boolean }
-  ) => {
+    payload?: UserWordPayload
+  ): Promise<UserWord> => {
     const instance = this.getAuthInstance(this.userId);
     const data = {
       optional: {
@@ -64,10 +71,10 @@ export class UsersWords extends UsersApi {
     }
   };
 
-  updateWord = async (
+  update = async (
     wordId: Word['id'],
-    payload: { isDifficult?: boolean; isKnown?: boolean }
-  ) => {
+    payload: UserWordPayload
+  ): Promise<UserWord> => {
     const instance = this.getAuthInstance(this.userId);
     const data = {
       optional: {

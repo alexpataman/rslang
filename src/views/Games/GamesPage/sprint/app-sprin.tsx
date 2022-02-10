@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 
 import { WordsApi } from '../../../../services/RSLangApi/WordsApi';
 import { Word } from '../../../../types/RSLangApi';
 import { Result } from './result/result';
 import { Answer } from './types/Answer';
-import { GameType } from './types/gametypes';
 import { WordCard } from './word-card/word-card';
 
 import './app-sprint.css';
@@ -15,24 +15,26 @@ export const AppSprint = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
 
-  const par = useParams<{ gameType: GameType }>();
   const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
-  const [ans, setAns] = useState<Answer[]>([]);
+  const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [cur, setcur] = useState<number>(0);
   const [gameStatus, setGameStatus] = useState<boolean>(true);
+  const [score, setScore] = useState<number>(0);
+
   useEffect(() => {
     if (cur >= words.length) {
       stopGame();
     }
   });
 
-  function see(a: Word, b: boolean) {
+  function see(activeWord: Word, isCorrect: boolean, score: number) {
     if (cur < words.length) {
-      const aa: Answer = { ans: b, word: a };
-      const newarr: Answer[] = [...ans, aa];
-      setAns(newarr);
+      const currentAnswer: Answer = { ans: isCorrect, word: activeWord };
+      const newarr: Answer[] = [...answerList, currentAnswer];
+      setAnswerList(newarr);
       setcur(cur + 1);
+      setScore(score);
     }
   }
   function getRandom(): Word {
@@ -49,18 +51,12 @@ export const AppSprint = () => {
   useEffect(() => {
     (async () => {
       let words = [];
-      if (par.gameType === GameType.fromMenu) {
-        words = await wordsApi.getWords();
-        console.log('from menu');
-      } else {
-        words = await wordsApi.getWords(Number(par.gameType) - 1);
-        console.log('from cat', par.gameType);
-      }
+      words = await wordsApi.getWords(categoryId, page);
       setWords(words);
       setcur(0);
       startGame();
     })();
-  }, [par.gameType, wordsApi]);
+  }, [wordsApi]);
 
   if (words.length !== 0) {
     if (gameStatus) {
@@ -77,7 +73,7 @@ export const AppSprint = () => {
     }
     return (
       <>
-        <Result ansList={ans} />
+        <Result ansList={answerList} score={score} />
       </>
     );
   }
@@ -86,7 +82,7 @@ export const AppSprint = () => {
       <h5>
         ID категории {categoryId}, страница {page}
       </h5>
-      loading...
+      loading... <CircularProgress />
     </div>
   );
 };

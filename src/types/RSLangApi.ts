@@ -1,8 +1,19 @@
-export type UserWord = {
-  optional: {
-    isDifficult: boolean;
-    isKnown: boolean;
+import { GAME_ID } from './common';
+
+export type UserWordPayload = {
+  isDifficult?: boolean;
+  isKnown?: boolean;
+  progress?: {
+    counter: number;
+    lastChange: string;
+    totalMistakes: number;
+    totalCorrect: number;
   };
+};
+
+export type UserWord = {
+  wordId: Word['id'];
+  optional: UserWordPayload;
 };
 
 export type Word = {
@@ -59,3 +70,31 @@ export type Tokens = {
 
 export type GetTokens = () => Tokens;
 export type SetTokens = (tokens: Tokens) => void;
+
+export interface IWordsStatistics {
+  totalNewWords: number;
+  totalCompleted: number;
+  totalMistakes: number;
+  totalCorrect: number;
+  correctAnswersRatio: number;
+}
+export interface IGameStatistics {
+  totalNewWords: number;
+  totalMistakes: number;
+  totalCorrect: number;
+  correctAnswersRatio: number;
+  maxSequence: number;
+  currentSequence: number;
+}
+export interface IUserStatistics {
+  optional: {
+    daily: {
+      [key: string]: {
+        games: {
+          [key in GAME_ID]: IGameStatistics;
+        };
+        words: IWordsStatistics;
+      };
+    };
+  };
+}

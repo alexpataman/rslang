@@ -1,0 +1,11 @@
+.list-item {
+  display: flex;
+  flex-direction: row;
+}
+.result {
+  
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
