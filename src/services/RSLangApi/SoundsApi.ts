@@ -5,7 +5,7 @@ export class SoundsApi extends RSLangApi {
   private API_PATH = this.API_HOST;
 
   getSoundPath(src: Word['audio']): string {
-    const result = `${this.API_PATH}${src}`;
+    const result = `${this.API_PATH}/${src}`;
     return result;
   }
 }

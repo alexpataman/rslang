@@ -1,16 +1,21 @@
-import { KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
+import { Paper } from '@mui/material';
+
+import { WordStatistics } from '../../../../../services/WordStatistics';
+import { GAME_ID } from '../../../../../types/common';
 import { Word } from '../../../../../types/RSLangApi'
-import { Answer } from '../types/Answer';
+import { Control } from '../control/control';
+
 import './word-card.css';
 
 type WordParam = {
   cWord: Word;
-  getAnswer: (a: Word, b: boolean) => void;
+  getAnswer: (a: Word, b: boolean, score: number) => void;
   random: Word,
   stop: () => void,
 }
-const TIME_TO_PLAY = 10;
+const TIME_TO_PLAY = 100;
 
 export const WordCard = (word: WordParam) => {
   const [ww, setww] = useState<Word>();
@@ -18,10 +23,15 @@ export const WordCard = (word: WordParam) => {
   const score = useRef<HTMLDivElement>(null);
   const multRef = useRef<HTMLDivElement>(null);
   const [mult, setMult] = useState<number>(1);
-  const [seconds, setSeconds ] =  useState(TIME_TO_PLAY);
-  const [ timerActive, setTimerActive ] = useState(false);
-  
-  
+  const [seconds, setSeconds] =  useState(TIME_TO_PLAY);
+  const [timerActive, setTimerActive] = useState(false);
+  const [isSound, setIsSound] = useState(true);
+  const [isFull, setIsFull] = useState(true);
+
+  // TODO: нужно как-то иначе
+  const [correctAudio, setCorrectAudio] = useState<HTMLAudioElement>();
+  const [errorAudio, setErrorAudio] = useState<HTMLAudioElement>();
+
    useEffect(() => {
     (() => {
       setww(word.cWord);
@@ -32,25 +42,54 @@ export const WordCard = (word: WordParam) => {
   });
 
   useEffect(() => {
-   
+    setCorrectAudio(new Audio(`${process.env.PUBLIC_URL}/sprint/sound/correct.mp3`));
+    setErrorAudio(new Audio(`${process.env.PUBLIC_URL}/sprint/sound/error.mp3`));
+  },[]);
+
+  useEffect(() => {
+   let timer: NodeJS.Timeout; 
     if (seconds > 0 && timerActive) {
-      setTimeout(setSeconds, 1000, seconds - 1);
+      timer = setTimeout(setSeconds, 1000, seconds - 1);
     } else {
-      console.log('timer',seconds);
       setTimerActive(false);
       }
+    return () => {clearTimeout(timer)} 
   }, [ seconds, timerActive ]);
 
   useEffect(() => {
     window.addEventListener("keydown", keyDownHandler);
-
     return () => {
       window.removeEventListener("keydown", keyDownHandler);
     };
-  },);
+  });
+
+  async function play(value: boolean) {
+    if (isSound) {
+      if (value) {
+      await correctAudio?.play();
+      } else {
+       await errorAudio?.play();
+      }
+    }
+  }
+  
+  function toggleSound() {
+    setIsSound(!isSound);
+  }
+
+function toggleFull() {
+  setIsFull(!isFull);
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+} else if (document.exitFullscreen) {
+    document.exitFullscreen();
+  }
+
+}
 
   function check(userWord: Word, b: boolean, rndWord: Word) {
     let res: boolean;
+
     if ((userWord.word === rndWord.word) === b) {
       res=true;
       setMult(mult + 1);
@@ -60,15 +99,16 @@ export const WordCard = (word: WordParam) => {
       setMult(1);
       res = false;
     }
-    word.getAnswer(userWord, res);
+    play(res);
+    WordStatistics.process(ww!.id, b, GAME_ID.SPRINT);
+    word.getAnswer(userWord, res, Number(score.current!.textContent));
   }
 
   const keyDownHandler = (event: Event) => {
     if (event.type=== 'keydown') {
       const e = event as unknown as KeyboardEvent;
-      console.log(e.key);
       if (e.key ==='ArrowRight') {
-        check(ww!, true, rn!);
+        check(ww!, false, rn!);
       }
       if (e.key ==='ArrowLeft') {
         check(ww!, true, rn!);
@@ -79,35 +119,41 @@ export const WordCard = (word: WordParam) => {
   if (ww!==undefined) {
   
  return (
-    <div tabIndex={-1}>
-      <div className="card">        
-        <div className='card__stat'>
-          <div className='score' >
-            <span>Очки:</span>
-            <span ref={score}>0</span>
-          </div>
-          <div className='mult'>
-            <span  >Множитель:</span>
-            <span ref={multRef}>1</span>
-          </div>
-          <div className='timer'>
-          <span>Осталось:</span>
-          <span>{seconds}</span>
-            
-            </div>
-        </div>
-        <div className='cards__words'>
-        {ww.word} это {rn?.wordTranslate}
-        </div>
-      
-      <div className='cards__buttons'>
-        <button type='button'onClick={() => {check(ww, true, rn!)}} > Да</button>
-        <button type='button'onClick={() => {check(ww, false, rn!)}} > Нет</button>
-      </div>
-     
-      </div>
-    
-    </div>
+   <div>
+   <h3>Спринт</h3>
+   <h4>Спринт - тренировка на скорость. Попробуй угадать как можно больше слов</h4>
+   <Paper elevation={8} sx={{
+     padding: '20px',
+   }}>
+     <Control stop={word.stop} toggleSound={toggleSound} isSound={isSound} isFull={isFull} toggleFull={toggleFull} />
+     <div className="card">
+       <div className='card__stat'>
+         <div className='score'>
+           <span>Очки:</span>
+           <span ref={score}>0</span>
+         </div>
+         <div className='mult'>
+           <span>Множитель:</span>
+           <span ref={multRef}>1</span>
+         </div>
+         <div className='timer'>
+           <span>Осталось:</span>
+           <span>{seconds}</span>
+
+         </div>
+       </div>
+       <div className='cards__words'>
+         {ww.word} это {rn?.wordTranslate}
+       </div>
+
+       <div className='cards__buttons'>
+         <button type='button' onClick={() => { check(ww, true, rn!); } }> Да</button>
+         <button type='button' onClick={() => { check(ww, false, rn!); } }> Нет</button>
+       </div>
+
+     </div>
+
+   </Paper></div>
   )}
   return (<div>undef</div>)
 }

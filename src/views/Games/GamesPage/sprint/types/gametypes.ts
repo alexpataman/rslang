@@ -1,7 +1,7 @@
 
 export const LEVEL_COUNT = 6;
 
-export const LEVELS: string[] = ['1', '2', '3', '4', '5', '6'];
+export const LEVELS: string[] = ['0', '1', '2', '3', '4', '5'];
 
 export const enum GameType {
   fromMenu = '0',
