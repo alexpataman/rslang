@@ -5,5 +5,6 @@ export type Answer = {
   ans: boolean;
 }
 export type propAnswer = {
+  score: number,
   ansList: Answer[],
 }
