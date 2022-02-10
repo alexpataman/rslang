@@ -17,7 +17,7 @@ export const AppSprint = () => {
 
   const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
-  const [ans, setAns] = useState<Answer[]>([]);
+  const [answerList, setAnswerList] = useState<Answer[]>([]);
   const [cur, setcur] = useState<number>(0);
   const [gameStatus, setGameStatus] = useState<boolean>(true);
   const [score, setScore] = useState<number>(0);
@@ -28,11 +28,11 @@ export const AppSprint = () => {
     }
   });
 
-  function see(a: Word, b: boolean, score: number) {
+  function see(activeWord: Word, isCorrect: boolean, score: number) {
     if (cur < words.length) {
-      const aa: Answer = { ans: b, word: a };
-      const newarr: Answer[] = [...ans, aa];
-      setAns(newarr);
+      const currentAnswer: Answer = { ans: isCorrect, word: activeWord };
+      const newarr: Answer[] = [...answerList, currentAnswer];
+      setAnswerList(newarr);
       setcur(cur + 1);
       setScore(score);
     }
@@ -45,16 +45,14 @@ export const AppSprint = () => {
   }
 
   function stopGame() {
-
     setGameStatus(false);
   }
 
   useEffect(() => {
     (async () => {
-      console.log(categoryId, page);
       let words = [];
-             words = await wordsApi.getWords(categoryId, page);
-        setWords(words);
+      words = await wordsApi.getWords(categoryId, page);
+      setWords(words);
       setcur(0);
       startGame();
     })();
@@ -75,7 +73,7 @@ export const AppSprint = () => {
     }
     return (
       <>
-        <Result ansList={ans} score={score} />
+        <Result ansList={answerList} score={score} />
       </>
     );
   }

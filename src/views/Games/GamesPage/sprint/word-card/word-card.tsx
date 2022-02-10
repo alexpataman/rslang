@@ -1,9 +1,12 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
+import { Paper } from '@mui/material';
+
 import { WordStatistics } from '../../../../../services/WordStatistics';
 import { GAME_ID } from '../../../../../types/common';
 import { Word } from '../../../../../types/RSLangApi'
 import { Control } from '../control/control';
+
 import './word-card.css';
 
 type WordParam = {
@@ -23,6 +26,8 @@ export const WordCard = (word: WordParam) => {
   const [seconds, setSeconds] =  useState(TIME_TO_PLAY);
   const [timerActive, setTimerActive] = useState(false);
   const [isSound, setIsSound] = useState(true);
+  const [isFull, setIsFull] = useState(true);
+
   // TODO: нужно как-то иначе
   const [correctAudio, setCorrectAudio] = useState<HTMLAudioElement>();
   const [errorAudio, setErrorAudio] = useState<HTMLAudioElement>();
@@ -46,7 +51,6 @@ export const WordCard = (word: WordParam) => {
     if (seconds > 0 && timerActive) {
       timer = setTimeout(setSeconds, 1000, seconds - 1);
     } else {
-      console.log('timer',seconds);
       setTimerActive(false);
       }
     return () => {clearTimeout(timer)} 
@@ -54,8 +58,6 @@ export const WordCard = (word: WordParam) => {
 
   useEffect(() => {
     window.addEventListener("keydown", keyDownHandler);
-    // correctAudio.load();
-    // errorAudio.load();
     return () => {
       window.removeEventListener("keydown", keyDownHandler);
     };
@@ -64,7 +66,6 @@ export const WordCard = (word: WordParam) => {
   async function play(value: boolean) {
     if (isSound) {
       if (value) {
-        // const correctAudio = new Audio(`${process.env.PUBLIC_URL}/sprint/sound/correct.mp3`);
       await correctAudio?.play();
       } else {
        await errorAudio?.play();
@@ -76,9 +77,18 @@ export const WordCard = (word: WordParam) => {
     setIsSound(!isSound);
   }
 
+function toggleFull() {
+  setIsFull(!isFull);
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+} else if (document.exitFullscreen) {
+    document.exitFullscreen();
+  }
+
+}
+
   function check(userWord: Word, b: boolean, rndWord: Word) {
     let res: boolean;
-    console.log(b, userWord.word, rndWord.word,(userWord.word === rndWord.word) === b);
 
     if ((userWord.word === rndWord.word) === b) {
       res=true;
@@ -109,36 +119,41 @@ export const WordCard = (word: WordParam) => {
   if (ww!==undefined) {
   
  return (
-    <div>
-      <Control stop={word.stop} toggleSound={toggleSound} isSound={isSound}/>
-      <div className="card">        
-        <div className='card__stat'>
-          <div className='score' >
-            <span>Очки:</span>
-            <span ref={score}>0</span>
-          </div>
-          <div className='mult'>
-            <span  >Множитель:</span>
-            <span ref={multRef}>1</span>
-          </div>
-          <div className='timer'>
-          <span>Осталось:</span>
-          <span>{seconds}</span>
-            
-            </div>
-        </div>
-        <div className='cards__words'>
-        {ww.word} это {rn?.wordTranslate}
-        </div>
-      
-      <div className='cards__buttons'>
-        <button type='button'onClick={() => {check(ww, true, rn!)}} > Да</button>
-        <button type='button'onClick={() => {check(ww, false, rn!)}} > Нет</button>
-      </div>
-     
-      </div>
-    
-    </div>
+   <div>
+   <h3>Спринт</h3>
+   <h4>Спринт - тренировка на скорость. Попробуй угадать как можно больше слов</h4>
+   <Paper elevation={8} sx={{
+     padding: '20px',
+   }}>
+     <Control stop={word.stop} toggleSound={toggleSound} isSound={isSound} isFull={isFull} toggleFull={toggleFull} />
+     <div className="card">
+       <div className='card__stat'>
+         <div className='score'>
+           <span>Очки:</span>
+           <span ref={score}>0</span>
+         </div>
+         <div className='mult'>
+           <span>Множитель:</span>
+           <span ref={multRef}>1</span>
+         </div>
+         <div className='timer'>
+           <span>Осталось:</span>
+           <span>{seconds}</span>
+
+         </div>
+       </div>
+       <div className='cards__words'>
+         {ww.word} это {rn?.wordTranslate}
+       </div>
+
+       <div className='cards__buttons'>
+         <button type='button' onClick={() => { check(ww, true, rn!); } }> Да</button>
+         <button type='button' onClick={() => { check(ww, false, rn!); } }> Нет</button>
+       </div>
+
+     </div>
+
+   </Paper></div>
   )}
   return (<div>undef</div>)
 }
