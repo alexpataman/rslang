@@ -41,7 +41,7 @@ export const Temp = (props: ITemp) => {
         <Grid item>
           <Button
             variant="outlined"
-            onClick={() => handleClick(GAME_ID.AUDIO, false)}
+            onClick={() => handleClick(GAME_ID.SPRINT, false)}
             size="small"
           >
             Wrong Sprint
@@ -50,7 +50,7 @@ export const Temp = (props: ITemp) => {
         <Grid item>
           <Button
             variant="contained"
-            onClick={() => handleClick(GAME_ID.AUDIO, true)}
+            onClick={() => handleClick(GAME_ID.SPRINT, true)}
             size="small"
           >
             Correct Sprint
