@@ -71,27 +71,29 @@ export type Tokens = {
 export type GetTokens = () => Tokens;
 export type SetTokens = (tokens: Tokens) => void;
 
+export interface IWordsStatistics {
+  totalNewWords: number;
+  totalCompleted: number;
+  totalMistakes: number;
+  totalCorrect: number;
+  correctAnswersRatio: number;
+}
+export interface IGameStatistics {
+  totalNewWords: number;
+  totalMistakes: number;
+  totalCorrect: number;
+  correctAnswersRatio: number;
+  maxSequence: number;
+  currentSequence: number;
+}
 export interface IUserStatistics {
   optional: {
     daily: {
       [key: string]: {
         games: {
-          [key in GAME_ID]: {
-            totalNewWords: number;
-            totalMistakes: number;
-            totalCorrect: number;
-            correctAnswersRatio: number;
-            maxSequence: number;
-            currentSequence: number;
-          };
+          [key in GAME_ID]: IGameStatistics;
         };
-        words: {
-          totalNewWords: number;
-          totalCompleted: number;
-          totalMistakes: number;
-          totalCorrect: number;
-          correctAnswersRatio: number;
-        };
+        words: IWordsStatistics;
       };
     };
   };
