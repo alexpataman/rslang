@@ -1,0 +1,22 @@
+.audio-btn {
+  height: 16px;
+  width: 16px;
+  background: 0 0/contain url("../../../../assets/svg/volume.svg") no-repeat;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.game__audio-btn {
+  margin-bottom: 20px;
+  padding: 10px;
+  height: 90px;
+  width: 90px;
+  background-color: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.result__audio {
+  margin-right: 6px;
+}

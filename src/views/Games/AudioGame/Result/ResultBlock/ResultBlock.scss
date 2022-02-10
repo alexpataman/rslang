@@ -1,0 +1,24 @@
+.result__block {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.result__subtitle::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 1px;
+  width: 30%;
+  background-color: #000;
+  top: 24px;
+  left: 35%;
+}
+
+.result__list {
+  text-align: center;
+}
+
+.result__item {
+  margin-bottom: 4px;
+  list-style: none;
+}

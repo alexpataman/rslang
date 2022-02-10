@@ -1,3 +1,5 @@
+import { Word } from "./RSLangApi";
+
 type round = {
   isAnswered: boolean,
   roundNum: number,
@@ -6,6 +8,55 @@ type round = {
   choices: Array<string> | []
 };
 
+interface ILevelBtnProps {
+  id: string,
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+interface IAudioBtnProps {
+  id: string | undefined,
+  className: string,
+  dataSrc: string | undefined,
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
+  text: string | undefined
+}
+
+interface IStartPageProps {
+  handleButtonClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+interface IAudioGameProps {
+  result: string[]
+  words: Word[] | undefined,
+  handleAudioClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+interface IGameProps extends IAudioGameProps {
+  roundState: round | undefined,
+  handleChoiceBtnClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
+  handleNextRoundBtnClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+interface IWordCardProps {
+  words: Word[] | undefined,
+  roundState: round | undefined,
+  handleAudioClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+interface IResultProps extends IAudioGameProps {}
+
+interface IResultBlockProps extends IAudioGameProps {
+  text: string,
+  condition: string
+}
+
 export type {
-  round
+  round,
+  ILevelBtnProps,
+  IAudioBtnProps,
+  IStartPageProps,
+  IGameProps,
+  IWordCardProps,
+  IResultProps,
+  IResultBlockProps
 };

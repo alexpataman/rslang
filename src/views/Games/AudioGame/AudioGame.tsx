@@ -12,8 +12,12 @@ import {
   MAX_PAGE,
   MIN_WORD_IND,
   MAX_WORD_IND,
+  API_PATH,
 } from '../../../utils/constants/AudioGame.constants';
 import { getRandomNum } from '../../../utils/helpers/randomNum';
+import { Game } from './Game/Game';
+import { Result } from './Result/Result';
+import { StartPage } from './StartPage/StartPage';
 
 export const AudioGame = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
@@ -35,7 +39,7 @@ export const AudioGame = () => {
       return;
     }
     const { src } = btn.dataset;
-    const audio = new Audio(`https://rslang-project.herokuapp.com/${src}`);
+    const audio = new Audio(`${API_PATH}${src}`);
     audio?.play();
   };
 
@@ -57,11 +61,11 @@ export const AudioGame = () => {
   const assignRoundState = (wordsArray: Word[]) => {
     const firstWord = wordsArray[0];
     const firstAudio = new Audio(
-      `https://rslang-project.herokuapp.com/${firstWord.audio}`
+      `${API_PATH}${firstWord.audio}`
     );
     const nextWord = wordsArray[1];
     const nextAudio = new Audio(
-      `https://rslang-project.herokuapp.com/${nextWord.audio}`
+      `${API_PATH}${nextWord.audio}`
     );
 
     const arr = getChoicesArray(0);
@@ -92,14 +96,7 @@ export const AudioGame = () => {
     })();
   };
 
-  const handleChoiceBtnClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
-    if (roundState?.isAnswered) return;
-
-    const btn = e.target as HTMLButtonElement;
+  const getRoundResult = (btn: HTMLButtonElement) => {
     const correctWord =
       words !== undefined &&
       words[roundState?.roundNum as number].wordTranslate;
@@ -114,6 +111,19 @@ export const AudioGame = () => {
       updResult[roundState?.roundNum as number] = 'wrong';
       btn.classList.add('wrong');
     }
+    return updResult;
+  }
+
+  const handleChoiceBtnClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    if (roundState?.isAnswered) return;
+
+    const btn = e.target as HTMLButtonElement;
+    const updResult = getRoundResult(btn);
+    
     setResult(updResult);
 
     const newRoundState = { ...(roundState as round) };
@@ -121,11 +131,7 @@ export const AudioGame = () => {
     setRoundState(newRoundState);
   };
 
-  const handleNextRoundBtnClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
+  const toggleChoiceBtn = () => {
     const choiceBtns = document.querySelectorAll('.choice');
     choiceBtns.forEach((item) => {
       if (item.classList.contains('correct')) {
@@ -135,8 +141,15 @@ export const AudioGame = () => {
         item.classList.remove('wrong');
       }
     });
+  }
 
-    const wordsArray = words?.slice() as Word[];
+  const handleNextRoundBtnClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    toggleChoiceBtn();
+
     const round = (roundState?.roundNum as number) + 1;
 
     if (round > 19) {
@@ -144,12 +157,13 @@ export const AudioGame = () => {
       return;
     }
 
+    const wordsArray = words?.slice() as Word[];
     const currAudio = roundState?.next as HTMLAudioElement;
     let nextAudio = null;
     if (round < MAX_WORD_IND) {
       const nextWord = wordsArray[round + 1];
       nextAudio = new Audio(
-        `https://rslang-project.herokuapp.com/${nextWord.audio}`
+        `${API_PATH}${nextWord.audio}`
       );
     }
 
@@ -172,62 +186,14 @@ export const AudioGame = () => {
   if (gameStatus === 'game') {
     return (
       <div className="audio-game">
-        <div className="game">
-          <ul className="game__progress">
-            {result.map((item, ind) => (
-              <li key={ind} className={item}></li>
-            ))}
-          </ul>
-          <button
-            id="wordAudio"
-            className="game__audio-btn"
-            onClick={handleAudioClick}
-          >
-            Повторить
-          </button>
-          {roundState?.isAnswered && words && (
-            <div className="word-card">
-              <img
-                src={`https://rslang-project.herokuapp.com/${
-                  words[roundState.roundNum].image
-                }`}
-                alt="photo: correct answer"
-              />
-              <p>
-                {words[roundState.roundNum].word}{' '}
-                <span>{words[roundState.roundNum].transcription}</span>
-              </p>
-              <button
-                className="audio-btn"
-                data-src={words[roundState.roundNum].audioExample}
-                onClick={handleAudioClick}
-              ></button>
-              <p>{words[roundState.roundNum].textExample}</p>
-              <p>{words[roundState.roundNum].textExampleTranslate}</p>
-            </div>
-          )}
-          <div className="game__choices">
-            {roundState?.choices.map((choice, ind) => (
-              <button
-                className="choice"
-                key={ind}
-                data-choice={choice}
-                onClick={handleChoiceBtnClick}
-              >
-                {choice}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={
-              roundState?.isAnswered
-                ? handleNextRoundBtnClick
-                : handleChoiceBtnClick
-            }
-          >
-            {roundState?.isAnswered ? '->' : 'не знаю'}
-          </button>
-        </div>
+        <Game
+          roundState={roundState}
+          result={result}
+          words={words}
+          handleAudioClick={handleAudioClick}
+          handleChoiceBtnClick={handleChoiceBtnClick}
+          handleNextRoundBtnClick={handleNextRoundBtnClick}
+        />
       </div>
     );
   }
@@ -235,143 +201,18 @@ export const AudioGame = () => {
   if (gameStatus === 'result') {
     return (
       <div className="audio-game">
-        <div className="result">
-          <h2 className="result__title">Результаты:</h2>
-          <div className="result__block">
-            <h3 className="result__subtitle">
-              Ошибки{' '}
-              <span>{result.filter((item) => item === 'wrong').length}</span>
-            </h3>
-            <ul className="result__list">
-              {result.map((item, ind) => {
-                if (item === 'wrong') {
-                  const { word, wordTranslate } = (words as Word[])[ind];
-                  return (
-                    <li key={word} className="result__item">
-                      <button
-                        className="result__audio audio-btn"
-                        data-src={(words as Word[])[ind].audio}
-                        onClick={handleAudioClick}
-                      ></button>
-                      {word} - {wordTranslate}
-                    </li>
-                  );
-                }
-                return null;
-              })}
-            </ul>
-          </div>
-          <div className="result__block">
-            <h3 className="result__subtitle">
-              Неизвестные{' '}
-              <span>{result.filter((item) => item === 'unknown').length}</span>
-            </h3>
-            <ul className="result__list">
-              {result.map((item, ind) => {
-                if (item === 'unknown') {
-                  const { word, wordTranslate } = (words as Word[])[ind];
-                  return (
-                    <li key={word} className="result__item">
-                      <button
-                        className="result__audio audio-btn"
-                        data-src={(words as Word[])[ind].audio}
-                        onClick={handleAudioClick}
-                      ></button>
-                      {word} - {wordTranslate}
-                    </li>
-                  );
-                }
-                return null;
-              })}
-            </ul>
-          </div>
-          <div className="result__block">
-            <h3 className="result__subtitle">
-              Изученные{' '}
-              <span>{result.filter((item) => item === 'correct').length}</span>
-            </h3>
-            <ul className="result__list">
-              {result.map((item, ind) => {
-                if (item === 'correct') {
-                  const { word, wordTranslate } = (words as Word[])[ind];
-                  return (
-                    <li key={word} className="result__item">
-                      <button
-                        className="result__audio audio-btn"
-                        data-src={(words as Word[])[ind].audio}
-                        onClick={handleAudioClick}
-                      ></button>
-                      {word} - {wordTranslate}
-                    </li>
-                  );
-                }
-                return null;
-              })}
-            </ul>
-          </div>
-        </div>
+        <Result
+          result={result}
+          words={words}
+          handleAudioClick={handleAudioClick}
+        />
       </div>
     );
   }
 
   return (
     <div className="audio-game">
-      <div className="start-page">
-        <h2 className="start-page__title">Аудиовызов</h2>
-
-        <h5>
-          ID категории {categoryId}, страница {page}
-        </h5>
-
-        <p className="start-page__subtitle">
-          Ваша задача - прослушать аудио и выбрать соответствующий ему перевод
-        </p>
-        <p className="start-page__subtitle">Выберите уровень сложности</p>
-        <div className="start-page__btn-cont">
-          <button
-            id="0"
-            className="start-page__lvl-btn"
-            onClick={handleLevelBtnClick}
-          >
-            1
-          </button>
-          <button
-            id="1"
-            className="start-page__lvl-btn"
-            onClick={handleLevelBtnClick}
-          >
-            2
-          </button>
-          <button
-            id="2"
-            className="start-page__lvl-btn"
-            onClick={handleLevelBtnClick}
-          >
-            3
-          </button>
-          <button
-            id="3"
-            className="start-page__lvl-btn"
-            onClick={handleLevelBtnClick}
-          >
-            4
-          </button>
-          <button
-            id="4"
-            className="start-page__lvl-btn"
-            onClick={handleLevelBtnClick}
-          >
-            5
-          </button>
-          <button
-            id="5"
-            className="start-page__lvl-btn"
-            onClick={handleLevelBtnClick}
-          >
-            6
-          </button>
-        </div>
-      </div>
+      <StartPage handleButtonClick={handleLevelBtnClick} />
     </div>
   );
 };
