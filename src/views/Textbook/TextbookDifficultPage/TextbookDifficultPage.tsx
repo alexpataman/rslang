@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 
+import { Loader } from '../../../components/Loader/Loader';
 import { UsersAggregatedWords } from '../../../services/RSLangApi/UsersAggregatedWords';
 import { User } from '../../../services/User';
 import { Word } from '../../../types/RSLangApi';
@@ -9,6 +10,7 @@ import { TextbookWordItem } from '../TextbookWordItem/TextbookWordItem';
 
 export const TextbookDifficultPage = () => {
   const [words, setWords] = useState<Word[]>();
+  const [isLoading, setIsLoading] = useState(true);
 
   const wordsApi = useMemo(
     () =>
@@ -27,6 +29,7 @@ export const TextbookDifficultPage = () => {
     () => async () => {
       const words = await wordsApi.getWords(0, 0, filter);
       setWords(words);
+      setIsLoading(false);
     },
     [filter, wordsApi]
   );
@@ -43,21 +46,23 @@ export const TextbookDifficultPage = () => {
     <>
       <h2>Сложные слова</h2>
 
-      <Grid
-        container
-        spacing={2}
-        justifyContent="space-between"
-        alignItems="stretch"
-      >
-        {words?.map((word) => (
-          <Grid item xs={3} key={word.id}>
-            <TextbookWordItem
-              item={word}
-              clickHandlers={{ difficultClickHandler }}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      <Loader isLoading={isLoading}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="space-between"
+          alignItems="stretch"
+        >
+          {words?.map((word) => (
+            <Grid item xs={3} key={word.id}>
+              <TextbookWordItem
+                item={word}
+                clickHandlers={{ difficultClickHandler }}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Loader>
     </>
   );
 };

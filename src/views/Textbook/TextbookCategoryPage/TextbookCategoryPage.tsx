@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { GameButtons } from '../../../components/GameButtons/GameButtons';
+import { Loader } from '../../../components/Loader/Loader';
 import {
   Pagination,
   PAGINATION_DIRECTIONS,
@@ -20,6 +21,7 @@ export const TextbookCategoryPage = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
   const [words, setWords] = useState<Word[]>();
+  const [isLoading, setIsLoading] = useState(true);
   const isGuest = useUserIsGuest();
   const navigate = useNavigate();
   const pageNavigatePath = `/textbook/category/${categoryId}/page`;
@@ -37,9 +39,14 @@ export const TextbookCategoryPage = () => {
   );
 
   useEffect(() => {
+    setIsLoading(true);
+  }, [page]);
+
+  useEffect(() => {
     (async () => {
       const words = await wordsApi.getWords(categoryId, page);
       setWords(words);
+      setIsLoading(false);
     })();
   }, [wordsApi, categoryId, page, isGuest]);
 
@@ -69,19 +76,20 @@ export const TextbookCategoryPage = () => {
           <GameButtons categoryId={categoryId} page={page} />
         </Grid>
       </Grid>
-
-      <Grid
-        container
-        spacing={2}
-        justifyContent="space-between"
-        alignItems="stretch"
-      >
-        {words?.map((word) => (
-          <Grid item xs={3} key={word.id}>
-            <TextbookWordItem item={word} />
-          </Grid>
-        ))}
-      </Grid>
+      <Loader isLoading={isLoading}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="space-between"
+          alignItems="stretch"
+        >
+          {words?.map((word) => (
+            <Grid item xs={3} key={word.id}>
+              <TextbookWordItem item={word} />
+            </Grid>
+          ))}
+        </Grid>
+      </Loader>
     </>
   );
 };
