@@ -28,9 +28,9 @@ export const Footer = () => (
           >
             <span className="nickname">{el}</span>
           </Button>
-        ))}{' '}
-        &copy;&nbsp;2022
+        ))}
       </div>
+      <div className="copy-link">&copy;&nbsp;2022</div>
     </div>
   </footer>
 );
