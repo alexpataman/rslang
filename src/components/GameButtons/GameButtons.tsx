@@ -4,8 +4,6 @@ import { Grid } from '@mui/material';
 import Button from '@mui/material/Button';
 import { NavLink } from 'react-router-dom';
 
-import { AuthorisedOnly } from '../AuthorisedOnly/AuthorisedOnly';
-
 const links = [
   {
     to: '/games/audio',
@@ -28,21 +26,19 @@ export const GameButtons = (props: IGameButtons) => {
   const { categoryId, page } = props;
 
   return (
-    <AuthorisedOnly>
-      <Grid container spacing={1}>
-        {links.map((link, index) => (
-          <Grid item key={index}>
-            <Button
-              component={NavLink}
-              to={`${link.to}/category/${categoryId}/page/${page}`}
-              variant="outlined"
-              startIcon={link.icon}
-            >
-              {link.text}
-            </Button>
-          </Grid>
-        ))}
-      </Grid>
-    </AuthorisedOnly>
+    <Grid container spacing={1}>
+      {links.map((link, index) => (
+        <Grid item key={index}>
+          <Button
+            component={NavLink}
+            to={`${link.to}/category/${categoryId}/page/${page}`}
+            variant="outlined"
+            startIcon={link.icon}
+          >
+            {link.text}
+          </Button>
+        </Grid>
+      ))}
+    </Grid>
   );
 };

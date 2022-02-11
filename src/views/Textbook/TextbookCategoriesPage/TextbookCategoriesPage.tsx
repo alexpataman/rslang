@@ -27,9 +27,9 @@ export const TextbookCategoriesPage = () => {
     <>
       <h2>Учебник</h2>
       <Loader isLoading={isLoading}>
-        <Grid container spacing={2} justifyContent="space-between">
+        <Grid container spacing={2}>
           {categories.map((category, index) => (
-            <Grid item xs={4} key={index}>
+            <Grid item xs={12} sm={6} md={4} key={index}>
               <TextbookCategoryItem id={index} img={category.image} />
             </Grid>
           ))}

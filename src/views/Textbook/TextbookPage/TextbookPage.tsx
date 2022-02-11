@@ -4,7 +4,9 @@ import { TextbookNav } from '../TextbookNav/TextbookNav';
 
 export const TextbookPage = () => (
   <>
-    <TextbookNav />
-    <Outlet />
+    <div className="container">
+      <TextbookNav />
+      <Outlet />
+    </div>
   </>
 );

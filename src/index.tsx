@@ -51,7 +51,14 @@ render(
               </Route>
             </Route>
 
-            <Route path="/games/audio/levels" element={<div className="audio-game"><StartPage /></div>} />
+            <Route
+              path="/games/audio/levels"
+              element={
+                <div className="audio-game">
+                  <StartPage />
+                </div>
+              }
+            />
 
             <Route path="/games/audio" element={<AudioGame />}>
               <Route path="category">

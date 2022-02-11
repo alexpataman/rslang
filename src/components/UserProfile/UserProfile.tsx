@@ -51,7 +51,7 @@ export const UserProfile = () => {
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
-        sx={{ textTransform: 'none', color: '#fff' }}
+        sx={{ textTransform: 'none' }}
       >
         <AccountCircle sx={{ mr: '5px' }} />
         <Typography>{userName}</Typography>
@@ -71,10 +71,14 @@ export const UserProfile = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem component={Link} to="/textbook/difficult">
+        <MenuItem
+          component={Link}
+          to="/textbook/difficult"
+          onClick={handleClose}
+        >
           Сложные слова
         </MenuItem>
-        <MenuItem component={Link} to="/textbook/known">
+        <MenuItem component={Link} to="/textbook/known" onClick={handleClose}>
           Изученные слова
         </MenuItem>
         <MenuItem onClick={handleLogout}>Выход</MenuItem>

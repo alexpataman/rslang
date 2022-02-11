@@ -47,14 +47,9 @@ export const TextbookDifficultPage = () => {
       <h2>Сложные слова</h2>
 
       <Loader isLoading={isLoading}>
-        <Grid
-          container
-          spacing={2}
-          justifyContent="space-between"
-          alignItems="stretch"
-        >
+        <Grid container spacing={2} alignItems="stretch">
           {words?.map((word) => (
-            <Grid item xs={3} key={word.id}>
+            <Grid item xs={12} sm={6} md={4} key={word.id}>
               <TextbookWordItem
                 item={word}
                 clickHandlers={{ difficultClickHandler }}

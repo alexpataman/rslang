@@ -1,4 +1,9 @@
+import { GitHub } from '@mui/icons-material';
+import Button from '@mui/material/Button';
+
 import './Footer.scss';
+
+const credentials = ['alexpataman', 'kxzws', 'shpakitze'];
 
 export const Footer = () => (
   <footer className="Footer">
@@ -13,16 +18,19 @@ export const Footer = () => (
           RS School
         </a>
       </div>
-      <div>
-        <a
-          href="https://github.com/alexpataman"
-          target="_blank"
-          rel="noreferrer"
-          className="copy-link"
-        >
-          &copy; 2022
-        </a>
+      <div className="credentials">
+        {credentials.map((el, index) => (
+          <Button
+            size="small"
+            startIcon={<GitHub />}
+            href={`https://github.com/${el}`}
+            key={index}
+          >
+            <span className="nickname">{el}</span>
+          </Button>
+        ))}
       </div>
+      <div className="copy-link">&copy;&nbsp;2022</div>
     </div>
   </footer>
 );

@@ -17,9 +17,9 @@ export const TextbookCategoryItem = (props: ITextbookCategoryItem) => {
   const image = `${process.env.REACT_APP_API_URL}/${img}`;
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 389 }}>
       <CardActionArea component={Link} to={link}>
-        <CardMedia component="img" height="140" image={image} alt={title} />
+        <CardMedia component="img" height="260" image={image} alt={title} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {title}
