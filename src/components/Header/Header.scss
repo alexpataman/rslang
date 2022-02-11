@@ -2,7 +2,7 @@
 
 .Header {
   padding: 0;
-  background: $base-color;
+  // background: $base-color;
   height: 50px;
 
   & > .container {
@@ -10,16 +10,37 @@
     align-items: center;
 
     .username {
-      color: #fff;
+      color: #000;
+    }
+
+    .logo {
+      flex-grow: 1;
+      position: relative;
+      text-decoration: none;
+      color: #000;
+      padding-left: 55px;
+      font-size: 24px;
+      line-height: 50px;
+      margin-top: 10px;
+
+      &::before {
+        content: '';
+        width: 45px;
+        height: 45px;
+        background: url('../../assets/img/logo.png') no-repeat;
+        background-size: 45px;
+        position: absolute;
+        left: 0;
+      }
     }
 
     .nav {
       display: flex;
       gap: 50px;
-      flex-grow: 1;
+      margin-right: 50px;
 
       a {
-        color: #fff;
+        color: #000;
         text-decoration: none;
       }
 
@@ -29,7 +50,7 @@
     }
 
     .nav span {
-      color: #fff;
+      color: #000;
       text-decoration: none;
       font-size: 24px;
       cursor: pointer;

@@ -24,10 +24,12 @@ export const StatisticsPage = () => {
 
   return (
     <>
-      <Loader isLoading={isLoading}>
-        <StatisticsDaily data={data} />
-        <StatisticsLongTerm data={data} />
-      </Loader>
+      <div className="container">
+        <Loader isLoading={isLoading}>
+          <StatisticsDaily data={data} />
+          <StatisticsLongTerm data={data} />
+        </Loader>
+      </div>
     </>
   );
 };

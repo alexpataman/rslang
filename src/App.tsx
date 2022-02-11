@@ -8,6 +8,10 @@ import { Modal } from './components/Modal/Modal';
 import { ModalContext } from './context/ModalContext';
 import { IModalData } from './types/modal';
 import './App.scss';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 export const App = () => {
   const [modalData, setModalData] = useState<IModalData>({});
@@ -27,9 +31,7 @@ export const App = () => {
       <div className="App">
         <Header />
         <main>
-          <div className="container">
-            <Outlet />
-          </div>
+          <Outlet />
         </main>
         <Footer />
 

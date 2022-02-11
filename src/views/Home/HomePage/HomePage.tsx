@@ -1,18 +1,12 @@
-import { useUserAuthState } from '../../../hooks/useUserAuthState';
-import { User } from '../../../services/User';
-import { UserInfo } from '../../../types/RSLangApi';
+import { HomeAbout } from '../HomeAbout/HomeAbout';
+import { HomeFeatures } from '../HomeFeatures/HomeFeatures';
+import { HomeWelcome } from '../HomeWelcome/HomeWelcome';
+import './HomePage.scss';
 
-export const HomePage = () => {
-  const result = useUserAuthState(() => User.getData()) as UserInfo | undefined;
-
-  return (
-    <>
-      <p>Демо обращения к методу апи, требующему аутентификации. </p>
-      <p>Если токен просрочен - делается повторный запрос.</p>
-      <p>В случае неудачи - разлогинивание.</p>
-      <div>
-        <b>{result?.name}</b>
-      </div>
-    </>
-  );
-};
+export const HomePage = () => (
+  <div className="HomePage">
+    <HomeWelcome />
+    <HomeFeatures />
+    <HomeAbout />
+  </div>
+);

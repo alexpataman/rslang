@@ -1,0 +1,24 @@
+@import '../../../App.variables.scss';
+
+.HomeAbout {
+  margin-bottom: 100px;
+
+  h2 {
+    text-align: center;
+    position: relative;
+    margin-bottom: 50px;
+
+    // &:after {
+    //   position: absolute;
+    //   content: '';
+    //   bottom: -10px;
+    //   left: 0;
+    //   right: 0;
+    //   margin: 0 auto;
+    //   text-align: center;
+    //   width: 180px;
+    //   height: 2px;
+    //   background-color: $base-color;
+    // }
+  }
+}

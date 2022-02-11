@@ -51,7 +51,7 @@ export const UserProfile = () => {
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
-        sx={{ textTransform: 'none', color: '#fff' }}
+        sx={{ textTransform: 'none' }}
       >
         <AccountCircle sx={{ mr: '5px' }} />
         <Typography>{userName}</Typography>
