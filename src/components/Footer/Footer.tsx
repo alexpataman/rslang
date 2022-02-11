@@ -29,7 +29,7 @@ export const Footer = () => (
             <span className="nickname">{el}</span>
           </Button>
         ))}{' '}
-        | &copy; 2022
+        &copy;&nbsp;2022
       </div>
     </div>
   </footer>

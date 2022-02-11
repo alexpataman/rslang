@@ -1,7 +1,7 @@
 .HomeWelcome {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 100px;
+  margin-bottom: 0;
 
   .welcome {
     width: 600px;
@@ -19,6 +19,28 @@
 
       &:last-of-type {
         margin-bottom: 30px;
+      }
+    }
+  }
+
+  .image {
+    line-height: 0;
+  }
+
+  @media screen and (max-width: 1200px) {
+    flex-direction: column;
+
+    .welcome {
+      margin-top: 0px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .image {
+      text-align: center;
+      margin-top: 50px;
+      img {
+        max-width: 100%;
       }
     }
   }

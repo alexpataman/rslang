@@ -2,7 +2,6 @@ import { useEffect, useState, MouseEvent } from 'react';
 
 import { useUserIsGuest } from '../../hooks/useUserIsGuest';
 import { SignIn } from '../SignIn/SignIn';
-import { SignOut } from '../SignOut/SignOut';
 import { SignUp } from '../SignUp/SignUp';
 
 enum STATES {

@@ -5,7 +5,6 @@ import {
   IUserStatistics,
   SetTokens,
   User,
-  Word,
 } from '../../types/RSLangApi';
 import { UsersApi } from './UsersApi';
 

@@ -1,4 +1,4 @@
-import { Avatar, Button, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 import ava1Img from '../../../assets/img/team_1.jpeg';
 import ava2Img from '../../../assets/img/team_2.jpeg';
@@ -32,9 +32,16 @@ export const HomeAbout = () => (
   <div className="container">
     <div className="HomeAbout">
       <Typography variant="h2">О команде</Typography>
-      <Grid container justifyContent="space-around">
+      <Grid container justifyContent="space-around" spacing={2}>
         {team.map((el, index) => (
-          <Grid item xs={3} className="TeamMemberItem" key={index}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            className="TeamMemberItem"
+            key={index}
+          >
             <TeamMemberCard
               name={el.name}
               img={el.img}

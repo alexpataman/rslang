@@ -1,10 +1,9 @@
 import AccessAlarmSharpIcon from '@mui/icons-material/AccessAlarmSharp';
-import DirectionsRunSharpIcon from '@mui/icons-material/DirectionsRunSharp';
 import InsightsSharpIcon from '@mui/icons-material/InsightsSharp';
 import MenuBookSharpIcon from '@mui/icons-material/MenuBookSharp';
 import PersonSharpIcon from '@mui/icons-material/PersonSharp';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
-import { Button, Typography, Grid } from '@mui/material';
+import { Typography, Grid } from '@mui/material';
 
 import './HomeFeatures.scss';
 
@@ -41,7 +40,7 @@ export const HomeFeatures = () => (
         className="items"
       >
         {features.map((el, index) => (
-          <Grid item xs={2} className="item" key={index}>
+          <Grid item xs={12} sm={4} md={2} className="item" key={index}>
             <el.icon className="icon" />
             <Typography>{el.title}</Typography>
           </Grid>
