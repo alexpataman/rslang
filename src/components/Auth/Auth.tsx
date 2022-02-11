@@ -31,7 +31,7 @@ export const Auth = (props: IAuth) => {
     };
     View = <GuestView toggleView={toggleView} />;
   } else {
-    View = <SignOut />;
+    // View = <SignOut />;
   }
 
   useEffect(() => {

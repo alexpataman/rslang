@@ -39,24 +39,89 @@ render(
                 </PrivateRoute>
               }
             />
-            <Route path="/games" element={<GamesPage />} />
+            <Route
+              path="/games"
+              element={
+                <PrivateRoute>
+                  <GamesPage />
+                </PrivateRoute>
+              }
+            />
 
-            <Route path="/games/sprint/levels" element={<Levels />} />
+            <Route
+              path="/games/sprint/levels"
+              element={
+                <PrivateRoute>
+                  <Levels />
+                </PrivateRoute>
+              }
+            />
 
-            <Route path="/games/sprint" element={<AppSprint />}>
+            <Route
+              path="/games/sprint"
+              element={
+                <PrivateRoute>
+                  <AppSprint />
+                </PrivateRoute>
+              }
+            >
               <Route path="category">
-                <Route path=":categoryId" element={<AppSprint />}>
-                  <Route path="page/:page" element={<AppSprint />} />
+                <Route
+                  path=":categoryId"
+                  element={
+                    <PrivateRoute>
+                      <AppSprint />
+                    </PrivateRoute>
+                  }
+                >
+                  <Route
+                    path="page/:page"
+                    element={
+                      <PrivateRoute>
+                        <AppSprint />
+                      </PrivateRoute>
+                    }
+                  />
                 </Route>
               </Route>
             </Route>
 
-            <Route path="/games/audio/levels" element={<div className="audio-game"><StartPage /></div>} />
+            <Route
+              path="/games/audio/levels"
+              element={
+                <div className="audio-game">
+                  <PrivateRoute>
+                    <StartPage />
+                  </PrivateRoute>
+                </div>
+              }
+            />
 
-            <Route path="/games/audio" element={<AudioGame />}>
+            <Route
+              path="/games/audio"
+              element={
+                <PrivateRoute>
+                  <AudioGame />
+                </PrivateRoute>
+              }
+            >
               <Route path="category">
-                <Route path=":categoryId" element={<AudioGame />}>
-                  <Route path="page/:page" element={<AudioGame />} />
+                <Route
+                  path=":categoryId"
+                  element={
+                    <PrivateRoute>
+                      <AudioGame />
+                    </PrivateRoute>
+                  }
+                >
+                  <Route
+                    path="page/:page"
+                    element={
+                      <PrivateRoute>
+                        <AudioGame />
+                      </PrivateRoute>
+                    }
+                  />
                 </Route>
               </Route>
             </Route>
