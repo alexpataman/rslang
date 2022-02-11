@@ -11,6 +11,10 @@ import { User } from './User';
 
 export const WordStatistics = {
   async process(wordId: Word['id'], isCorrectAnswer: boolean, gameId: GAME_ID) {
+    if (User.isGuest()) {
+      return;
+    }
+
     const usersWords = new UsersWordsApi(
       User.getId(),
       User.getTokens,

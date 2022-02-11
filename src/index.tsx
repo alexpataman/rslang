@@ -8,6 +8,7 @@ import { App } from './App';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { store } from './store';
 import { AudioGame } from './views/Games/AudioGame/AudioGame';
+import { AudioGamePage } from './views/Games/AudioGame/AudioGamePage';
 import { StartPage } from './views/Games/AudioGame/StartPage/StartPage';
 import { GamesPage } from './views/Games/GamesPage/GamesPage';
 import { AppSprint } from './views/Games/GamesPage/sprint/app-sprin';
@@ -38,49 +39,14 @@ render(
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/games"
-              element={
-                <PrivateRoute>
-                  <GamesPage />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/games" element={<GamesPage />} />
 
-            <Route
-              path="/games/sprint/levels"
-              element={
-                <PrivateRoute>
-                  <Levels />
-                </PrivateRoute>
-              }
-            />
+            <Route path="/games/sprint/levels" element={<Levels />} />
 
-            <Route
-              path="/games/sprint"
-              element={
-                <PrivateRoute>
-                  <AppSprint />
-                </PrivateRoute>
-              }
-            >
+            <Route path="/games/sprint" element={<AppSprint />}>
               <Route path="category">
-                <Route
-                  path=":categoryId"
-                  element={
-                    <PrivateRoute>
-                      <AppSprint />
-                    </PrivateRoute>
-                  }
-                >
-                  <Route
-                    path="page/:page"
-                    element={
-                      <PrivateRoute>
-                        <AppSprint />
-                      </PrivateRoute>
-                    }
-                  />
+                <Route path=":categoryId" element={<AppSprint />}>
+                  <Route path="page/:page" element={<AppSprint />} />
                 </Route>
               </Route>
             </Route>
@@ -89,38 +55,15 @@ render(
               path="/games/audio/levels"
               element={
                 <div className="audio-game">
-                  <PrivateRoute>
-                    <StartPage />
-                  </PrivateRoute>
+                  <StartPage />
                 </div>
               }
             />
 
-            <Route
-              path="/games/audio"
-              element={
-                <PrivateRoute>
-                  <AudioGame />
-                </PrivateRoute>
-              }
-            >
+            <Route path="/games/audio" element={<AudioGame />}>
               <Route path="category">
-                <Route
-                  path=":categoryId"
-                  element={
-                    <PrivateRoute>
-                      <AudioGame />
-                    </PrivateRoute>
-                  }
-                >
-                  <Route
-                    path="page/:page"
-                    element={
-                      <PrivateRoute>
-                        <AudioGame />
-                      </PrivateRoute>
-                    }
-                  />
+                <Route path=":categoryId" element={<AudioGame />}>
+                  <Route path="page/:page" element={<AudioGame />} />
                 </Route>
               </Route>
             </Route>
