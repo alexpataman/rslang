@@ -17,3 +17,8 @@ export enum GAME_ID {
   AUDIO = 'audio',
   SPRINT = 'sprint',
 }
+
+export enum CHART_TYPES {
+  BAR = 'bar',
+  LINE = 'line',
+}
