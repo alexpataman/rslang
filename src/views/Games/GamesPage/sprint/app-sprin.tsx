@@ -11,6 +11,8 @@ import { WordCard } from './word-card/word-card';
 
 import './app-sprint.css';
 
+const RND_WORD = 0.5;
+
 export const AppSprint = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
@@ -38,7 +40,7 @@ export const AppSprint = () => {
     }
   }
   function getRandom(): Word {
-    if (Math.random() > 0.5 ) {
+    if (Math.random() > RND_WORD) {
       return words[cur]
     }
     return words[Math.floor(Math.random() * words.length)];

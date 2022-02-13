@@ -63,12 +63,14 @@ export const WordCard = (word: WordParam) => {
     };
   });
 
-  async function play(value: boolean) {
+  function play(value: boolean) {
     if (isSound) {
       if (value) {
-      await correctAudio?.play();
+        correctAudio!.currentTime=0;
+      correctAudio?.play();
       } else {
-       await errorAudio?.play();
+        errorAudio!.currentTime = 0;
+       errorAudio?.play();
       }
     }
   }
