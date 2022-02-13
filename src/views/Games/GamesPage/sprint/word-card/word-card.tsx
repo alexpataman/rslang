@@ -11,7 +11,7 @@ import './word-card.css';
 
 type WordParam = {
   cWord: Word;
-  getAnswer: (a: Word, b: boolean, score: number) => void;
+  getAnswer: (userWord: Word, b: boolean, score: number) => void;
   random: Word,
   stop: () => void,
 }
@@ -100,7 +100,7 @@ function toggleFull() {
       res = false;
     }
     play(res);
-    WordStatistics.process(ww!.id, b, GAME_ID.SPRINT);
+    WordStatistics.process(ww!.id, res, GAME_ID.SPRINT);
     word.getAnswer(userWord, res, Number(score.current!.textContent));
   }
 
