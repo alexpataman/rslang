@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Chart from 'react-apexcharts';
+// import Chart from 'react-apexcharts';
 
 import { GAME_ID } from '../../../types/common';
 import {

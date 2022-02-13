@@ -38,6 +38,9 @@ export const AppSprint = () => {
     }
   }
   function getRandom(): Word {
+    if (Math.random() > 0.5 ) {
+      return words[cur]
+    }
     return words[Math.floor(Math.random() * words.length)];
   }
   function startGame() {
