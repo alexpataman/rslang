@@ -30,6 +30,13 @@ export const StartPage = () => {
       <p className="start-page__subtitle">
         Ваша задача - прослушать аудио и выбрать соответствующий ему перевод
       </p>
+      <p className="start-page__subtitle">
+        Также поддерживается управление с клавиатуры
+      </p>
+      <p className="start-page__subtitle">
+        (<i>R</i> - повторить, цифры 1-5 - варианты, <i>Enter</i> - продолжить,{' '}
+        <i>Q</i> - "не знаю")
+      </p>
       <p className="start-page__subtitle">Выберите уровень сложности</p>
       <div className="start-page__btn-cont">
         {WORD_GROUP_IDS.map((num) => (
