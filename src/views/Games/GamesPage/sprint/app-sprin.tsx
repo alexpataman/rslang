@@ -7,7 +7,7 @@ import { UsersWordsApi } from '../../../../services/RSLangApi/UsersWordsApi';
 import { WordsApi } from '../../../../services/RSLangApi/WordsApi';
 import { User } from '../../../../services/User';
 import { Word } from '../../../../types/RSLangApi';
-import { WORDS_PER_PAGE } from '../../../../utils/constants/common.constants';
+import { MAX_PAGE_NUMBER, WORDS_PER_PAGE } from '../../../../utils/constants/common.constants';
 import { getRandomNum } from '../../../../utils/helpers/randomNum';
 import { Result } from './result/result';
 import { Answer } from './types/Answer';
@@ -63,7 +63,7 @@ export const AppSprint = () => {
       if (page === undefined) {
         // run from menu
       // TODO: 29 const
-        words = await wordsApi.getWords(categoryId, getRandomNum(0, WORDS_PER_PAGE - 1));
+        words = await wordsApi.getWords(categoryId, getRandomNum(0, MAX_PAGE_NUMBER - 1));
       } else if (!User.isGuest()) {
         const userWords = new UsersWordsApi(User.getId(), User.getTokens, User.setTokens)
           let cPage = Number(page);
