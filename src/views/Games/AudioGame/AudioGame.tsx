@@ -2,6 +2,7 @@ import './AudioGame.scss';
 
 import React, { useMemo, useState, useEffect } from 'react';
 
+import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
@@ -21,6 +22,7 @@ import { Result } from './Result/Result';
 export const AudioGame = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
+  const [isLoading, setLoading] = useState<boolean>(true);
   const [gameStatus, setGameStatus] = useState<boolean>(true);
   const [roundState, setRoundState] = useState<round>();
   const [words, setWords] = useState<Word[]>();
@@ -43,13 +45,16 @@ export const AudioGame = () => {
       next: nextAudio,
       choices: choicesArr,
     });
+
+    firstAudio.play();
   };
-  
+
   useEffect(() => {
     (async () => {
       const wordsArray = await wordsApi.getWords(categoryId, page);
       setWords(wordsArray);
       assignRoundState(wordsArray);
+      setLoading(false);
     })();
   }, [wordsApi]);
 
@@ -68,6 +73,21 @@ export const AudioGame = () => {
     audio?.play();
   };
 
+  const removeArrayDubplicates = (array: Array<number>): Array<number> => {
+    const arr = array.slice();
+    arr.forEach((item, ind) => {
+      if (ind === arr.length - 1) {
+        return;
+      }
+
+      while (arr.indexOf(item, ind + 1) > -1) {
+        item = getRandomNum(MIN_WORD_IND, MAX_WORD_IND);
+      }
+      arr[ind] = item;
+    });
+    return arr;
+  };
+
   const getChoicesArray = (correctId: number): Array<number> => {
     let array = new Array(5).fill(99);
     array = array.map((index) => {
@@ -79,6 +99,7 @@ export const AudioGame = () => {
     });
     const randomInd = getRandomNum(0, 4);
     array[randomInd] = correctId;
+    array = removeArrayDubplicates(array);
     return array;
   };
 
@@ -88,7 +109,6 @@ export const AudioGame = () => {
       words !== undefined && words[roundState?.roundNum as number];
     const correctTranslation = (correctWord as Word).wordTranslate;
     const correctWordId = (correctWord as Word).id;
-    console.log(correctWordId);
     const { choice } = btn.dataset;
     const updResult = result.slice();
     if (choice === correctTranslation) {
@@ -173,28 +193,32 @@ export const AudioGame = () => {
     }
   };
 
-  if (!gameStatus) {
+  if (isLoading) {
     return (
-      <div className="audio-game">
-        <Result
-          result={result}
-          words={words}
-          handleAudioClick={handleAudioClick}
-        />
+      <div className="loading">
+        <CircularProgress />
       </div>
     );
   }
 
-  return (
-    <div className="audio-game">
-      <Game
-        roundState={roundState}
+  if (!gameStatus) {
+    return (
+      <Result
         result={result}
         words={words}
         handleAudioClick={handleAudioClick}
-        handleChoiceBtnClick={handleChoiceBtnClick}
-        handleNextRoundBtnClick={handleNextRoundBtnClick}
       />
-    </div>
+    );
+  }
+
+  return (
+    <Game
+      roundState={roundState}
+      result={result}
+      words={words}
+      handleAudioClick={handleAudioClick}
+      handleChoiceBtnClick={handleChoiceBtnClick}
+      handleNextRoundBtnClick={handleNextRoundBtnClick}
+    />
   );
 };

@@ -3,18 +3,23 @@ import { useEffect, useMemo, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 
+import { UsersWordsApi } from '../../../../services/RSLangApi/UsersWordsApi';
 import { WordsApi } from '../../../../services/RSLangApi/WordsApi';
+import { User } from '../../../../services/User';
 import { Word } from '../../../../types/RSLangApi';
+import { getRandomNum } from '../../../../utils/helpers/randomNum';
 import { Result } from './result/result';
 import { Answer } from './types/Answer';
 import { WordCard } from './word-card/word-card';
 
 import './app-sprint.css';
 
+const RND_WORD = 0.5;
+
 export const AppSprint = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
-  const page = Number(useParams()?.page) || 0;
-
+  const page = useParams()?.page;
+  
   const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
   const [answerList, setAnswerList] = useState<Answer[]>([]);
@@ -38,6 +43,9 @@ export const AppSprint = () => {
     }
   }
   function getRandom(): Word {
+    if (Math.random() > RND_WORD) {
+      return words[cur]
+    }
     return words[Math.floor(Math.random() * words.length)];
   }
   function startGame() {
@@ -50,8 +58,38 @@ export const AppSprint = () => {
 
   useEffect(() => {
     (async () => {
-      let words = [];
-      words = await wordsApi.getWords(categoryId, page);
+      let words: Word[] = [];
+      if (page === undefined) {
+        // run from menu
+      // TODO: 29 const
+        words = await wordsApi.getWords(categoryId, getRandomNum(0, 29));
+      } else if (!User.isGuest()) {
+        const userWords = new UsersWordsApi(User.getId(), User.getTokens, User.setTokens)
+          let cPage = Number(page);
+          while (cPage >= 0 && words.length < 20) {
+            // eslint-disable-next-line no-await-in-loop
+            const cWord = await wordsApi.getWords(categoryId, cPage);
+            for (const item of cWord) {
+              try {
+                // eslint-disable-next-line no-await-in-loop
+                const uWord = await userWords.get(item.id);  
+                if (!uWord.optional.isKnown) {
+                  words.push(item);
+                }
+              }
+              catch (err) {
+                words.push(item);
+              } 
+             if (words.length ===20) {
+               break;
+             }
+            } 
+            cPage -=1;
+          }
+        } else {
+          console.log('guest page');
+          words = await wordsApi.getWords(categoryId, Number(page));
+        }
       setWords(words);
       setcur(0);
       startGame();

@@ -12,10 +12,13 @@ export const WordCard = (props: IWordCardProps) => {
     <div className="word-card">
       <img
         src={`https://rslang-project.herokuapp.com/${word.image}`}
-        alt="photo: correct answer"
+        alt="correct answer"
       />
       <p>
         {word.word} <span>{word.transcription}</span>
+      </p>
+      <p>
+        {word.wordTranslate}
       </p>
       <AudioButton
         id={undefined}

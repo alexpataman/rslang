@@ -8,7 +8,6 @@ import { App } from './App';
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
 import { store } from './store';
 import { AudioGame } from './views/Games/AudioGame/AudioGame';
-import { AudioGamePage } from './views/Games/AudioGame/AudioGamePage';
 import { StartPage } from './views/Games/AudioGame/StartPage/StartPage';
 import { GamesPage } from './views/Games/GamesPage/GamesPage';
 import { AppSprint } from './views/Games/GamesPage/sprint/app-sprin';
