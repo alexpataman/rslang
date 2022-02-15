@@ -48,7 +48,7 @@ export const AudioGame = () => {
 
     firstAudio.play();
   };
-  
+
   useEffect(() => {
     (async () => {
       const wordsArray = await wordsApi.getWords(categoryId, page);
@@ -86,7 +86,7 @@ export const AudioGame = () => {
       arr[ind] = item;
     });
     return arr;
-  }
+  };
 
   const getChoicesArray = (correctId: number): Array<number> => {
     let array = new Array(5).fill(99);
@@ -203,26 +203,22 @@ export const AudioGame = () => {
 
   if (!gameStatus) {
     return (
-      <div className="audio-game">
-        <Result
-          result={result}
-          words={words}
-          handleAudioClick={handleAudioClick}
-        />
-      </div>
+      <Result
+        result={result}
+        words={words}
+        handleAudioClick={handleAudioClick}
+      />
     );
   }
 
   return (
-    <div className="audio-game">
-      <Game
-        roundState={roundState}
-        result={result}
-        words={words}
-        handleAudioClick={handleAudioClick}
-        handleChoiceBtnClick={handleChoiceBtnClick}
-        handleNextRoundBtnClick={handleNextRoundBtnClick}
-      />
-    </div>
+    <Game
+      roundState={roundState}
+      result={result}
+      words={words}
+      handleAudioClick={handleAudioClick}
+      handleChoiceBtnClick={handleChoiceBtnClick}
+      handleNextRoundBtnClick={handleNextRoundBtnClick}
+    />
   );
 };

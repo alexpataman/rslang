@@ -34,7 +34,7 @@ export const StartPage = () => {
         (<i>R</i> - повторить, цифры 1-5 - варианты, <i>Enter</i> - продолжить,{' '}
         <i>Q</i> - "не знаю")
       </p>
-      <p className="start-page__subtitle">Выберите уровень сложности</p>
+      <p className="start-page__subtitle subtitle-level">Выберите уровень сложности</p>
       <div className="start-page__btn-cont">
         {WORD_GROUP_IDS.map((num) => (
           <LevelButton
