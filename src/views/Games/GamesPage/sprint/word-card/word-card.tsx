@@ -11,7 +11,7 @@ import './word-card.css';
 
 type WordParam = {
   cWord: Word;
-  getAnswer: (a: Word, b: boolean, score: number) => void;
+  getAnswer: (userWord: Word, b: boolean, score: number) => void;
   random: Word,
   stop: () => void,
 }
@@ -63,12 +63,14 @@ export const WordCard = (word: WordParam) => {
     };
   });
 
-  async function play(value: boolean) {
+  function play(value: boolean) {
     if (isSound) {
       if (value) {
-      await correctAudio?.play();
+        correctAudio!.currentTime=0;
+      correctAudio?.play();
       } else {
-       await errorAudio?.play();
+        errorAudio!.currentTime = 0;
+       errorAudio?.play();
       }
     }
   }
@@ -100,7 +102,7 @@ function toggleFull() {
       res = false;
     }
     play(res);
-    WordStatistics.process(ww!.id, b, GAME_ID.SPRINT);
+    WordStatistics.process(ww!.id, res, GAME_ID.SPRINT);
     word.getAnswer(userWord, res, Number(score.current!.textContent));
   }
 
