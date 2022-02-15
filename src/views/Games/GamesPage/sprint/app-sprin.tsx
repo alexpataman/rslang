@@ -7,6 +7,7 @@ import { UsersWordsApi } from '../../../../services/RSLangApi/UsersWordsApi';
 import { WordsApi } from '../../../../services/RSLangApi/WordsApi';
 import { User } from '../../../../services/User';
 import { Word } from '../../../../types/RSLangApi';
+import { WORDS_PER_PAGE } from '../../../../utils/constants/common.constants';
 import { getRandomNum } from '../../../../utils/helpers/randomNum';
 import { Result } from './result/result';
 import { Answer } from './types/Answer';
@@ -62,11 +63,11 @@ export const AppSprint = () => {
       if (page === undefined) {
         // run from menu
       // TODO: 29 const
-        words = await wordsApi.getWords(categoryId, getRandomNum(0, 29));
+        words = await wordsApi.getWords(categoryId, getRandomNum(0, WORDS_PER_PAGE - 1));
       } else if (!User.isGuest()) {
         const userWords = new UsersWordsApi(User.getId(), User.getTokens, User.setTokens)
           let cPage = Number(page);
-          while (cPage >= 0 && words.length < 20) {
+          while (cPage >= 0 && words.length < WORDS_PER_PAGE) {
             // eslint-disable-next-line no-await-in-loop
             const cWord = await wordsApi.getWords(categoryId, cPage);
             for (const item of cWord) {
@@ -80,7 +81,7 @@ export const AppSprint = () => {
               catch (err) {
                 words.push(item);
               } 
-             if (words.length ===20) {
+             if (words.length === WORDS_PER_PAGE) {
                break;
              }
             } 

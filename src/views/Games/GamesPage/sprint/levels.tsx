@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import { getRandomNum } from '../../../../utils/helpers/randomNum';
 import { LEVELS } from './types/gametypes';
 
 export const Levels = () =>{
