@@ -57,7 +57,14 @@ export const WordStatistics = {
       User.getTokens,
       User.setTokens
     );
-    const statistics = await userStatistics.get();
+
+    let statistics;
+    try {
+      statistics = await userStatistics.get();
+    } catch {
+      // nothing
+    }
+
     const currentDate = new Date().toISOString().slice(0, 10);
     const isNewKnown = !!(
       wordUpdated.optional.isKnown &&
@@ -140,7 +147,7 @@ export const WordStatistics = {
 };
 
 const prepareGameStatistics = (
-  statistics: IUserStatistics,
+  statistics: IUserStatistics | undefined,
   gameId: GAME_ID,
   currentDate: string,
   isNew: boolean,
@@ -180,7 +187,7 @@ const prepareGameStatistics = (
 };
 
 const prepareWordsStatistics = (
-  statistics: IUserStatistics,
+  statistics: IUserStatistics | undefined,
   currentDate: string,
   isNewCompleted: boolean,
   isNew: boolean,
