@@ -1,7 +1,25 @@
+@import '../../../../App.variables.scss';
+
 .start-page__lvl-btn {
-  margin: 0 6px;
-  height: 40px;
-  width: 40px;
+  margin: 0;
+  height: 45px;
+  width: 45px;
   font-size: 20px;
   font-weight: bold;
+  color: #fff;
+  background-color: #363271;
+  border-radius: 50%;
+  transition: all .2s ease-in;
+
+  &:hover {
+    color: #363271;
+    background-color: #fff;
+    border: 1px solid #363271;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: $subtitle-font * 1.25;
+  }
 }
+
+/*background-image: linear-gradient(to left, #ee390f 0%, #f9b700 51%, #ee390f 100%);*/
