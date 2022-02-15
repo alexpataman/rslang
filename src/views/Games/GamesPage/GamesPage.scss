@@ -1,0 +1,40 @@
+.games-page {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .games-page__tab {
+    padding: 20px 30px;
+    width: 23%;
+    font: inherit;
+    background-color: #fff;
+    border: 1px solid #edeff2;
+    border-radius: 2%;
+    transition: all .4s ease-out;
+
+    &:hover {
+      box-shadow: 0px 5px 10px 2px #edeff2;
+      transform: scale(1.005);
+    }
+
+    &:active {
+      transform: scale(.98);
+    }
+  }
+
+  .games-page__img {
+    height: 70%;
+  }
+
+  .games-page__title {
+    font: inherit;
+    font-size: 24px;
+  }
+
+  .games-page__subtitle {
+    font: inherit;
+    font-size: 16px;
+    opacity: .7;
+    text-align: left;
+  }
+}

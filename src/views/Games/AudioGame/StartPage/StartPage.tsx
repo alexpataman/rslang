@@ -28,10 +28,7 @@ export const StartPage = () => {
     <div className="start-page">
       <h2 className="start-page__title">Аудиовызов</h2>
       <p className="start-page__subtitle">
-        Ваша задача - прослушать аудио и выбрать соответствующий ему перевод
-      </p>
-      <p className="start-page__subtitle">
-        Также поддерживается управление с клавиатуры
+        Поддерживается управление с клавиатуры
       </p>
       <p className="start-page__subtitle">
         (<i>R</i> - повторить, цифры 1-5 - варианты, <i>Enter</i> - продолжить,{' '}
