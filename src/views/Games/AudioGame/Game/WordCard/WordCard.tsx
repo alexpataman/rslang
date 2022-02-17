@@ -29,7 +29,7 @@ export const WordCard = (props: IWordCardProps) => {
             dataSrc={word.audioExample}
             onClick={handleAudioClick}
           />
-          <p className="word-card__text">{word.textExample.toString()}</p>
+          <p className="word-card__text">{word.textExample}</p>
         </div>
         <p className="word-card__text">{word.textExampleTranslate}</p>
       </div>
