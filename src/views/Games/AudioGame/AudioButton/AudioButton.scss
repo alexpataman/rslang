@@ -1,4 +1,17 @@
+%btn-transition {
+  transition: all .1s ease-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(.95);
+  }
+}
+
 .audio-btn {
+  @extend %btn-transition;
   height: 16px;
   width: 16px;
   background: 0 0/contain url("../../../../assets/svg/volume.svg") no-repeat;
@@ -8,15 +21,25 @@
 }
 
 .game__audio-btn {
-  margin-bottom: 20px;
+  @extend %btn-transition;
   padding: 10px;
   height: 90px;
   width: 90px;
-  background-color: transparent;
+  background: 0 0/contain url('../../../../assets/svg/volume.svg') no-repeat;
   border-radius: 50%;
   cursor: pointer;
+
+  @media screen and (max-width: 900px) {
+    height: 70px;
+    width: 70px;
+  }
+
+  @media screen and (max-width: 600px) {
+    margin-bottom: 50px;
+  }
 }
 
 .result__audio {
+  @extend %btn-transition;
   margin-right: 6px;
 }

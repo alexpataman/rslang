@@ -10,16 +10,16 @@ export const Result = (props: IResultProps) => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <div className="result">
       <button
         className="return-btn"
         type="button"
         onClick={() => navigate('/games')}
       >
-        {'<-'}
+        &#8592;
       </button>
-      <div className="result">
-        <h2 className="result__title">Результаты:</h2>
+      <h2 className="result__title">Результаты</h2>
+      <div className="result__flex">
         <ResultBlock
           result={result}
           words={words}
@@ -42,6 +42,6 @@ export const Result = (props: IResultProps) => {
           handleAudioClick={handleAudioClick}
         />
       </div>
-    </>
+    </div>
   );
 };
