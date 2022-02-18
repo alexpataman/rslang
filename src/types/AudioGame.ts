@@ -18,7 +18,6 @@ interface IAudioBtnProps {
   className: string,
   dataSrc: string | undefined,
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-  text: string | undefined
 }
 
 interface IAudioGameProps {

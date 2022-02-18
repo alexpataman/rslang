@@ -52,26 +52,25 @@ export const Game = (props: IGameProps) => {
   }, []);
 
   return (
-    <>
+    <div className="game">
       <button
         className="return-btn"
         type="button"
         onClick={() => navigate('/games')}
       >
-        {'<-'}
+        &#8592;
       </button>
-      <div className="game">
-        <ul className="game__progress">
-          {result.map((item, ind) => (
-            <li key={ind} className={item}></li>
-          ))}
-        </ul>
+      <ul className="game__progress">
+        {result.map((item, ind) => (
+          <li key={ind} className={item}></li>
+        ))}
+      </ul>
+      <div className="game__flex">
         <AudioButton
           id="wordAudio"
           className="game__audio-btn"
           dataSrc={undefined}
           onClick={handleAudioClick}
-          text="Повторить"
         />
         {roundState?.isAnswered && words && (
           <WordCard
@@ -80,30 +79,32 @@ export const Game = (props: IGameProps) => {
             handleAudioClick={handleAudioClick}
           />
         )}
-        <div className="game__choices">
-          {roundState?.choices.map((choice, ind) => (
-            <button
-              id={String(ind + 1)}
-              className="choice"
-              key={ind}
-              data-choice={choice}
-              onClick={handleChoiceBtnClick}
-            >
-              <span className="game__choice-num">{ind + 1}</span> {choice}
-            </button>
-          ))}
-        </div>
-        <button
-          id={roundState?.isAnswered ? 'next' : 'unknown'}
-          onClick={
-            roundState?.isAnswered
-              ? handleNextRoundBtnClick
-              : handleChoiceBtnClick
-          }
-        >
-          {roundState?.isAnswered ? '->' : 'не знаю'}
-        </button>
       </div>
-    </>
+      <div className="game__choices">
+        {roundState?.choices.map((choice, ind) => (
+          <button
+            id={String(ind + 1)}
+            className="choice"
+            key={ind}
+            data-choice={choice}
+            onClick={handleChoiceBtnClick}
+          >
+            <span className="choice-num">{ind + 1}</span>
+            {choice}
+          </button>
+        ))}
+      </div>
+      <button
+        id={roundState?.isAnswered ? 'next' : 'unknown'}
+        className="unknown-choice"
+        onClick={
+          roundState?.isAnswered
+            ? handleNextRoundBtnClick
+            : handleChoiceBtnClick
+        }
+      >
+        {roundState?.isAnswered ? '→' : 'не знаю'}
+      </button>
+    </div>
   );
 };
