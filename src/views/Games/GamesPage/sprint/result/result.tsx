@@ -1,4 +1,4 @@
-import { TabsUnstyled, TabsListUnstyled, TabUnstyled, TabPanelUnstyled, Icon, Paper, TableContainer, TableBody, TableRow, TableCell, Table } from '@mui/material'
+import { TabsUnstyled, TabsListUnstyled, TabUnstyled, TabPanelUnstyled, Icon, Paper, TableContainer, TableBody, TableRow, TableCell, Table, Avatar, Card } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 
 import { SoundsApi } from '../../../../../services/RSLangApi/SoundsApi';
@@ -15,16 +15,17 @@ export const Result = (a: propAnswer) => {
 };
 
 return  (
-<div className='result'>
-Твой результат {a.score} очков
-  <TabsUnstyled defaultValue={0}>
-    <TabsListUnstyled>
+<Card sx={{ width: '70%', margin: '0 auto', }} className='result_sprint1'>
+
+  <TabsUnstyled className='result_sprint' defaultValue={0}>
+    <TabsListUnstyled className='tabs__header'>
       <TabUnstyled>Результат</TabUnstyled>
       <TabUnstyled>Подробнее</TabUnstyled>
       <button onClick={() => navigate('/')}>Завершить</button>
     </TabsListUnstyled>
-    <TabPanelUnstyled value={0}>
+    <TabPanelUnstyled value={0} className='result__info'>
       <p>
+      <p>Твой результат {a.score} очков</p>
         Слов изучено: {a.ansList.reduce((acc: number, cur) => acc + (cur.ans ? 1 : 0), 0)}, Слов на изучении: {a.ansList.reduce((acc: number, cur) => acc + (!cur.ans ? 1 : 0), 0)} 
       </p>
     </TabPanelUnstyled>
@@ -33,9 +34,10 @@ return  (
       <TableContainer component={Paper} sx={{
         overflowY: 'scroll',
         maxHeight: '40vh',
+        
       }}>
-         <p>Верно:</p> 
-      <Table sx={{ Height: 0 }} aria-label="a dense table" size="small">
+         <div>Верно: <Avatar sx={{ bgcolor: '#363271;' }}>{a.ansList.reduce((acc: number, cur) => acc + (cur.ans ? 1 : 0), 0)}</Avatar></div> 
+      <Table aria-label="a dense table" size="small">
         <TableBody>
           {a.ansList.map((el, i) => {
             if (el.ans)
@@ -50,11 +52,10 @@ return  (
         })}
         </TableBody>
         </Table>
-        
 
-      <p>Неверно:</p>
+        <div>Неверно: <Avatar sx={{ bgcolor: 'red'}}>{a.ansList.reduce((acc: number, cur) => acc + (!cur.ans ? 1 : 0), 0)}</Avatar></div> 
      
-      <Table sx={{ minWidth: 0 }} aria-label="a dense table" size="small">
+      <Table aria-label="a dense table" size="small">
         <TableBody>
           {a.ansList.map((el, i) => {
             if (!el.ans)
@@ -70,28 +71,9 @@ return  (
         </TableBody>
       </Table>
       </TableContainer>
-      {/* <div className='result__list'>
-        {a.ansList.map((el, i) => {
-          if (!el.ans)
-            return (
-              <div key={i} className='list-item'>
-                <div>
-                  {el.word.word}
-                </div>
-                <div>
-                  <button type='button' onClick={() => playAudio(el.word.audio)}><Icon>volume_up</Icon></button>
-                </div>
-                <div>
-                  {el.word.wordTranslate}
-                </div>
-              </div>
-            );
-          return null;
-        })}
-      </div> */}
     </div>
     </TabPanelUnstyled>
   </TabsUnstyled>
-</div>
+</Card>
   )
 }

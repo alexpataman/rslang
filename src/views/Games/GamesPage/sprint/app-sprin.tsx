@@ -88,7 +88,6 @@ export const AppSprint = () => {
             cPage -=1;
           }
         } else {
-          console.log('guest page');
           words = await wordsApi.getWords(categoryId, Number(page));
         }
       setWords(words);

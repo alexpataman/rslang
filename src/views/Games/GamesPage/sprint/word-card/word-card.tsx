@@ -1,13 +1,15 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
-import { Paper } from '@mui/material';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import { Badge, Button, createTheme, Paper, ThemeProvider } from '@mui/material';
 
 import { WordStatistics } from '../../../../../services/WordStatistics';
 import { GAME_ID } from '../../../../../types/common';
 import { Word } from '../../../../../types/RSLangApi'
+import { TIME_TO_PLAY } from '../../../../../utils/constants/common.constants';
 import { Control } from '../control/control';
 
-import './word-card.css';
+import './word-card.scss';
 
 type WordParam = {
   cWord: Word;
@@ -15,20 +17,31 @@ type WordParam = {
   random: Word,
   stop: () => void,
 }
-const TIME_TO_PLAY = 100;
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      // Purple and green play nicely together.
+      main: '#363271;',
+    },
+    secondary: {
+      // This is green.A700 as hex.
+      main: '#11cb5f',
+    },
+  },
+});
+
 
 export const WordCard = (word: WordParam) => {
   const [ww, setww] = useState<Word>();
   const [rn, setRn] = useState<Word>();
   const score = useRef<HTMLDivElement>(null);
-  const multRef = useRef<HTMLDivElement>(null);
   const [mult, setMult] = useState<number>(1);
   const [seconds, setSeconds] =  useState(TIME_TO_PLAY);
   const [timerActive, setTimerActive] = useState(false);
   const [isSound, setIsSound] = useState(true);
   const [isFull, setIsFull] = useState(true);
 
-  // TODO: нужно как-то иначе
   const [correctAudio, setCorrectAudio] = useState<HTMLAudioElement>();
   const [errorAudio, setErrorAudio] = useState<HTMLAudioElement>();
 
@@ -67,9 +80,11 @@ export const WordCard = (word: WordParam) => {
     if (isSound) {
       if (value) {
         correctAudio!.currentTime=0;
+        errorAudio!.pause();
       correctAudio?.play();
       } else {
         errorAudio!.currentTime = 0;
+        correctAudio?.pause();
        errorAudio?.play();
       }
     }
@@ -96,7 +111,6 @@ function toggleFull() {
       res=true;
       setMult(mult + 1);
       score.current!.textContent = (Number(score.current!.textContent) +10 * mult).toString();
-      multRef.current!.textContent = mult.toString();
     } else {
       setMult(1);
       res = false;
@@ -135,8 +149,9 @@ function toggleFull() {
            <span ref={score}>0</span>
          </div>
          <div className='mult'>
-           <span>Множитель:</span>
-           <span ref={multRef}>1</span>
+            <Badge badgeContent={mult - 1} color="primary">
+              <ThumbUpAltIcon />
+            </Badge>
          </div>
          <div className='timer'>
            <span>Осталось:</span>
@@ -145,12 +160,17 @@ function toggleFull() {
          </div>
        </div>
        <div className='cards__words'>
-         {ww.word} это {rn?.wordTranslate}
+
+          <span className='word__item'>{ww.word}</span> <span className='word__item-s'> это </span> <span className='word__item'>{rn?.wordTranslate}</span>
+       
+         
        </div>
 
        <div className='cards__buttons'>
-         <button type='button' onClick={() => { check(ww, true, rn!); } }> Да</button>
-         <button type='button' onClick={() => { check(ww, false, rn!); } }> Нет</button>
+          <ThemeProvider theme={theme}>
+            <Button color='primary' variant="contained" type='button' onClick={() => { check(ww, true, rn!); } }>&#8592; Да</Button>
+            <Button color='primary' variant="outlined"  type='button' onClick={() => { check(ww, false, rn!); } }>Нет &#8594;</Button>
+          </ThemeProvider>
        </div>
 
      </div>
