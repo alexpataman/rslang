@@ -1,14 +1,12 @@
 import { useMemo, useEffect, useState } from 'react';
 
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { GameButtons } from '../../../components/GameButtons/GameButtons';
 import { Loader } from '../../../components/Loader/Loader';
-import {
-  Pagination,
-  PAGINATION_DIRECTIONS,
-} from '../../../components/Pagination/Pagination';
+import { PaginationNumbers } from '../../../components/PaginationNumbers/PaginationNumbers';
 import { useUserIsGuest } from '../../../hooks/useUserIsGuest';
 import { UsersAggregatedWords } from '../../../services/RSLangApi/UsersAggregatedWords';
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
@@ -50,26 +48,20 @@ export const TextbookCategoryPage = () => {
     })();
   }, [wordsApi, categoryId, page, isGuest]);
 
-  const changePageHandler = (direction: PAGINATION_DIRECTIONS) => {
-    if (direction === PAGINATION_DIRECTIONS.PREV) {
-      return navigate(`${pageNavigatePath}/${page - 1}`);
-    }
-    return navigate(`${pageNavigatePath}/${page + 1}`);
-  };
-
-  const disableConditions = {
-    [PAGINATION_DIRECTIONS.NEXT]: page >= MAX_PAGE_NUMBER - 1,
-    [PAGINATION_DIRECTIONS.PREV]: page <= 0,
-  };
+  const changePageHandler = (page: number) =>
+    navigate(`${pageNavigatePath}/${page}`);
 
   return (
     <>
-      <h2>Категория #{categoryId + 1}</h2>
-      <Grid container alignItems="center" sx={{ mb: 2 }} spacing={2}>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Категория #{categoryId + 1}
+      </Typography>
+      <Grid container alignItems="center" sx={{ mb: 3 }} spacing={2}>
         <Grid item>
-          <Pagination
+          <PaginationNumbers
             changePageHandler={changePageHandler}
-            disableConditions={disableConditions}
+            count={MAX_PAGE_NUMBER - 1}
+            page={page}
           />
         </Grid>
         <Grid item>
@@ -77,7 +69,7 @@ export const TextbookCategoryPage = () => {
         </Grid>
       </Grid>
       <Loader isLoading={isLoading}>
-        <Grid container spacing={2} alignItems="stretch">
+        <Grid container spacing={3} alignItems="stretch">
           {words?.map((word) => (
             <Grid item xs={12} sm={6} md={4} key={word.id}>
               <TextbookWordItem item={word} />

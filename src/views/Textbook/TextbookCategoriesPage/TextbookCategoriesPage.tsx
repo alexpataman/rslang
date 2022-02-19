@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
 import { Loader } from '../../../components/Loader/Loader';
@@ -25,9 +26,11 @@ export const TextbookCategoriesPage = () => {
 
   return (
     <>
-      <h2>Учебник</h2>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Учебник
+      </Typography>
       <Loader isLoading={isLoading}>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           {categories.map((category, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <TextbookCategoryItem id={index} img={category.image} />

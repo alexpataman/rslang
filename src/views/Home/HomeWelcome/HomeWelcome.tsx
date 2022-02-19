@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import homeImg from '../../../assets/img/home.webp';
+import homeImg from '../../../assets/img/home.png';
 import './HomeWelcome.scss';
 
 export const HomeWelcome = () => (

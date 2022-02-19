@@ -27,7 +27,7 @@ const links = [
 
 export const TextbookNav = () => (
   <AuthorisedOnly>
-    <Grid container spacing={1}>
+    <Grid container spacing={1} sx={{ mb: 3 }}>
       {links.map((link, index) => (
         <Grid item key={index}>
           <Button
