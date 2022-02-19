@@ -65,7 +65,7 @@ export const TextbookWordItem = ({
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }} raised={true} className="TextbookWordItem">
+    <Card sx={{ maxWidth: 390 }} raised={true} className="TextbookWordItem">
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {word} {transcription}

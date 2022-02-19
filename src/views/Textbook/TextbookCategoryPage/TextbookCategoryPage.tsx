@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -64,8 +65,10 @@ export const TextbookCategoryPage = () => {
 
   return (
     <>
-      <h2>Категория #{categoryId + 1}</h2>
-      <Grid container alignItems="center" sx={{ mb: 2 }} spacing={2}>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Категория #{categoryId + 1}
+      </Typography>
+      <Grid container alignItems="center" sx={{ mb: 3 }} spacing={2}>
         <Grid item>
           <Pagination
             changePageHandler={changePageHandler}
@@ -77,7 +80,7 @@ export const TextbookCategoryPage = () => {
         </Grid>
       </Grid>
       <Loader isLoading={isLoading}>
-        <Grid container spacing={2} alignItems="stretch">
+        <Grid container spacing={3} alignItems="stretch">
           {words?.map((word) => (
             <Grid item xs={12} sm={6} md={4} key={word.id}>
               <TextbookWordItem item={word} />

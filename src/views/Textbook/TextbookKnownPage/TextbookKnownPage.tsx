@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
 import { Loader } from '../../../components/Loader/Loader';
@@ -43,7 +44,9 @@ export const TextbookKnownPage = () => {
 
   return (
     <>
-      <h2>Изученные слова</h2>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Изученные слова
+      </Typography>
 
       <Loader isLoading={isLoading}>
         <Grid container spacing={2} alignItems="stretch">
