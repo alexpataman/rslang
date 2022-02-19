@@ -38,6 +38,7 @@ export const HomeFeatures = () => (
         justifyContent="space-around"
         alignContent="center"
         className="items"
+        spacing={4}
       >
         {features.map((el, index) => (
           <Grid item xs={12} sm={4} md={2} className="item" key={index}>

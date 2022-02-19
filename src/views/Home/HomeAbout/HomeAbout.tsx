@@ -12,19 +12,19 @@ const team = [
     name: 'Alexander Pataman',
     img: ava1Img,
     github: 'alexpataman',
-    description: 'Описание что делал',
+    description: 'Авторизация, учебник, статистика, базовый UI',
   },
   {
     name: 'Aliona Bulanava',
     img: ava3Img,
     github: 'kxzws',
-    description: 'Описание что делал',
+    description: 'Игра "Аудиовызов"',
   },
   {
     name: 'Andrei Shpak',
     img: ava2Img,
     github: 'shpakitze',
-    description: 'Описание что делал',
+    description: 'Игра "Спринт"',
   },
 ];
 
