@@ -6,10 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import { GameButtons } from '../../../components/GameButtons/GameButtons';
 import { Loader } from '../../../components/Loader/Loader';
-import {
-  Pagination,
-  PAGINATION_DIRECTIONS,
-} from '../../../components/Pagination/Pagination';
+import { PaginationNumbers } from '../../../components/PaginationNumbers/PaginationNumbers';
 import { useUserIsGuest } from '../../../hooks/useUserIsGuest';
 import { UsersAggregatedWords } from '../../../services/RSLangApi/UsersAggregatedWords';
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
@@ -51,17 +48,8 @@ export const TextbookCategoryPage = () => {
     })();
   }, [wordsApi, categoryId, page, isGuest]);
 
-  const changePageHandler = (direction: PAGINATION_DIRECTIONS) => {
-    if (direction === PAGINATION_DIRECTIONS.PREV) {
-      return navigate(`${pageNavigatePath}/${page - 1}`);
-    }
-    return navigate(`${pageNavigatePath}/${page + 1}`);
-  };
-
-  const disableConditions = {
-    [PAGINATION_DIRECTIONS.NEXT]: page >= MAX_PAGE_NUMBER - 1,
-    [PAGINATION_DIRECTIONS.PREV]: page <= 0,
-  };
+  const changePageHandler = (page: number) =>
+    navigate(`${pageNavigatePath}/${page}`);
 
   return (
     <>
@@ -70,9 +58,10 @@ export const TextbookCategoryPage = () => {
       </Typography>
       <Grid container alignItems="center" sx={{ mb: 3 }} spacing={2}>
         <Grid item>
-          <Pagination
+          <PaginationNumbers
             changePageHandler={changePageHandler}
-            disableConditions={disableConditions}
+            count={MAX_PAGE_NUMBER - 1}
+            page={page}
           />
         </Grid>
         <Grid item>
