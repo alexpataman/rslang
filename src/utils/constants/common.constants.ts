@@ -5,3 +5,8 @@ export const WORDS_PER_PAGE = 20;
 export const regularWordKnownThreshold = 3;
 export const difficultWordKnownThreshold = 5;
 export const TIME_TO_PLAY = 60;
+export const STATISTICS_LABELS = {
+  audio: 'Аудиовызов',
+  sprint: 'Спринт',
+  total: 'Общая статистика',
+};

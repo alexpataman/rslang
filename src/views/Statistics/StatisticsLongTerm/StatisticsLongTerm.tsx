@@ -1,7 +1,10 @@
+import { Grid, Paper, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import Chart from 'react-apexcharts';
 
 import { CHART_TYPES, GAME_ID } from '../../../types/common';
 import { IUserStatistics } from '../../../types/RSLangApi';
+import { STATISTICS_LABELS } from '../../../utils/constants/common.constants';
 
 interface IStatisticsLongTerm {
   data: IUserStatistics | undefined;
@@ -39,7 +42,7 @@ export const StatisticsLongTerm = ({ data }: IStatisticsLongTerm) => {
     newWordsByDayCharts.push(
       getWordsByDayChart(
         CHART_TYPES.BAR,
-        game,
+        'Изучено слов',
         game,
         categories,
         newWordsSeries[game]
@@ -48,7 +51,7 @@ export const StatisticsLongTerm = ({ data }: IStatisticsLongTerm) => {
     newWordsByDayChartsAcc.push(
       getWordsByDayChart(
         CHART_TYPES.LINE,
-        game,
+        'Изучено слов',
         game,
         categories,
         newWordsSeries[game].reduce((acc, el, index) => {
@@ -61,24 +64,32 @@ export const StatisticsLongTerm = ({ data }: IStatisticsLongTerm) => {
   });
 
   return (
-    <>
-      <h4>Долгосрочная статистика</h4>
-      <h3>Количество новых слов за каждый день изучения</h3>
-      <div>
+    <Box className="StatisticsLongTerm" sx={{ mb: 5 }}>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Долгосрочная статистика
+      </Typography>
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        Количество новых слов за каждый день изучения
+      </Typography>
+      <Grid container spacing={2} sx={{ mb: 5 }}>
         {newWordsByDayCharts.map((el, index) => (
-          <div key={index}>{el}</div>
+          <Grid item key={index} xs={12} sm={4}>
+            {el}
+          </Grid>
         ))}
-      </div>
-      <h3>
+      </Grid>
+      <Typography variant="h5" sx={{ mb: 2 }}>
         Увеличение общего количества изученных слов за весь период обучения по
         дням
-        <div>
-          {newWordsByDayChartsAcc.map((el, index) => (
-            <div key={index}>{el}</div>
-          ))}
-        </div>
-      </h3>
-    </>
+      </Typography>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
+        {newWordsByDayChartsAcc.map((el, index) => (
+          <Grid item key={index} xs={12} sm={4}>
+            {el}
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 
@@ -112,15 +123,11 @@ const getWordsByDayChart = (
     ],
   };
   return (
-    <>
-      <h4>{title}</h4>
-      <Chart
-        options={data.options}
-        series={data.series}
-        type={type}
-        width={500}
-        height={320}
-      />
-    </>
+    <Paper sx={{ width: 1, p: 2 }}>
+      <Typography variant="h6">
+        {STATISTICS_LABELS[title as keyof typeof STATISTICS_LABELS]}
+      </Typography>
+      <Chart options={data.options} series={data.series} type={type} />
+    </Paper>
   );
 };
