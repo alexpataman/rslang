@@ -104,7 +104,6 @@ export const AudioGame = () => {
   };
 
   const getRoundResult = (btn: HTMLButtonElement) => {
-    // TODO: обернуть вызов process в проверку авторизации
     const correctWord =
       words !== undefined && words[roundState?.roundNum as number];
     const correctTranslation = (correctWord as Word).wordTranslate;

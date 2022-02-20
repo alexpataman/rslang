@@ -168,7 +168,7 @@
       background-color: #5d5a92;
       border-radius: 25px;
       transform: scale(1);
-      transition: all 1s ease-in;
+      transition: all .6s ease-in;
 
       &:hover {
         animation: scale 0.7s infinite alternate;
