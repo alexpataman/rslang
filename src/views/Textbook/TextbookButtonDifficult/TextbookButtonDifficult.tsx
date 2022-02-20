@@ -12,10 +12,11 @@ import { AlreadyExistsError } from '../../../utils/errors/AlreadyExistsError';
 interface ITextbookButtonDifficult {
   word: Word;
   onClick?: () => void;
+  refreshPageItems?: () => void;
 }
 
 export const TextbookButtonDifficult = (props: ITextbookButtonDifficult) => {
-  const { onClick, word } = props;
+  const { onClick, word, refreshPageItems } = props;
   const { id, userWord } = word;
   const [isActive, setIsActive] = useState(userWord?.optional?.isDifficult);
 
@@ -46,6 +47,10 @@ export const TextbookButtonDifficult = (props: ITextbookButtonDifficult) => {
 
     if (onClick) {
       onClick();
+    }
+
+    if (refreshPageItems) {
+      refreshPageItems();
     }
   };
 

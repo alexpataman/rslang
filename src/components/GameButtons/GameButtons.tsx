@@ -20,10 +20,11 @@ const links = [
 interface IGameButtons {
   categoryId: number;
   page: number;
+  isKnownPage: boolean | undefined;
 }
 
 export const GameButtons = (props: IGameButtons) => {
-  const { categoryId, page } = props;
+  const { categoryId, page, isKnownPage } = props;
 
   return (
     <Grid container spacing={1}>
@@ -34,6 +35,7 @@ export const GameButtons = (props: IGameButtons) => {
             to={`${link.to}/category/${categoryId}/page/${page}`}
             variant="outlined"
             startIcon={link.icon}
+            disabled={isKnownPage}
           >
             {link.text}
           </Button>
