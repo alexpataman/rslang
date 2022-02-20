@@ -60,7 +60,7 @@ export const TextbookCategoryPage = () => {
         <Grid item>
           <PaginationNumbers
             changePageHandler={changePageHandler}
-            count={MAX_PAGE_NUMBER - 1}
+            count={MAX_PAGE_NUMBER}
             page={page}
           />
         </Grid>

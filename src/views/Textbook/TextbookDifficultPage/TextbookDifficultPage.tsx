@@ -43,12 +43,10 @@ export const TextbookDifficultPage = () => {
     getItems();
   };
 
-  return (
-    <>
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        Сложные слова
-      </Typography>
+  let content;
 
+  if (words && words.length > 0) {
+    content = (
       <Loader isLoading={isLoading}>
         <Grid container spacing={2} alignItems="stretch">
           {words?.map((word) => (
@@ -61,6 +59,17 @@ export const TextbookDifficultPage = () => {
           ))}
         </Grid>
       </Loader>
+    );
+  } else {
+    content = <Typography>Список сложных слов пуст</Typography>;
+  }
+
+  return (
+    <>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Сложные слова
+      </Typography>
+      {content}
     </>
   );
 };

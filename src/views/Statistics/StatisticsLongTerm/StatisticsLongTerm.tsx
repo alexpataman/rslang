@@ -68,27 +68,38 @@ export const StatisticsLongTerm = ({ data }: IStatisticsLongTerm) => {
       <Typography variant="h4" sx={{ mb: 3 }}>
         Долгосрочная статистика
       </Typography>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Количество новых слов за каждый день изучения
-      </Typography>
-      <Grid container spacing={2} sx={{ mb: 5 }}>
-        {newWordsByDayCharts.map((el, index) => (
-          <Grid item key={index} xs={12} sm={4}>
-            {el}
+      {!newWordsByDayCharts.length && (
+        <Typography>
+          Долгосрочная статистика пока недоступна. Для начала попробуйте
+          потренировать слова.
+        </Typography>
+      )}
+
+      {newWordsByDayCharts.length > 0 && (
+        <>
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Количество новых слов за каждый день изучения
+          </Typography>
+          <Grid container spacing={2} sx={{ mb: 5 }}>
+            {newWordsByDayCharts.map((el, index) => (
+              <Grid item key={index} xs={12} sm={4}>
+                {el}
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Увеличение общего количества изученных слов за весь период обучения по
-        дням
-      </Typography>
-      <Grid container spacing={2} sx={{ mb: 2 }}>
-        {newWordsByDayChartsAcc.map((el, index) => (
-          <Grid item key={index} xs={12} sm={4}>
-            {el}
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Увеличение общего количества изученных слов за весь период обучения
+            по дням
+          </Typography>
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            {newWordsByDayChartsAcc.map((el, index) => (
+              <Grid item key={index} xs={12} sm={4}>
+                {el}
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </>
+      )}
     </Box>
   );
 };

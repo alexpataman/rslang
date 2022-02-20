@@ -42,12 +42,10 @@ export const TextbookKnownPage = () => {
     getItems();
   };
 
-  return (
-    <>
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        Изученные слова
-      </Typography>
+  let content;
 
+  if (words && words.length > 0) {
+    content = (
       <Loader isLoading={isLoading}>
         <Grid container spacing={2} alignItems="stretch">
           {words?.map((word) => (
@@ -60,6 +58,17 @@ export const TextbookKnownPage = () => {
           ))}
         </Grid>
       </Loader>
+    );
+  } else {
+    content = <Typography>Список изученных слов пуст</Typography>;
+  }
+
+  return (
+    <>
+      <Typography variant="h4" sx={{ mb: 3 }}>
+        Изученные слова
+      </Typography>
+      {content}
     </>
   );
 };
