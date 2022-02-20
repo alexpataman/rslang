@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import parse from 'html-react-parser';
 
 import { AuthorisedOnly } from '../../../components/AuthorisedOnly/AuthorisedOnly';
-import { Temp } from '../../../components/Temp/Temp';
 import { Word } from '../../../types/RSLangApi';
 import { TextbookButtonAudio } from '../TextbookButtonAudio/TextbookButtonAudio';
 import { TextbookButtonDifficult } from '../TextbookButtonDifficult/TextbookButtonDifficult';
@@ -37,6 +36,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 interface ITextbookWordItem {
   item: Word;
+  refreshPageItems?: () => void;
   clickHandlers?: {
     knownClickHandler?: () => void;
     difficultClickHandler?: () => void;
@@ -46,6 +46,7 @@ interface ITextbookWordItem {
 export const TextbookWordItem = ({
   item,
   clickHandlers,
+  refreshPageItems,
 }: ITextbookWordItem) => {
   const [expanded, setExpanded] = React.useState(false);
   const {
@@ -88,12 +89,14 @@ export const TextbookWordItem = ({
           <TextbookButtonDifficult
             word={item}
             onClick={clickHandlers?.difficultClickHandler}
+            refreshPageItems={refreshPageItems}
           />
         </AuthorisedOnly>
         <AuthorisedOnly>
           <TextbookButtonKnown
             word={item}
             onClick={clickHandlers?.knownClickHandler}
+            refreshPageItems={refreshPageItems}
           />
         </AuthorisedOnly>
         <AuthorisedOnly>
@@ -113,7 +116,6 @@ export const TextbookWordItem = ({
         <CardContent>
           <Typography paragraph>{parse(textMeaning)}</Typography>
           <Typography>{parse(textMeaningTranslate)}</Typography>
-          <Temp word={item} />
         </CardContent>
       </Collapse>
     </Card>

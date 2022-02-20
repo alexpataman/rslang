@@ -16,8 +16,12 @@ export const StatisticsPage = () => {
   );
   useEffect(() => {
     (async () => {
-      const statistics = await userStatistics.get();
-      setData(statistics);
+      try {
+        const statistics = await userStatistics.get();
+        setData(statistics);
+      } catch {
+        // do nothing
+      }
       setIsLoading(false);
     })();
   }, [userStatistics]);

@@ -12,15 +12,17 @@ interface IPaginationNumbers {
   changePageHandler: (direction: PAGINATION_DIRECTIONS) => void;
   count: number;
   page: number;
+  color: 'primary' | 'secondary' | 'standard' | undefined;
 }
 
 export const PaginationNumbers = ({
   changePageHandler,
   count,
   page,
+  color,
 }: IPaginationNumbers) => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    changePageHandler(value);
+    changePageHandler(value - 1);
   };
 
   return (
@@ -28,9 +30,9 @@ export const PaginationNumbers = ({
       <Stack spacing={2}>
         <Pagination
           count={count}
-          page={page}
+          page={page + 1}
           onChange={handleChange}
-          color="primary"
+          color={color}
         />
       </Stack>
     </div>

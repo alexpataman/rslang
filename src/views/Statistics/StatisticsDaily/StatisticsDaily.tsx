@@ -24,6 +24,12 @@ export const StatisticsDaily = ({ data }: IStatisticsDaily) => {
       <Typography variant="h4" sx={{ mb: 3 }}>
         Краткосрочная статистика за сегодня
       </Typography>
+      {!words && !games && (
+        <Typography>
+          Информации за текущий день нет. Вероятно, Вы сегодня еще не
+          тренировали слова.
+        </Typography>
+      )}
       <Grid container spacing={2}>
         {games &&
           Object.keys(games).map((gameId) => (

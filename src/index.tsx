@@ -20,7 +20,7 @@ import { TextbookCategoryPage } from './views/Textbook/TextbookCategoryPage/Text
 import { TextbookDifficultPage } from './views/Textbook/TextbookDifficultPage/TextbookDifficultPage';
 import { TextbookKnownPage } from './views/Textbook/TextbookKnownPage/TextbookKnownPage';
 import { TextbookPage } from './views/Textbook/TextbookPage/TextbookPage';
-// import './utils/helpers/taskCheck';
+import './utils/helpers/taskCheck';
 
 render(
   <StrictMode>

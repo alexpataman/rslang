@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 
-import { Typography } from '@mui/material';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { Avatar, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
 import { Loader } from '../../../components/Loader/Loader';
@@ -26,7 +27,10 @@ export const TextbookCategoriesPage = () => {
 
   return (
     <>
-      <Typography variant="h4" sx={{ mb: 3 }}>
+      <Typography variant="h4" sx={{ mb: 3 }} className="head-with-image">
+        <Avatar>
+          <MenuBookIcon />
+        </Avatar>
         Учебник
       </Typography>
       <Loader isLoading={isLoading}>

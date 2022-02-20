@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useState } from 'react';
 
-import { Typography } from '@mui/material';
+import NewReleasesIcon from '@mui/icons-material/NewReleases';
+import { Avatar, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
 import { Loader } from '../../../components/Loader/Loader';
@@ -43,24 +44,34 @@ export const TextbookDifficultPage = () => {
     getItems();
   };
 
+  let content;
+
+  if (words && words.length > 0) {
+    content = (
+      <Grid container spacing={2} alignItems="stretch">
+        {words?.map((word) => (
+          <Grid item xs={12} sm={6} md={3} key={word.id}>
+            <TextbookWordItem
+              item={word}
+              clickHandlers={{ difficultClickHandler }}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  } else {
+    content = <Typography>Список сложных слов пуст</Typography>;
+  }
+
   return (
     <>
-      <Typography variant="h4" sx={{ mb: 3 }}>
+      <Typography variant="h4" sx={{ mb: 3 }} className="head-with-image">
+        <Avatar>
+          <NewReleasesIcon />
+        </Avatar>
         Сложные слова
       </Typography>
-
-      <Loader isLoading={isLoading}>
-        <Grid container spacing={2} alignItems="stretch">
-          {words?.map((word) => (
-            <Grid item xs={12} sm={6} md={4} key={word.id}>
-              <TextbookWordItem
-                item={word}
-                clickHandlers={{ difficultClickHandler }}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Loader>
+      <Loader isLoading={isLoading}>{content}</Loader>
     </>
   );
 };

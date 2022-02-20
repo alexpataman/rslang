@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material';
 
 import ava1Img from '../../../assets/img/team_1.jpeg';
 import ava2Img from '../../../assets/img/team_2.jpeg';
-import ava3Img from '../../../assets/img/team_3.png';
+import ava3Img from '../../../assets/img/team_3.jpg';
 import TeamMemberCard from '../../../components/TeamMemberCard/TeamMemberCard';
 
 import './HomeAbout.scss';
@@ -18,7 +18,7 @@ const team = [
     name: 'Aliona Bulanava',
     img: ava3Img,
     github: 'kxzws',
-    description: 'Игра "Аудиовызов"',
+    description: 'Игра "Аудиовызов", UI раздела игр',
   },
   {
     name: 'Andrei Shpak',
