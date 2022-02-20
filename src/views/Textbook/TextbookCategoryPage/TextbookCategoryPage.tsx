@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 
-import { Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -15,10 +15,13 @@ import { Word } from '../../../types/RSLangApi';
 import { MAX_PAGE_NUMBER } from '../../../utils/constants/common.constants';
 import { TextbookWordItem } from '../TextbookWordItem/TextbookWordItem';
 
+import './TextbookCategoryPage.scss';
+
 export const TextbookCategoryPage = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = Number(useParams()?.page) || 0;
   const [words, setWords] = useState<Word[]>();
+  const [categoryImage, setCategoryImage] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
   const isGuest = useUserIsGuest();
   const navigate = useNavigate();
@@ -42,6 +45,12 @@ export const TextbookCategoryPage = () => {
 
   useEffect(() => {
     (async () => {
+      const firstWords = await wordsApi.getWords(categoryId, 0);
+      if (firstWords.length) {
+        const categoryImage = `${process.env.REACT_APP_API_URL}/${firstWords[0].image}`;
+        setCategoryImage(categoryImage);
+      }
+
       const words = await wordsApi.getWords(categoryId, page);
       setWords(words);
       setIsLoading(false);
@@ -52,11 +61,24 @@ export const TextbookCategoryPage = () => {
     navigate(`${pageNavigatePath}/${page}`);
 
   return (
-    <>
-      <Typography variant="h4" sx={{ mb: 3 }}>
+    <div className="TextbookCategoryPage">
+      <Typography variant="h4" sx={{ mb: 3 }} className="category-title">
+        {categoryImage && (
+          <Avatar src={categoryImage} alt={`Категория #${categoryId + 1}`} />
+        )}
         Категория #{categoryId + 1}
       </Typography>
-      <Grid container alignItems="center" sx={{ mb: 3 }} spacing={2}>
+
+      <Grid
+        container
+        alignItems="center"
+        sx={{ mb: 3 }}
+        spacing={2}
+        justifyContent="space-between"
+      >
+        <Grid item>
+          <GameButtons categoryId={categoryId} page={page} />
+        </Grid>
         <Grid item>
           <PaginationNumbers
             changePageHandler={changePageHandler}
@@ -64,19 +86,16 @@ export const TextbookCategoryPage = () => {
             page={page}
           />
         </Grid>
-        <Grid item>
-          <GameButtons categoryId={categoryId} page={page} />
-        </Grid>
       </Grid>
       <Loader isLoading={isLoading}>
         <Grid container spacing={3} alignItems="stretch">
           {words?.map((word) => (
-            <Grid item xs={12} sm={6} md={4} key={word.id}>
+            <Grid item xs={12} sm={6} md={3} key={word.id}>
               <TextbookWordItem item={word} />
             </Grid>
           ))}
         </Grid>
       </Loader>
-    </>
+    </div>
   );
 };

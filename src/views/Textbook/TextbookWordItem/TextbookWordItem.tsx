@@ -113,7 +113,6 @@ export const TextbookWordItem = ({
         <CardContent>
           <Typography paragraph>{parse(textMeaning)}</Typography>
           <Typography>{parse(textMeaningTranslate)}</Typography>
-          <Temp word={item} />
         </CardContent>
       </Collapse>
     </Card>
