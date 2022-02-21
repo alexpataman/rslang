@@ -11,7 +11,9 @@ export const Levels = () => {
         Поддерживается управление с клавиатуры
       </p>
       <p className="start-page__subtitle">(&#8592; Да, &#8594; Нет)</p>
-      <p className="start-page__subtitle subtitle-level">Выберите категорию</p>
+      <p className="start-page__subtitle subtitle-level">
+        Выберите уровень сложности
+      </p>
       <div className="start-page__btn-cont">
         {WORD_GROUP_IDS.map((e, i) => (
           <button
