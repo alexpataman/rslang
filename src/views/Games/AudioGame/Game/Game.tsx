@@ -21,15 +21,16 @@ export const Game = (props: IGameProps) => {
 
   useEffect(() => {
     const onKeyPress = (e: KeyboardEvent) => {
+      e.preventDefault();
+
       if (parseInt(e.key, 10) >= 1 && parseInt(e.key, 10) <= 5) {
         const btn = document.getElementById(e.key);
         btn?.click();
         btn?.blur();
       }
 
-      // bug: не знаю мышкой -> enter
       if (e.key === 'Enter') {
-        [1, 2, 3, 4, 5].forEach(key => {
+        [1, 2, 3, 4, 5].forEach((key) => {
           const choice = document.getElementById(key.toString());
           choice?.blur();
         });

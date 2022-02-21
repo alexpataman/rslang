@@ -17,7 +17,8 @@
     background-color: #fff;
     border: 1px solid $shadow-color;
     border-radius: 2%;
-    transition: all .4s ease-out;
+    transition: all 0.4s ease-out;
+    cursor: pointer;
 
     &:hover {
       box-shadow: 0px 5px 10px 2px $shadow-color;
@@ -25,7 +26,7 @@
     }
 
     &:active {
-      transform: scale(.98);
+      transform: scale(0.98);
     }
 
     @media screen and (max-width: 1300px) {
@@ -40,11 +41,10 @@
       width: 60%;
     }
 
-    
     @media screen and (max-width: 620px) {
       width: 70%;
     }
-    
+
     @media screen and (max-width: 460px) {
       width: 90%;
     }
@@ -66,7 +66,7 @@
   .games-page__subtitle {
     font: inherit;
     font-size: $subtitle-font;
-    opacity: .7;
+    opacity: 0.7;
     text-align: left;
 
     @media screen and (max-width: 768px) {

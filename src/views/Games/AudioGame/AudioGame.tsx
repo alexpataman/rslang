@@ -33,7 +33,8 @@ export const AudioGame = () => {
   const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
   const [result, setResult] = useState<Array<string>>([]);
-  const templateWords = [ // заглушка на варианты, где меньше 5-ти слов в игре
+  const templateWords = [
+    // заглушка на варианты, где меньше 5-ти слов в игре
     '',
     'дуга',
     'ядро',
@@ -292,13 +293,15 @@ export const AudioGame = () => {
   }
 
   return (
-    <Game
-      roundState={roundState}
-      result={result}
-      words={words}
-      handleAudioClick={handleAudioClick}
-      handleChoiceBtnClick={handleChoiceBtnClick}
-      handleNextRoundBtnClick={handleNextRoundBtnClick}
-    />
+    <div className="container">
+      <Game
+        roundState={roundState}
+        result={result}
+        words={words}
+        handleAudioClick={handleAudioClick}
+        handleChoiceBtnClick={handleChoiceBtnClick}
+        handleNextRoundBtnClick={handleNextRoundBtnClick}
+      />
+    </div>
   );
 };
