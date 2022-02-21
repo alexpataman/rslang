@@ -20,27 +20,36 @@ export const Game = (props: IGameProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // const onKeyPress = (e: Event) => console.log(e);
-
     const onKeyPress = (e: KeyboardEvent) => {
       if (parseInt(e.key, 10) >= 1 && parseInt(e.key, 10) <= 5) {
         const btn = document.getElementById(e.key);
         btn?.click();
+        btn?.blur();
       }
 
+      // bug: не знаю мышкой -> enter
       if (e.key === 'Enter') {
+        [1, 2, 3, 4, 5].forEach(key => {
+          const choice = document.getElementById(key.toString());
+          choice?.blur();
+        });
         const btn = document.getElementById('next');
-        btn?.click();
+        setTimeout(() => {
+          btn?.click();
+          btn?.blur();
+        }, 0);
       }
 
-      if (e.key === 'q') {
+      if (e.key === 'q' || e.key === 'й') {
         const btn = document.getElementById('unknown');
         btn?.click();
+        btn?.blur();
       }
 
-      if (e.key === 'r') {
+      if (e.key === 'r' || e.key === 'к') {
         const btn = document.getElementById('wordAudio');
         btn?.click();
+        btn?.blur();
       }
     };
 

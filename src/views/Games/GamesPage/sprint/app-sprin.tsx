@@ -116,11 +116,8 @@ export const AppSprint = () => {
     );
   }
   return (
-    <div>
-      <h5>
-        ID категории {categoryId}, страница {page}
-      </h5>
-      loading... <CircularProgress />
+    <div className="loading">
+      <CircularProgress />
     </div>
   );
 };
