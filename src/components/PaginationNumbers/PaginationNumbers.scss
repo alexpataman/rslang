@@ -1,0 +1,19 @@
+.Pagination {
+  margin: 0;
+}
+
+.PaginationButton {
+  padding: 5px 20px;
+  border: 0;
+  color: #000;
+  border-radius: 5px;
+  border: 1px solid;
+  margin-right: 5px;
+  text-transform: uppercase;
+  background: #fff;
+
+  &:disabled {
+    background: #696868;
+    cursor: not-allowed;
+  }
+}

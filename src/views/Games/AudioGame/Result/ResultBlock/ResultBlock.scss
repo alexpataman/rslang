@@ -1,0 +1,57 @@
+@import '../../../../../App.variables.scss';
+
+.result__block {
+  margin-bottom: 10px;
+  position: relative;
+
+  .result__subtitle {
+    font: inherit;
+    font-size: $subtitle-font * 1.1;
+    opacity: .9;
+
+    @media screen and (max-width: 600px) {
+      font-size: $subtitle-font * 1.25;
+    }
+
+    .result__answer-num {
+      padding: 3px;
+      padding-top: 5px;
+      display: inline-block;
+      height: 29px;
+      width: 29px;
+      border-radius: 50%;
+
+      &.answer-wrong {
+        background-color: rgba(255, 0, 0, .5);
+      }
+
+      &.answer-unknown {
+        background-color: rgba(255, 215, 0, .6);
+      }
+
+      &.answer-correct {
+        background-color: rgba(0, 161, 0, .5);
+      }
+    }
+  }
+
+  .result__list {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+    .result__item {
+      margin-bottom: 5px;
+      text-align: left;
+      list-style: none;
+
+      .item-translate {
+        opacity: .8;
+      }
+
+      @media screen and (max-width: 600px) {
+        font-size: $subtitle-font * 1.1;
+      }
+    }
+  }
+}

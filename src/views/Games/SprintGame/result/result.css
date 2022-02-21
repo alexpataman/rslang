@@ -1,0 +1,17 @@
+.list-item {
+  display: flex;
+  flex-direction: row;
+}
+.result_sprint {
+  padding: 20px;
+}
+.tabs__header {
+  padding: 20px;
+  font-size: 1.5rem;
+}
+.result__info {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}

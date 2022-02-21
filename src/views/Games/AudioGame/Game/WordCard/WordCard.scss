@@ -1,0 +1,48 @@
+.word-card {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+
+  @media screen and (max-width: 900px) {
+    display: block;
+  }
+
+  .word-card__text {
+    margin: 0;
+    margin-bottom: 18px;
+    max-width: 300px;
+
+    @media screen and (max-width: 900px) {
+      max-width: 220px;
+    }
+
+    @media screen and (max-width: 600px) {
+      text-align: center;
+      max-width: initial;
+    }
+  }
+
+  .word-card__img {
+    height: 180px;
+    border-radius: 16px;
+
+    @media screen and (max-width: 900px) {
+      margin-bottom: 20px;
+      height: 150px;
+    }
+  }
+
+  .word-card__description {
+    text-align: left;
+
+    .word-card__flex {
+      display: flex;
+      align-items: start;
+      column-gap: 10px;
+
+      @media screen and (max-width: 600px) {
+        justify-content: center;
+      }
+    }
+  }
+}

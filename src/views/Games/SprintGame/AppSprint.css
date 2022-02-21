@@ -1,0 +1,10 @@
+.appSprint {
+  display: flex;
+  justify-content: center;
+}
+
+.loading {
+  margin: 0 auto;
+  margin-top: 200px;
+  margin-left: 49%;
+}

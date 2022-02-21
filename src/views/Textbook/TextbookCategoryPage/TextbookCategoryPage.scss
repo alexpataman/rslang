@@ -1,0 +1,12 @@
+.TextbookCategoryPage {
+  .category-title {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .known-category {
+    background-color: #9c27b0;
+  }
+}
