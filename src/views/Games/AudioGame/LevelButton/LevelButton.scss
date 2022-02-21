@@ -9,7 +9,8 @@
   color: #fff;
   background-color: #363271;
   border-radius: 50%;
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
+  cursor: pointer;
 
   &:hover {
     color: #363271;

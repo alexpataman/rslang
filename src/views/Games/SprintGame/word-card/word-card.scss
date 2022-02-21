@@ -1,4 +1,4 @@
-@import '../../../../../App.variables.scss';
+@import '../../../../App.variables.scss';
 .card {
   max-width: 40vw;
   height: 50vh;
@@ -9,8 +9,9 @@
   margin: auto;
 }
 @media screen and (max-width: 600px) {
-  .card{max-width: 100%;}
-  
+  .card {
+    max-width: 100%;
+  }
 }
 .card__stat {
   display: flex;
@@ -26,11 +27,13 @@
   justify-content: space-around;
   align-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 30px;
 }
 .word__item {
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 400;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
 }
 .word__item-s {
   font-size: 1rem;

@@ -3,7 +3,6 @@
   flex-direction: row;
 }
 .result_sprint {
-  
   padding: 20px;
 }
 .tabs__header {
@@ -13,4 +12,6 @@
 .result__info {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }

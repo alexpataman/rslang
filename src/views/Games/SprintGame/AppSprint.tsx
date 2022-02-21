@@ -3,24 +3,27 @@ import { useEffect, useMemo, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 
-import { UsersWordsApi } from '../../../../services/RSLangApi/UsersWordsApi';
-import { WordsApi } from '../../../../services/RSLangApi/WordsApi';
-import { User } from '../../../../services/User';
-import { Word } from '../../../../types/RSLangApi';
-import { MAX_PAGE_NUMBER, WORDS_PER_PAGE } from '../../../../utils/constants/common.constants';
-import { getRandomNum } from '../../../../utils/helpers/randomNum';
+import { UsersWordsApi } from '../../../services/RSLangApi/UsersWordsApi';
+import { WordsApi } from '../../../services/RSLangApi/WordsApi';
+import { User } from '../../../services/User';
+import { Word } from '../../../types/RSLangApi';
+import {
+  MAX_PAGE_NUMBER,
+  WORDS_PER_PAGE,
+} from '../../../utils/constants/common.constants';
+import { getRandomNum } from '../../../utils/helpers/randomNum';
 import { Result } from './result/result';
 import { Answer } from './types/Answer';
 import { WordCard } from './word-card/word-card';
 
-import './app-sprint.css';
+import './AppSprint.css';
 
 const RND_WORD = 0.5;
 
 export const AppSprint = () => {
   const categoryId = Number(useParams()?.categoryId) || 0;
   const page = useParams()?.page;
-  
+
   const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
   const [answerList, setAnswerList] = useState<Answer[]>([]);
@@ -45,7 +48,7 @@ export const AppSprint = () => {
   }
   function getRandom(): Word {
     if (Math.random() > RND_WORD) {
-      return words[cur]
+      return words[cur];
     }
     return words[Math.floor(Math.random() * words.length)];
   }
@@ -62,34 +65,40 @@ export const AppSprint = () => {
       let words: Word[] = [];
       if (page === undefined) {
         // run from menu
-      // TODO: 29 const
-        words = await wordsApi.getWords(categoryId, getRandomNum(0, MAX_PAGE_NUMBER - 1));
+        // TODO: 29 const
+        words = await wordsApi.getWords(
+          categoryId,
+          getRandomNum(0, MAX_PAGE_NUMBER - 1)
+        );
       } else if (!User.isGuest()) {
-        const userWords = new UsersWordsApi(User.getId(), User.getTokens, User.setTokens)
-          let cPage = Number(page);
-          while (cPage >= 0 && words.length < WORDS_PER_PAGE) {
-            // eslint-disable-next-line no-await-in-loop
-            const cWord = await wordsApi.getWords(categoryId, cPage);
-            for (const item of cWord) {
-              try {
-                // eslint-disable-next-line no-await-in-loop
-                const uWord = await userWords.get(item.id);  
-                if (!uWord.optional.isKnown) {
-                  words.push(item);
-                }
-              }
-              catch (err) {
+        const userWords = new UsersWordsApi(
+          User.getId(),
+          User.getTokens,
+          User.setTokens
+        );
+        let cPage = Number(page);
+        while (cPage >= 0 && words.length < WORDS_PER_PAGE) {
+          // eslint-disable-next-line no-await-in-loop
+          const cWord = await wordsApi.getWords(categoryId, cPage);
+          for (const item of cWord) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              const uWord = await userWords.get(item.id);
+              if (!uWord.optional.isKnown) {
                 words.push(item);
-              } 
-             if (words.length === WORDS_PER_PAGE) {
-               break;
-             }
-            } 
-            cPage -=1;
+              }
+            } catch (err) {
+              words.push(item);
+            }
+            if (words.length === WORDS_PER_PAGE) {
+              break;
+            }
           }
-        } else {
-          words = await wordsApi.getWords(categoryId, Number(page));
+          cPage -= 1;
         }
+      } else {
+        words = await wordsApi.getWords(categoryId, Number(page));
+      }
       setWords(words);
       setcur(0);
       startGame();
