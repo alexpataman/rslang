@@ -5,7 +5,9 @@ import React, { useMemo, useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 
+import { UsersWordsApi } from '../../../services/RSLangApi/UsersWordsApi';
 import { WordsApi } from '../../../services/RSLangApi/WordsApi';
+import { User } from '../../../services/User';
 import { WordStatistics } from '../../../services/WordStatistics';
 import { round } from '../../../types/AudioGame';
 import { GAME_ID } from '../../../types/common';
@@ -13,30 +15,63 @@ import { Word } from '../../../types/RSLangApi';
 import {
   MIN_WORD_IND,
   MAX_WORD_IND,
+  MIN_PAGE,
+  MAX_PAGE,
   API_PATH,
 } from '../../../utils/constants/AudioGame.constants';
+import { WORDS_PER_PAGE } from '../../../utils/constants/common.constants';
 import { getRandomNum } from '../../../utils/helpers/randomNum';
 import { Game } from './Game/Game';
 import { Result } from './Result/Result';
 
 export const AudioGame = () => {
-  const categoryId = Number(useParams()?.categoryId) || 0;
-  const page = Number(useParams()?.page) || 0;
+  const categoryId = Number(useParams()?.categoryId);
+  const page = Number(useParams()?.page);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [gameStatus, setGameStatus] = useState<boolean>(true);
   const [roundState, setRoundState] = useState<round>();
-  const [words, setWords] = useState<Word[]>();
+  const [words, setWords] = useState<Word[]>([]);
   const wordsApi = useMemo(() => new WordsApi(), []);
-  const [result, setResult] = useState<Array<string>>(new Array(20).fill(''));
+  const [result, setResult] = useState<Array<string>>([]);
+  const templateWords = [ // заглушка на варианты, где меньше 5-ти слов в игре
+    '',
+    'дуга',
+    'ядро',
+    'провинция',
+    'громкость',
+    'комбинировать',
+    'привлекательный',
+    'великий',
+    'вызывать',
+    'состояние',
+    'колонка',
+    'вина',
+    'знакомый',
+    'пруд',
+    'рука',
+    'поведение',
+    'кабель',
+    'широкий',
+    'корень',
+    'сравнивать',
+  ];
 
   const assignRoundState = (wordsArray: Word[]) => {
     const firstWord = wordsArray[0];
     const firstAudio = new Audio(`${API_PATH}${firstWord.audio}`);
-    const nextWord = wordsArray[1];
-    const nextAudio = new Audio(`${API_PATH}${nextWord.audio}`);
+    let nextAudio = null;
+    if (wordsArray.length > 1) {
+      const { audio } = wordsArray[1];
+      nextAudio = new Audio(`${API_PATH}${audio}`);
+    }
 
     const arr = getChoicesArray(0);
-    const choicesArr = arr.map((index) => wordsArray[index].wordTranslate);
+    const choicesArr = arr.map((index) => {
+      if (index > wordsArray.length - 1) {
+        return templateWords[index];
+      }
+      return wordsArray[index].wordTranslate;
+    });
 
     setRoundState({
       isAnswered: false,
@@ -51,9 +86,46 @@ export const AudioGame = () => {
 
   useEffect(() => {
     (async () => {
-      const wordsArray = await wordsApi.getWords(categoryId, page);
-      setWords(wordsArray);
-      assignRoundState(wordsArray);
+      let words: Word[] = [];
+      if (isNaN(page)) {
+        // anyone from menu
+        const pageNum = getRandomNum(MIN_PAGE, MAX_PAGE);
+        words = await wordsApi.getWords(categoryId, pageNum);
+      } else if (User.isGuest()) {
+        // guest from textbook
+        words = await wordsApi.getWords(categoryId, page);
+      } else {
+        // user from textbook
+        const userWords = new UsersWordsApi(
+          User.getId(),
+          User.getTokens,
+          User.setTokens
+        );
+        let currPage = page;
+        while (currPage >= 0 && words.length < WORDS_PER_PAGE) {
+          // eslint-disable-next-line no-await-in-loop
+          const currWord = await wordsApi.getWords(categoryId, currPage);
+          for (const item of currWord) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              const uWord = await userWords.get(item.id);
+              if (!uWord.optional.isKnown) {
+                words.push(item);
+              }
+            } catch (err) {
+              words.push(item);
+            }
+            if (words.length === WORDS_PER_PAGE) {
+              break;
+            }
+          }
+          currPage -= 1;
+        }
+      }
+
+      setWords(words);
+      setResult(new Array(words.length).fill(''));
+      assignRoundState(words);
       setLoading(false);
     })();
   }, [wordsApi]);
@@ -154,6 +226,11 @@ export const AudioGame = () => {
     });
   };
 
+  const isRoundTheLast = (): boolean => {
+    const lastInd = result.length - 1;
+    return result[lastInd] !== '';
+  };
+
   const handleNextRoundBtnClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -161,23 +238,27 @@ export const AudioGame = () => {
 
     toggleChoiceBtn();
 
-    const round = (roundState?.roundNum as number) + 1;
-
-    if (round > 19) {
+    if (isRoundTheLast()) {
       setGameStatus(false);
       return;
     }
 
+    const round = (roundState?.roundNum as number) + 1;
     const wordsArray = words?.slice() as Word[];
     const currAudio = roundState?.next as HTMLAudioElement;
     let nextAudio = null;
-    if (round < MAX_WORD_IND) {
-      const nextWord = wordsArray[round + 1];
-      nextAudio = new Audio(`${API_PATH}${nextWord.audio}`);
+    if (round < words.length - 1) {
+      const { audio } = wordsArray[round + 1];
+      nextAudio = new Audio(`${API_PATH}${audio}`);
     }
 
     const arr = getChoicesArray(round);
-    const choicesArr = arr.map((index) => wordsArray[index].wordTranslate);
+    const choicesArr = arr.map((index) => {
+      if (index > wordsArray.length - 1) {
+        return templateWords[index];
+      }
+      return wordsArray[index].wordTranslate;
+    });
 
     const nextRoundState = {
       isAnswered: false,

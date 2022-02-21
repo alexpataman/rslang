@@ -1,5 +1,7 @@
 import './WordCard.scss';
 
+import parse from 'html-react-parser';
+
 import { IWordCardProps } from '../../../../../types/AudioGame';
 import { Word } from '../../../../../types/RSLangApi';
 import { AudioButton } from '../../AudioButton/AudioButton';
@@ -29,7 +31,7 @@ export const WordCard = (props: IWordCardProps) => {
             dataSrc={word.audioExample}
             onClick={handleAudioClick}
           />
-          <p className="word-card__text">{word.textExample}</p>
+          <p className="word-card__text">{parse(word.textExample)}</p>
         </div>
         <p className="word-card__text">{word.textExampleTranslate}</p>
       </div>

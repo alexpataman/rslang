@@ -2,12 +2,7 @@ import './StartPage.scss';
 
 import { useNavigate } from 'react-router-dom';
 
-import {
-  MIN_PAGE,
-  MAX_PAGE,
-} from '../../../../utils/constants/AudioGame.constants';
 import { WORD_GROUP_IDS } from '../../../../utils/constants/common.constants';
-import { getRandomNum } from '../../../../utils/helpers/randomNum';
 import { LevelButton } from '../LevelButton/LevelButton';
 
 export const StartPage = () => {
@@ -19,9 +14,8 @@ export const StartPage = () => {
     e.preventDefault();
 
     const categoryNum = parseInt(e.currentTarget.id, 10);
-    const pageNum = getRandomNum(MIN_PAGE, MAX_PAGE);
 
-    navigate(`/games/audio/category/${categoryNum}/page/${pageNum}`);
+    navigate(`/games/audio/category/${categoryNum}`);
   };
 
   return (
