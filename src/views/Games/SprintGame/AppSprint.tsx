@@ -3,20 +3,20 @@ import { useEffect, useMemo, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 
-import { UsersWordsApi } from '../../../../services/RSLangApi/UsersWordsApi';
-import { WordsApi } from '../../../../services/RSLangApi/WordsApi';
-import { User } from '../../../../services/User';
-import { Word } from '../../../../types/RSLangApi';
+import { UsersWordsApi } from '../../../services/RSLangApi/UsersWordsApi';
+import { WordsApi } from '../../../services/RSLangApi/WordsApi';
+import { User } from '../../../services/User';
+import { Word } from '../../../types/RSLangApi';
 import {
   MAX_PAGE_NUMBER,
   WORDS_PER_PAGE,
-} from '../../../../utils/constants/common.constants';
-import { getRandomNum } from '../../../../utils/helpers/randomNum';
+} from '../../../utils/constants/common.constants';
+import { getRandomNum } from '../../../utils/helpers/randomNum';
 import { Result } from './result/result';
 import { Answer } from './types/Answer';
 import { WordCard } from './word-card/word-card';
 
-import './app-sprint.css';
+import './AppSprint.css';
 
 const RND_WORD = 0.5;
 

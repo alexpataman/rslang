@@ -9,10 +9,10 @@ import {
   ThemeProvider,
 } from '@mui/material';
 
-import { WordStatistics } from '../../../../../services/WordStatistics';
-import { GAME_ID } from '../../../../../types/common';
-import { Word } from '../../../../../types/RSLangApi';
-import { TIME_TO_PLAY } from '../../../../../utils/constants/common.constants';
+import { WordStatistics } from '../../../../services/WordStatistics';
+import { GAME_ID } from '../../../../types/common';
+import { Word } from '../../../../types/RSLangApi';
+import { TIME_TO_PLAY } from '../../../../utils/constants/common.constants';
 import { Control } from '../control/control';
 
 import './word-card.scss';

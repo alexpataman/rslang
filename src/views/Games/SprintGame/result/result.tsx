@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { SoundsApi } from '../../../../../services/RSLangApi/SoundsApi';
+import { SoundsApi } from '../../../../services/RSLangApi/SoundsApi';
 import { propAnswer } from '../types/Answer';
 import './result.css';
 

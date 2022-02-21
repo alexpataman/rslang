@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { WORD_GROUP_IDS } from '../../../../utils/constants/common.constants';
+import { WORD_GROUP_IDS } from '../../../utils/constants/common.constants';
 
 export const Levels = () => {
   const navigate = useNavigate();
