@@ -52,7 +52,8 @@ export abstract class RSLangApi {
 
   getException(error: AxiosError): Error {
     if (!error.response) {
-      return new Error('Something went wrong');
+      // return new Error('Something went wrong');
+      return error;
     }
 
     const { status, data } = error.response;

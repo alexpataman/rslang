@@ -5,9 +5,11 @@ import { Avatar, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
 import { Loader } from '../../../components/Loader/Loader';
+import { useUserLogout } from '../../../hooks/useUserLogout';
 import { UsersAggregatedWords } from '../../../services/RSLangApi/UsersAggregatedWords';
 import { User } from '../../../services/User';
 import { Word } from '../../../types/RSLangApi';
+import { ForbiddenError } from '../../../utils/errors/ForbiddenError';
 import { TextbookWordItem } from '../TextbookWordItem/TextbookWordItem';
 
 export const TextbookKnownPage = () => {
@@ -18,6 +20,7 @@ export const TextbookKnownPage = () => {
       new UsersAggregatedWords(User.getId(), User.getTokens, User.setTokens),
     []
   );
+  const userLogout = useUserLogout();
 
   const filter = useMemo(
     () => ({
@@ -28,11 +31,17 @@ export const TextbookKnownPage = () => {
 
   const getItems = useMemo(
     () => async () => {
-      const words = await wordsApi.getWords(0, 0, filter);
-      setWords(words);
-      setIsLoading(false);
+      try {
+        const words = await wordsApi.getWords(0, 0, filter);
+        setWords(words);
+        setIsLoading(false);
+      } catch (error) {
+        if (error instanceof ForbiddenError) {
+          userLogout();
+        }
+      }
     },
-    [filter, wordsApi]
+    [filter, wordsApi, userLogout]
   );
 
   useEffect(() => {
