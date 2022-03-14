@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Loader } from '../../../components/Loader/Loader';
+import { useUserLogout } from '../../../hooks/useUserLogout';
 import { UsersStatisticsApi } from '../../../services/RSLangApi/UsersStatisticsApi';
 import { User } from '../../../services/User';
 import { IUserStatistics } from '../../../types/RSLangApi';
+import { ForbiddenError } from '../../../utils/errors/ForbiddenError';
 import { StatisticsDaily } from '../StatisticsDaily/StatisticsDaily';
 import { StatisticsLongTerm } from '../StatisticsLongTerm/StatisticsLongTerm';
 
@@ -14,17 +16,25 @@ export const StatisticsPage = () => {
     () => new UsersStatisticsApi(User.getId(), User.getTokens, User.setTokens),
     []
   );
+  const userLogout = useUserLogout();
+
   useEffect(() => {
     (async () => {
       try {
-        const statistics = await userStatistics.get();
-        setData(statistics);
+        try {
+          const statistics = await userStatistics.get();
+          setData(statistics);
+        } catch (error) {
+          if (error instanceof ForbiddenError) {
+            userLogout();
+          }
+        }
       } catch {
         // do nothing
       }
       setIsLoading(false);
     })();
-  }, [userStatistics]);
+  }, [userStatistics, userLogout]);
 
   return (
     <>

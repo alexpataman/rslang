@@ -10,7 +10,7 @@ export const Levels = () => {
       <p className="start-page__subtitle">
         Поддерживается управление с клавиатуры
       </p>
-      <p className="start-page__subtitle">(&#8592; Да, &#8594; Нет)</p>
+      <p className="start-page__subtitle">(&#8592; Верно, &#8594; Неверно)</p>
       <p className="start-page__subtitle subtitle-level">
         Выберите уровень сложности
       </p>
